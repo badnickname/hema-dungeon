@@ -53,9 +53,17 @@ jobs:
           script: |
             cd /root
             cp -r hema/wwwroot wwwroot
+            cp hema/appsettings.Production.json appsettings.Production.json
             rm -rf /root/hema/*
             7z x -ohema web-build.zip
             chmod 777 hema/HemaDungeon
             rm web-build.zip
+            rm -rf /root/wwwroot/wwwroot/assets
+            rm -rf /root/wwwroot/wwwroot/index.html
+            rm -rf /root/wwwroot/wwwroot/vite.svg
+            cp appsettings.Production.json hema/appsettings.Production.json
+            cp -r wwwroot/wwwroot/* hema/wwwroot/*
+            rm appsettings.Production.json
+            rm -rf wwwroot
             systemctl start hema
             systemctl status hema

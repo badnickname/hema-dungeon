@@ -30,7 +30,7 @@ public sealed class ApiController : ControllerBase
             Age = model.Age,
             Gender = model.Gender,
             Story = model.Story,
-            UserName = model.Name,
+            UserName = model.Name
         };
         var result = await userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded) return Redirect("/");
