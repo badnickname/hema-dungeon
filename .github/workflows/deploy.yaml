@@ -1,0 +1,61 @@
+﻿name: Deploy NetApi
+
+on:
+  push:
+    branches: ['master']
+    paths: ['HemaDungeon/**']
+
+jobs:
+  web_build:
+    uses: ./.github/workflows/build.yaml
+  web_publish:
+    runs-on: ubuntu-latest
+    needs: [web_build]
+    steps:
+      - name: Get artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+      - name: Install 7Zip
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: p7zip-rar p7zip-full
+          version: 1.0
+      - name: Archive to zip
+        run: |
+          7z a web-build.zip *
+      - name: Copy artifacts
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          source: 'web-build.zip'
+          target: '/root'
+      - name: Disable Web
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            systemctl status hema
+            systemctl stop hema
+      - name: Replace and start Web
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            cd /root
+            cp -r hema/wwwroot wwwroot
+            rm -rf /root/hema/*
+            7z x -ohema web-build.zip
+            chmod 777 hema/HemaDungeon
+            rm web-build.zip
+            systemctl start hema
+            systemctl status hema
