@@ -58,11 +58,11 @@ jobs:
             7z x -ohema web-build.zip
             chmod 777 hema/HemaDungeon
             rm web-build.zip
-            rm -rf /root/wwwroot/wwwroot/assets
-            rm -rf /root/wwwroot/wwwroot/index.html
-            rm -rf /root/wwwroot/wwwroot/vite.svg
+            rm -rf /root/wwwroot/assets
+            rm -rf /root/wwwroot/index.html
+            rm -rf /root/wwwroot/vite.svg
             cp appsettings.Production.json hema/appsettings.Production.json
-            cp -r wwwroot/wwwroot/* hema/wwwroot/*
+            cp -r wwwroot/* hema/wwwroot/*
             rm appsettings.Production.json
             rm -rf wwwroot
             systemctl start hema
