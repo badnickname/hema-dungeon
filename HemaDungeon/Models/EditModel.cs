@@ -12,6 +12,6 @@ public sealed class EditModel
     [RegularExpression("^[^><;]+$")]
     public string Gender { get; set; }
 
-    [RegularExpression("^[^><;]+$")]
+    [RegularExpression("^[^><]+$")]
     public string Story { get; set; }
 }

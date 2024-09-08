@@ -12,7 +12,7 @@ public sealed class SignUpModel
     [RegularExpression("^[^><;]+$")]
     public string Gender { get; set; }
 
-    [RegularExpression("^[^><;]+$")]
+    [RegularExpression("^[^><]+$")]
     public string Story { get; set; }
 
     [RegularExpression("^[^><;]+$")]
