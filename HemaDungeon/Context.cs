@@ -8,6 +8,8 @@ public sealed class Context : IdentityDbContext<Character>
 {
     public Context(DbContextOptions options) : base(options)
     {
-        Database.EnsureCreated();
+#if RELEASE
+        Database.Migrate();
+#endif
     }
 }
