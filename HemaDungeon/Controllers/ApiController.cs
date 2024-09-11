@@ -105,4 +105,24 @@ public sealed class ApiController : ControllerBase
 
         return Redirect("/");
     }
+
+    [HttpPost("state")]
+    [Authorize]
+    public async Task<IActionResult> PostState([FromForm] StateModel model, [FromServices] Context context, [FromServices] SignInManager<Character> signInManager)
+    {
+        var user = await signInManager.UserManager.GetUserAsync(HttpContext.User);
+        if (user is null) return Unauthorized();
+
+        user.PushUp = model.PushUp;
+        user.PullUp = model.PullUp;
+        user.Abdominal = model.Abdominal;
+        user.RunTwenty = model.RunTwenty;
+        user.Rang = model.Rang;
+        user.Score = model.Score;
+
+        context.Users.Update(user);
+        await context.SaveChangesAsync();
+
+        return Redirect("/");
+    }
 }

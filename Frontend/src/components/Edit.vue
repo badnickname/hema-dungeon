@@ -8,6 +8,31 @@ const entity = computed(() => store.character);
 
 <template>
   <div>
+    <form class="body" enctype="multipart/form-data" action="/api/state" method="POST">
+      <h2>Статы (временно так)</h2>
+      <label>
+        <span>Отжимания</span>
+        <input v-model="entity.pullUp" type="number" name="pushUp" autocomplete="off" />
+      </label>
+      <label>
+        <span>Подтягивания</span>
+        <input v-model="entity.pushUp" type="number" name="pullUp" autocomplete="off" />
+      </label>
+      <label>
+        <span>Бег 20м</span>
+        <input v-model="entity.runTwenty" type="number" step=".01" name="runTwenty" autocomplete="off" />
+      </label>
+      <label>
+        <span>Ранг</span>
+        <input v-model="entity.rang" type="number" name="rang" autocomplete="off" />
+      </label>
+      <label>
+        <span>ОФП</span>
+        <input v-model="entity.score" type="number" name="score" autocomplete="off" />
+      </label>
+      <hr />
+      <button>Сохранить</button>
+    </form>
     <form class="body" enctype="multipart/form-data" action="/api/avatar" method="POST">
       <h2>Портрет</h2>
       <label>

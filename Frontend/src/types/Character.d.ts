@@ -4,4 +4,14 @@ export type Character = {
 	age: number;
 	gender: string;
 	story: string;
+	power: number;
+	agility: number;
+	wisdom: number;
+	vitality: number;
+	pushUp?: number;
+	pullUp?: number;
+	abdominal?: number;
+	runTwenty?: number;
+	rang?: number;
+	score?: number;
 }

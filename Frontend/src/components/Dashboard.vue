@@ -52,6 +52,24 @@ function getGender(gender: string) {
             <strong>Возраст: </strong>
             <span>{{ entity.age }}</span>
           </div>
+          <span>
+            <strong>HP: </strong>
+            <span>{{ entity.vitality.toFixed(2) }}</span>
+          </span>
+          <div class="stats">
+            <span>
+              <img src="../assets/power.png" width="16px" height="16px" alt="Power" />
+              <span>{{ entity.power.toFixed(2) }}</span>
+            </span>
+            <span>
+              <img src="../assets/wisdom.png" width="16px" height="16px" alt="Wisdom" />
+              <span>{{ entity.wisdom.toFixed(2) }}</span>
+            </span>
+            <span>
+              <img src="../assets/agility.png" width="16px" height="16px" alt="Agility" />
+              <span>{{ entity.agility.toFixed(2) }}</span>
+            </span>
+          </div>
         </div>
         <div class="buttons">
           <button @click="open(entity)">Открыть</button>
@@ -114,5 +132,16 @@ button {
 h2 {
   color: #ffe071;
   border-bottom: 2px #ffe071 solid;
+}
+
+.stats {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  > * {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
 }
 </style>

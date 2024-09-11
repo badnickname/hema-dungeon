@@ -22,6 +22,25 @@ function getGender(gender: string) {
     <h2>{{ entity.name }}</h2>
     <img :src="entity.avatar" style="max-width: 300px" :alt="entity.name" />
     <hr />
+    <div class="stats">
+      <span>
+        <strong>HP: </strong>
+        <span>{{ entity.vitality.toFixed(2) }}</span>
+      </span>
+      <span>
+        <img src="../assets/power.png" width="16px" height="16px" alt="Power"/>
+        <span>{{ entity.power.toFixed(2) }}</span>
+      </span>
+      <span>
+        <img src="../assets/wisdom.png" width="16px" height="16px" alt="Wisdom"/>
+        <span>{{ entity.wisdom.toFixed(2) }}</span>
+      </span>
+      <span>
+        <img src="../assets/agility.png" width="16px" height="16px" alt="Agility"/>
+        <span>{{ entity.agility.toFixed(2) }}</span>
+      </span>
+    </div>
+    <hr />
     <div>
       <strong>Имя: </strong>
       <span>{{ entity.name }}</span>
@@ -83,5 +102,19 @@ button {
 h2 {
   color: #ffe071;
   border-bottom: 2px #ffe071 solid;
+}
+
+.stats {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  flex-direction: row !important;
+  justify-content: space-between;
+  > * {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    width: auto !important;
+  }
 }
 </style>
