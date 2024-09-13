@@ -42,5 +42,9 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapGet("login", (HttpContext context) => context.Response.Redirect("/"));
+app.MapGet("dashboard", (HttpContext context) => context.Response.Redirect("/"));
+app.MapGet("register", (HttpContext context) => context.Response.Redirect("/"));
+app.MapGet("fight", (HttpContext context) => context.Response.Redirect("/"));
 
 app.Run();

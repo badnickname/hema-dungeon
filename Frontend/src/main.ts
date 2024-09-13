@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import './style.css';
 import App from './App.vue';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createMemoryHistory, createRouter } from 'vue-router';
 import Index from './components/Index.vue';
 import Register from './components/Register.vue';
 import Login from './components/Login.vue';
@@ -12,7 +12,7 @@ import Edit from './components/Edit.vue';
 import Fight from './components/Fight.vue';
 
 const router = createRouter({
-	history: createWebHistory(), routes: [{
+	history: createMemoryHistory(), routes: [{
 		path: '/', component: Index,
 	}, {
 		path: '/register', component: Register
