@@ -90,7 +90,7 @@ public sealed class ApiController : ControllerBase
         user.Name = model.Name;
         user.Gender = model.Gender;
         user.Story = model.Story;
-        user.Author = model.Author;
+        user.Author = model.Author ?? string.Empty;
 
         context.Users.Update(user);
         await context.SaveChangesAsync();
