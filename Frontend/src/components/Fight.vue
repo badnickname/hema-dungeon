@@ -210,6 +210,7 @@ onMounted(store.getFight);
       > img {
         max-width: 36px;
         height: fit-content;
+        max-height: 50px;
       }
       > div {
         width: 100%;

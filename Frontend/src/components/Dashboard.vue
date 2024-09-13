@@ -107,6 +107,7 @@ async function edit() {
       > img {
         max-width: 36px;
         height: fit-content;
+        max-height: 50px;
       }
       > div {
         width: 100%;
@@ -126,6 +127,7 @@ async function edit() {
 button {
   background-color: #ffe071;
   height: fit-content;
+  max-height: 50px;
 }
 
 .buttons {
