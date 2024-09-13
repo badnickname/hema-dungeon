@@ -22,7 +22,7 @@ public sealed class SignUpModel
     public string Password { get; set; }
 
     [RegularExpression("^[^><;]+$")]
-    public string Author { get; set; }
+    public string? Author { get; set; }
 
     public int? PushUp { get; set; }
 

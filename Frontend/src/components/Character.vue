@@ -66,6 +66,11 @@ function getGender(gender: string) {
       <strong>Биография: </strong>
       <span style="white-space: pre-line;">{{ entity.story }}</span>
     </div>
+    <hr />
+    <div>
+      <strong>Автор персонажа: </strong>
+      <span>{{ entity.author ?? '--' }}</span>
+    </div>
   </div>
   <hr />
   <RouterLink to="/dashboard">

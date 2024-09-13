@@ -31,7 +31,7 @@ public sealed class ApiController : ControllerBase
             Rang = model.Rang ?? 0,
             Score = model.Score ?? 0,
             Avatar = "default.png",
-            Author = model.Author,
+            Author = model.Author ?? string.Empty,
         };
 
         var avatar = HttpContext.Request.Form.Files.GetFile("avatar");
