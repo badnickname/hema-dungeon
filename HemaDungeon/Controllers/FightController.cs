@@ -95,11 +95,11 @@ public sealed class FightController : ControllerBase
         states[0].Damage *= 5;
         if (states[0].Character.Character.Rang > states[1].Character.Character.Rang)
         {
-            states[0].Damage /= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
+            states[0].Damage *= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
         }
         else if (states[0].Character.Character.Rang < states[1].Character.Character.Rang)
         {
-            states[0].Damage *= (states[1].Character.Character.Rang - states[0].Character.Character.Rang);
+            states[0].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang);
         }
 
         states[1].Damage =
@@ -110,11 +110,11 @@ public sealed class FightController : ControllerBase
         states[1].Damage *= 5;
         if (states[1].Character.Character.Rang > states[0].Character.Character.Rang)
         {
-            states[1].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang);
+            states[1].Damage *= (states[1].Character.Character.Rang - states[0].Character.Character.Rang);
         }
         else if (states[1].Character.Character.Rang < states[0].Character.Character.Rang)
         {
-            states[1].Damage *= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
+            states[1].Damage /= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
         }
 
         states[0].ScoreHealth = (int) Math.Ceiling(states[0].Character.Health / states[1].Damage);
