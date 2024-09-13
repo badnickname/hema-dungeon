@@ -60,7 +60,7 @@ function getGender(gender: string) {
     <hr />
     <div>
       <strong>Биография: </strong>
-      <span>{{ entity.story }}</span>
+      <span style="white-space: pre;">{{ entity.story }}</span>
     </div>
   </div>
   <hr />
