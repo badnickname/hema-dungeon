@@ -24,6 +24,10 @@ function getGender(gender: string) {
     <hr />
     <div class="stats">
       <span>
+        <strong>Ранг: </strong>
+        <span>{{ entity.rang }}</span>
+      </span>
+      <span>
         <strong>Жизни: </strong>
         <span>{{ entity.vitality.toFixed(1) }}</span>
       </span>

@@ -35,6 +35,10 @@ onMounted(store.getFight);
               <span>{{ entity.name }}</span>
             </div>
             <div>
+              <strong>Ранг: </strong>
+              <span>{{ entity.rang }}</span>
+            </div>
+            <div>
               <strong>Жизни: </strong>
               <span>{{ entity.vitality.toFixed(1) }}</span>
             </div>
@@ -78,6 +82,10 @@ onMounted(store.getFight);
               <span>{{ entity.character.name }}</span>
             </div>
             <div>
+              <strong>Ранг: </strong>
+              <span>{{ entity.character.rang }}</span>
+            </div>
+            <div>
               <strong>Жизни: </strong>
               <span>{{ entity.health.toFixed(1) }}</span>
             </div>
@@ -118,6 +126,10 @@ onMounted(store.getFight);
             <div>
               <strong>Имя: </strong>
               <span>{{ entity.character.character.name }}</span>
+            </div>
+            <div>
+              <strong>Ранг: </strong>
+              <span>{{ entity.character.character.rang }}</span>
             </div>
             <div>
               <strong>Жизни: </strong>

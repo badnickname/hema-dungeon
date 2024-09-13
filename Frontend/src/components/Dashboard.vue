@@ -38,6 +38,10 @@ async function edit() {
             <span>{{ entity.name }}</span>
           </div>
           <div>
+            <strong>Ранг: </strong>
+            <span>{{ entity.rang }}</span>
+          </div>
+          <div>
             <strong>Жизни: </strong>
             <span>{{ entity.vitality.toFixed(1) }}</span>
           </div>
