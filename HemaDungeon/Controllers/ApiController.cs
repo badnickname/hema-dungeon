@@ -26,6 +26,7 @@ public sealed class ApiController : ControllerBase
             PushUp = model.PushUp ?? 0,
             PullUp = model.PullUp ?? 0,
             RunTwenty = model.RunTwenty ?? 0,
+            Abdominal = model.Abdominal ?? 0,
             Rope = model.Rope ?? 0,
             Rang = model.Rang ?? 0,
             Score = model.Score ?? 0,

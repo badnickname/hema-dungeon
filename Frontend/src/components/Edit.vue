@@ -19,6 +19,10 @@ const entity = computed(() => store.character);
         <input v-model="entity.pushUp" type="number" name="pullUp" autocomplete="off" />
       </label>
       <label>
+        <span>Пресс</span>
+        <input v-model="entity.abdominal" type="number" name="abdominal" autocomplete="off" />
+      </label>
+      <label>
         <span>Челнок (секунды)</span>
         <input v-model="entity.runTwenty" type="number" step=".01" name="runTwenty" autocomplete="off" />
       </label>

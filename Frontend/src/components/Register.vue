@@ -50,6 +50,10 @@
     <input type="number" name="pullUp" autocomplete="off" />
   </label>
   <label>
+    <span>Пресс</span>
+    <input type="number" name="abdominal" autocomplete="off" />
+  </label>
+  <label>
     <span>Челнок (секунды)</span>
     <input type="number" step=".01" name="runTwenty" autocomplete="off" />
   </label>
