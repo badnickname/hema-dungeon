@@ -15,6 +15,7 @@
     </label>
     <hr />
     <button>Войти</button>
+    <RouterLink to="/password">Сбросить пароль</RouterLink>
   </form>
 </template>
 
@@ -43,6 +44,10 @@
       text-align: left;
       width: 300px;
     }
+  }
+
+  a {
+    color: #ffe071;
   }
 }
 button {

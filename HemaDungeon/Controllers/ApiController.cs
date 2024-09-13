@@ -1,8 +1,12 @@
-﻿using HemaDungeon.Entities;
+﻿using System.Net;
+using System.Net.Mail;
+using HemaDungeon.Entities;
 using HemaDungeon.Models;
+using HemaDungeon.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace HemaDungeon.Controllers;
 
@@ -59,10 +63,41 @@ public sealed class ApiController : ControllerBase
     public async Task<IActionResult> SignIn([FromForm] SignInModel model, [FromServices] UserManager<Character> userManager, [FromServices] SignInManager<Character> signInManager)
     {
         var user = await userManager.FindByEmailAsync(model.Email);
-        if (user is null) return Redirect("/login");
+        if (user is null) return Content("Incorrect password or email", "text/plain");
 
         var result = await signInManager.PasswordSignInAsync(user, model.Password, true, false);
-        return Redirect(!result.Succeeded ? "/login" : "/");
+        if (!result.Succeeded) return Content("Incorrect password or email", "text/plain");
+        return Redirect("/");
+    }
+
+    [HttpPost("password/reset")]
+    public async Task<IActionResult> RestorePassword([FromBody] ResetPasswordModel model, [FromServices] IOptions<EmailOption> options, [FromServices] Context context, [FromServices] UserManager<Character> userManager)
+    {
+        var user = context.Users.FirstOrDefault(x => x.Email == model.Email);
+        if (user is null) return Unauthorized();
+
+        var code = await userManager.GeneratePasswordResetTokenAsync(user);
+
+        var smtp = new SmtpClient(options.Value.Host, 587) {
+            EnableSsl = true,
+            DeliveryMethod = SmtpDeliveryMethod.Network,
+            UseDefaultCredentials = false,
+            Credentials = new NetworkCredential(options.Value.Mail, options.Value.Password),
+        };
+        smtp.Send(new MailMessage(options.Value.Mail, user.Email!, "Hema Dungeon: Восстановление пароля", $"Ваш код для сброса пароля: {code}"));
+
+        return Ok();
+    }
+
+    [HttpPost("password/commit")]
+    public async Task<IActionResult> CommitPassword([FromForm] PasswordCommitModel model, [FromServices] Context context, [FromServices] UserManager<Character> userManager, [FromServices] SignInManager<Character> signInManager)
+    {
+        var user = context.Users.FirstOrDefault(x => x.Email == model.Email);
+        if (user is null) return Unauthorized();
+
+        await userManager.ResetPasswordAsync(user, model.Code, model.Password);
+        await signInManager.PasswordSignInAsync(user, model.Password, true, false);
+        return Redirect("/");
     }
 
     [HttpGet("user")]

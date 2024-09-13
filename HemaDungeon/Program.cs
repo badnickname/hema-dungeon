@@ -1,5 +1,6 @@
 using HemaDungeon;
 using HemaDungeon.Entities;
+using HemaDungeon.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.Configure<EmailOption>(builder.Configuration.GetSection("Email"));
 builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("default")));
 builder.Services.AddIdentity<Character, IdentityRole>(options =>
 {
@@ -24,7 +26,7 @@ builder.Services.AddIdentity<Character, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false;
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedPhoneNumber = false;
-}).AddEntityFrameworkStores<Context>();
+}).AddEntityFrameworkStores<Context>().AddTokenProvider<DataProtectorTokenProvider<Character>>(TokenOptions.DefaultProvider);
 
 var app = builder.Build();
 
