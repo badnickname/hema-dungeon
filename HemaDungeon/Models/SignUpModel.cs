@@ -21,6 +21,9 @@ public sealed class SignUpModel
     [RegularExpression("^[^><;]+$")]
     public string Password { get; set; }
 
+    [RegularExpression("^[^><;]+$")]
+    public string Author { get; set; }
+
     public int? PushUp { get; set; }
 
     public int? PullUp { get; set; }

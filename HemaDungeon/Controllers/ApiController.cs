@@ -30,7 +30,8 @@ public sealed class ApiController : ControllerBase
             Rope = model.Rope ?? 0,
             Rang = model.Rang ?? 0,
             Score = model.Score ?? 0,
-            Avatar = "default.png"
+            Avatar = "default.png",
+            Author = model.Author,
         };
 
         var avatar = HttpContext.Request.Form.Files.GetFile("avatar");
@@ -89,6 +90,7 @@ public sealed class ApiController : ControllerBase
         user.Name = model.Name;
         user.Gender = model.Gender;
         user.Story = model.Story;
+        user.Author = model.Author;
 
         context.Users.Update(user);
         await context.SaveChangesAsync();

@@ -14,4 +14,7 @@ public sealed class EditModel
 
     [RegularExpression("^[^><]+$")]
     public string Story { get; set; }
+
+    [RegularExpression("^[^><;]+$")]
+    public string Author { get; set; }
 }

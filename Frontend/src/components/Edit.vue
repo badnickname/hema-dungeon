@@ -53,6 +53,10 @@ const entity = computed(() => store.character);
     <form class="body" action="/api/user" method="POST">
       <h2>Персонаж</h2>
       <label>
+        <span>Автор персонажа</span>
+        <input v-model="entity.author" type="text" name="author" autocomplete="off" />
+      </label>
+      <label>
         <span>Имя</span>
         <input v-model="entity.name" type="text" name="name" autocomplete="off" />
       </label>

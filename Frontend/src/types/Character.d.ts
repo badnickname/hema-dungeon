@@ -16,4 +16,5 @@ export type Character = {
 	score?: number;
 	stamina?: number;
 	rope?: number;
+	author?: string;
 }

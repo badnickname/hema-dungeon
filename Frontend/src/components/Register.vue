@@ -13,6 +13,10 @@
     <span>Пароль</span>
     <input type="password" name="password" autocomplete="off" />
   </label>
+  <label>
+    <span>Имя Фамилия</span>
+    <input type="text" name="author" autocomplete="off" />
+  </label>
   <hr />
   <label>
     <span>Портрет</span>
