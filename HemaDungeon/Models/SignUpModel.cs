@@ -27,7 +27,7 @@ public sealed class SignUpModel
 
     public int? Abdominal { get; set; }
 
-    public int? RunTwenty { get; set; }
+    public float? RunTwenty { get; set; }
 
     public int? Rang { get; set; }
 
