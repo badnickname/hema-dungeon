@@ -144,7 +144,7 @@ onMounted(store.getFight);
           </div>
           <div>
             <strong>Очки жизней: </strong>
-            <span>{{ entity.scoreHealth.toFixed(1) }}</span>
+            <span>{{ entity.scoreHealth }}</span>
           </div>
           <div>
             <strong>Урон: </strong>
@@ -152,7 +152,7 @@ onMounted(store.getFight);
           </div>
           <label class="buttons">
             <span>Очки за бой</span>
-            <input type="number" name="score">
+            <input type="number" name="score" value="0">
           </label>
         </li>
       </ul>

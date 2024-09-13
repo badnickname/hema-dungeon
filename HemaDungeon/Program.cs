@@ -20,6 +20,7 @@ builder.Services.AddIdentity<Character, IdentityRole>(options =>
         RequiredUniqueChars = 1,
     };
     options.User.RequireUniqueEmail = true;
+    options.User.AllowedUserNameCharacters = null;
     options.SignIn.RequireConfirmedAccount = false;
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedPhoneNumber = false;
