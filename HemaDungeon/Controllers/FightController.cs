@@ -101,6 +101,7 @@ public sealed class FightController : ControllerBase
         {
             states[0].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang + 1);
         }
+        states[0].Damage = (int) states[0].Damage;
 
         states[1].Damage =
             Math.Max(states[1].Character.Character.Agility - states[0].Character.Character.Agility, 1) +
@@ -116,6 +117,7 @@ public sealed class FightController : ControllerBase
         {
             states[1].Damage /= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
         }
+        states[1].Damage = (int) states[1].Damage;
 
         states[0].ScoreHealth = (int) Math.Ceiling(states[0].Character.Health / states[1].Damage);
         if (states[0].ScoreHealth == 0) states[0].ScoreHealth = 1;
