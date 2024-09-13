@@ -170,7 +170,7 @@ onMounted(store.getFight);
       </ul>
       <button>Завершить бой</button>
     </form>
-    <form action="/api/fight/complete" method="POST">
+    <form action="/api/fight/complete" method="POST" onsubmit="return confirm('Вы уверены, что хотите прекратить сражения?')">
       <button v-if="!isNewFight">Остановить</button>
     </form>
   </div>
