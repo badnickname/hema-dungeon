@@ -8,7 +8,13 @@ const router = useRouter();
 
 onMounted(async () => {
   const result = await store.getCharacter();
-  if (result) await router.replace('/dashboard');
+  if (result) {
+    if (await store.getFight()) {
+      await router.replace('/fight');
+    } else {
+      await router.replace('/dashboard');
+    }
+  }
 })
 </script>
 

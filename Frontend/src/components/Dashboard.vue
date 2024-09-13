@@ -20,21 +20,14 @@ function checkIsMe(character: Character) {
 async function edit() {
   await router.replace('/edit');
 }
-
-function getGender(gender: string) {
-  switch (gender) {
-    case 'male':
-      return 'Мужской';
-    case 'female':
-      return 'Женский';
-    default:
-      return 'Боевой вертолет Апач';
-  }
-}
 </script>
 
 <template>
   <div class="body">
+    <h2>Сражения</h2>
+    <RouterLink class="fight" to="/fight">
+     <button>Открыть</button>
+    </RouterLink>
     <h2>Персонажи</h2>
     <ul>
       <li v-for="entity in characters">
@@ -43,14 +36,6 @@ function getGender(gender: string) {
           <div>
             <strong>Имя: </strong>
             <span>{{ entity.name }}</span>
-          </div>
-          <div>
-            <strong>Пол: </strong>
-            <span>{{ getGender(entity.gender) }}</span>
-          </div>
-          <div>
-            <strong>Возраст: </strong>
-            <span>{{ entity.age }}</span>
           </div>
           <div>
             <strong>Жизни: </strong>
@@ -161,6 +146,13 @@ h2 {
     display: flex;
     gap: 4px;
     align-items: center;
+  }
+}
+
+.fight {
+  width: 100%;
+  > button {
+    width: 100%;
   }
 }
 </style>

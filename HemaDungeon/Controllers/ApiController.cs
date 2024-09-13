@@ -15,25 +15,35 @@ public sealed class ApiController : ControllerBase
     {
         if (context.Users.Any(x => x.Name == model.Name || x.Email == model.Email)) return Redirect("/");
 
-        var avatar = HttpContext.Request.Form.Files.GetFile("avatar")!;
-        if (!avatar.ContentType.Contains("image")) return BadRequest();
-
-        var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
-        await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
-        await using var input = avatar.OpenReadStream();
-        await input.CopyToAsync(filestream);
-        filestream.Flush();
-
         var user = new Character
         {
             Email = model.Email,
             Name = model.Name,
-            Avatar = filename,
             Age = model.Age,
             Gender = model.Gender,
             Story = model.Story,
             UserName = model.Name,
+            PushUp = model.PushUp ?? 0,
+            PullUp = model.PullUp ?? 0,
+            RunTwenty = model.RunTwenty ?? 0,
+            Rope = model.Rope ?? 0,
+            Rang = model.Rang ?? 0,
+            Score = model.Score ?? 0,
+            Avatar = "default.png"
         };
+
+        var avatar = HttpContext.Request.Form.Files.GetFile("avatar");
+        if (avatar is not null)
+        {
+            var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
+            await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
+            await using var input = avatar.OpenReadStream();
+            await input.CopyToAsync(filestream);
+            filestream.Flush();
+
+            user.Avatar = filename;
+        }
+
         var result = await userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded) return Redirect("/");
 
@@ -93,7 +103,6 @@ public sealed class ApiController : ControllerBase
         if (user is null) return Unauthorized();
 
         var avatar = HttpContext.Request.Form.Files.GetFile("avatar")!;
-        if (!avatar.ContentType.Contains("image")) return BadRequest();
 
         System.IO.File.Delete($"wwwroot/{user.Avatar}");
 

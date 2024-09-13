@@ -9,6 +9,7 @@ import { createPinia } from 'pinia';
 import Dashboard from './components/Dashboard.vue';
 import Character from './components/Character.vue';
 import Edit from './components/Edit.vue';
+import Fight from './components/Fight.vue';
 
 const router = createRouter({
 	history: createWebHistory(), routes: [{
@@ -23,6 +24,8 @@ const router = createRouter({
 		path: '/character', component: Character
 	}, {
 		path: '/edit', component: Edit
+	}, {
+		path: '/fight', component: Fight
 	}]
 });
 

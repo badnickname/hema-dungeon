@@ -41,6 +41,31 @@
     <textarea name="story" style="height: 300px" />
   </label>
   <hr />
+  <label>
+    <span>Отжимания</span>
+    <input type="number" name="pushUp" autocomplete="off" />
+  </label>
+  <label>
+    <span>Подтягивания</span>
+    <input type="number" name="pullUp" autocomplete="off" />
+  </label>
+  <label>
+    <span>Челнок (секунды)</span>
+    <input type="number" step=".01" name="runTwenty" autocomplete="off" />
+  </label>
+  <label>
+    <span>Скакалка</span>
+    <input type="number" name="rope" autocomplete="off" />
+  </label>
+  <label>
+    <span>Ранг</span>
+    <input type="number" name="rang" autocomplete="off" />
+  </label>
+  <label>
+    <span>ОФП</span>
+    <input type="number" name="score" autocomplete="off" />
+  </label>
+  <hr />
   <button>Создать</button>
 </form>
 </template>
