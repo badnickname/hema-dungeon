@@ -117,10 +117,10 @@ public sealed class FightController : ControllerBase
             states[1].Damage *= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
         }
 
-        states[0].ScoreHealth = (int) (states[0].Character.Health / states[1].Damage);
+        states[0].ScoreHealth = (int) Math.Ceiling(states[0].Character.Health / states[1].Damage);
         if (states[0].ScoreHealth == 0) states[0].ScoreHealth = 1;
 
-        states[1].ScoreHealth = (int) (states[1].Character.Health / states[0].Damage);
+        states[1].ScoreHealth = (int) Math.Ceiling(states[1].Character.Health / states[0].Damage);
         if (states[1].ScoreHealth == 0) states[1].ScoreHealth = 1;
 
         await context.SaveChangesAsync();
