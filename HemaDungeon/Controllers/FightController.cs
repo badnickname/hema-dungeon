@@ -95,11 +95,11 @@ public sealed class FightController : ControllerBase
         states[0].Damage *= 5;
         if (states[0].Character.Character.Rang > states[1].Character.Character.Rang)
         {
-            states[0].Damage *= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
+            states[0].Damage *= (states[0].Character.Character.Rang - states[1].Character.Character.Rang + 1);
         }
         else if (states[0].Character.Character.Rang < states[1].Character.Character.Rang)
         {
-            states[0].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang);
+            states[0].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang + 1);
         }
 
         states[1].Damage =
