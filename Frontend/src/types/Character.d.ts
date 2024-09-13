@@ -14,4 +14,6 @@ export type Character = {
 	runTwenty?: number;
 	rang?: number;
 	score?: number;
+	stamina?: number;
+	rope?: number;
 }

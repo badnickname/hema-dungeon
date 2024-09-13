@@ -13,4 +13,6 @@ public sealed class StateModel
     public int Rang { get; set; }
 
     public int Score { get; set; }
+
+    public int Rope { get; set; }
 }

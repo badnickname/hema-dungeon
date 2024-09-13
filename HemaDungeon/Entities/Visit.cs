@@ -6,5 +6,7 @@ public sealed class Visit
 
     public Character Character { get; set; }
 
+    public DateTime? Date { get; set; }
+
     public bool WasHere { get; set; }
 }

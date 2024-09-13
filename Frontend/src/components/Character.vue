@@ -24,20 +24,24 @@ function getGender(gender: string) {
     <hr />
     <div class="stats">
       <span>
-        <strong>HP: </strong>
-        <span>{{ entity.vitality.toFixed(2) }}</span>
+        <strong>Жизни: </strong>
+        <span>{{ entity.vitality.toFixed(1) }}</span>
+      </span>
+      <span>
+        <strong>Выносливость: </strong>
+        <span>{{ entity.stamina?.toFixed(1) }}</span>
       </span>
       <span>
         <img src="../assets/power.png" width="16px" height="16px" alt="Power"/>
-        <span>{{ entity.power.toFixed(2) }}</span>
+        <span>{{ entity.power.toFixed(1) }}</span>
       </span>
       <span>
         <img src="../assets/wisdom.png" width="16px" height="16px" alt="Wisdom"/>
-        <span>{{ entity.wisdom.toFixed(2) }}</span>
+        <span>{{ entity.wisdom.toFixed(1) }}</span>
       </span>
       <span>
         <img src="../assets/agility.png" width="16px" height="16px" alt="Agility"/>
-        <span>{{ entity.agility.toFixed(2) }}</span>
+        <span>{{ entity.agility.toFixed(1) }}</span>
       </span>
     </div>
     <hr />
@@ -110,6 +114,7 @@ h2 {
   margin-top: 8px;
   flex-direction: row !important;
   justify-content: space-between;
+  align-items: center !important;
   > * {
     display: flex;
     gap: 4px;

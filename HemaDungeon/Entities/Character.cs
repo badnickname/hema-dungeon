@@ -27,6 +27,8 @@ public sealed class Character : IdentityUser
     public int Rang { get; set; }
 
     public int Score { get; set; }
+
+    public int Rope { get; set; }
     // Physics
 
     // Stats
@@ -34,13 +36,18 @@ public sealed class Character : IdentityUser
     public float Power => Math.Min(60, PushUp) + PullUp * 3;
 
     [NotMapped]
-    public double Agility => Math.Min(50.0, Abdominal) +  (RunTwenty > 0 ? (6.6 - RunTwenty) : 0) * 1.5;
+    // public double Agility => Math.Min(50.0, Abdominal) +  (RunTwenty > 0 ? (20 - RunTwenty) : 0) * 5;
+    public double Agility => Math.Min(50.0, Abdominal) +  (RunTwenty > 0 ? (20 - RunTwenty) : 0) * 5;
 
     [NotMapped]
-    public float Wisdom => Rang > 0 ? (10 - Rang) * 10 : 0;
+    public float Wisdom => Rang > 0 ? (11 - Rang) * 10 : 0;
+
+    [NotMapped] 
+    public double Stamina => Rope / 10.0 + RunTwenty * 2.5;
 
     [NotMapped]
-    public double Vitality => (Score > 0 ? Score : 1) * (Rang > 0 ? (11 - Rang) * 10 : 10) * (Visits?.Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
+    // public double Vitality => (Score > 0 ? Score : 1) * (Rang > 0 ? (11 - Rang) * 10 : 10) * (Visits?.Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
+    public double Vitality => (Score > 0 ? Score : 1) * 5 * (Visits?.OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
     // Stats
 
     public ICollection<Visit>? Visits { get; set; }

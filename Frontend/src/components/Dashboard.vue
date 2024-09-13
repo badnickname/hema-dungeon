@@ -38,7 +38,7 @@ function getGender(gender: string) {
     <h2>Персонажи</h2>
     <ul>
       <li v-for="entity in characters">
-        <img :src="entity.avatar" style="min-width: 36px;" :alt="entity.name"/>
+        <img :src="entity.avatar" :alt="entity.name"/>
         <div>
           <div>
             <strong>Имя: </strong>
@@ -52,22 +52,26 @@ function getGender(gender: string) {
             <strong>Возраст: </strong>
             <span>{{ entity.age }}</span>
           </div>
-          <span>
-            <strong>HP: </strong>
-            <span>{{ entity.vitality.toFixed(2) }}</span>
-          </span>
+          <div>
+            <strong>Жизни: </strong>
+            <span>{{ entity.vitality.toFixed(1) }}</span>
+          </div>
+          <div>
+            <strong>Выносливость: </strong>
+            <span>{{ entity.stamina?.toFixed(1) }}</span>
+          </div>
           <div class="stats">
             <span>
               <img src="../assets/power.png" width="16px" height="16px" alt="Power" />
-              <span>{{ entity.power.toFixed(2) }}</span>
+              <span>{{ entity.power.toFixed(1) }}</span>
             </span>
             <span>
               <img src="../assets/wisdom.png" width="16px" height="16px" alt="Wisdom" />
-              <span>{{ entity.wisdom.toFixed(2) }}</span>
+              <span>{{ entity.wisdom.toFixed(1) }}</span>
             </span>
             <span>
               <img src="../assets/agility.png" width="16px" height="16px" alt="Agility" />
-              <span>{{ entity.agility.toFixed(2) }}</span>
+              <span>{{ entity.agility.toFixed(1) }}</span>
             </span>
           </div>
         </div>
@@ -102,17 +106,29 @@ function getGender(gender: string) {
     flex-direction: column;
     gap: 4px;
     align-items: baseline;
+    padding: 0;
 
     > li {
-      width: 300px;
+      width: 320px;
       justify-content: space-between;
       gap: 10px;
       display: flex;
       margin-bottom: 24px;
 
+      > img {
+        max-width: 36px;
+        height: fit-content;
+      }
       > div {
         width: 100%;
         text-align: left;
+      }
+      > :first-child,
+      > :last-child {
+        flex: 1;
+      }
+      > :nth-child(2) {
+        flex: 5;
       }
     }
   }
@@ -127,6 +143,9 @@ button {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  > * {
+    flex: none !important;
+  }
 }
 
 h2 {

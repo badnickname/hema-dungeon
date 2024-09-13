@@ -19,8 +19,12 @@ const entity = computed(() => store.character);
         <input v-model="entity.pushUp" type="number" name="pullUp" autocomplete="off" />
       </label>
       <label>
-        <span>Бег 20м</span>
+        <span>Челнок (секунды)</span>
         <input v-model="entity.runTwenty" type="number" step=".01" name="runTwenty" autocomplete="off" />
+      </label>
+      <label>
+        <span>Скакалка</span>
+        <input v-model="entity.rope" type="number" name="rope" autocomplete="off" />
       </label>
       <label>
         <span>Ранг</span>
@@ -37,7 +41,7 @@ const entity = computed(() => store.character);
       <h2>Портрет</h2>
       <label>
         <span>Изображение</span>
-        <input type="file" name="avatar" />
+        <input type="file" name="avatar" accept="image/png, image/jpeg, image/gif" />
       </label>
       <hr />
       <button>Сохранить</button>

@@ -16,6 +16,8 @@ public sealed class ApiController : ControllerBase
         if (context.Users.Any(x => x.Name == model.Name || x.Email == model.Email)) return Redirect("/");
 
         var avatar = HttpContext.Request.Form.Files.GetFile("avatar")!;
+        if (!avatar.ContentType.Contains("image")) return BadRequest();
+
         var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
         await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
         await using var input = avatar.OpenReadStream();
@@ -90,9 +92,11 @@ public sealed class ApiController : ControllerBase
         var user = await signInManager.UserManager.GetUserAsync(HttpContext.User);
         if (user is null) return Unauthorized();
 
+        var avatar = HttpContext.Request.Form.Files.GetFile("avatar")!;
+        if (!avatar.ContentType.Contains("image")) return BadRequest();
+
         System.IO.File.Delete($"wwwroot/{user.Avatar}");
 
-        var avatar = HttpContext.Request.Form.Files.GetFile("avatar")!;
         var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
         await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
         await using var input = avatar.OpenReadStream();
@@ -119,6 +123,7 @@ public sealed class ApiController : ControllerBase
         user.RunTwenty = model.RunTwenty;
         user.Rang = model.Rang;
         user.Score = model.Score;
+        user.Rope = model.Rope;
 
         context.Users.Update(user);
         await context.SaveChangesAsync();

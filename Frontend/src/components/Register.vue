@@ -16,7 +16,7 @@
   <hr />
   <label>
     <span>Портрет</span>
-    <input type="file" name="avatar" />
+    <input type="file" name="avatar" accept="image/png, image/jpeg, image/gif" />
   </label>
   <hr />
   <label>
