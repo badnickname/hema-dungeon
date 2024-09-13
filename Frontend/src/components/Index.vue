@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useStore } from '../store';
 
 const store = useStore();
 const router = useRouter();
+const loading = ref(true);
 
 onMounted(async () => {
   const result = await store.getCharacter();
@@ -15,11 +16,15 @@ onMounted(async () => {
       await router.replace('/dashboard');
     }
   }
+  loading.value = false;
 })
 </script>
 
 <template>
-  <div class="body">
+  <div v-if="loading" class="body">
+    Загрузка...
+  </div>
+  <div v-else class="body">
     <span>WELCOME TO DEEP DARK FANTASY</span>
     <div class="tools">
       <RouterLink to="login">
