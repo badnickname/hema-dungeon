@@ -46,5 +46,7 @@ app.MapGet("login", (HttpContext context) => context.Response.Redirect("/"));
 app.MapGet("dashboard", (HttpContext context) => context.Response.Redirect("/"));
 app.MapGet("register", (HttpContext context) => context.Response.Redirect("/"));
 app.MapGet("fight", (HttpContext context) => context.Response.Redirect("/"));
+app.MapGet("character", (HttpContext context) => context.Response.Redirect("/"));
+app.MapGet("edit", (HttpContext context) => context.Response.Redirect("/"));
 
 app.Run();

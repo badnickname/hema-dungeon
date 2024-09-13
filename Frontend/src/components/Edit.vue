@@ -12,11 +12,11 @@ const entity = computed(() => store.character);
       <h2>Статы (временно так)</h2>
       <label>
         <span>Отжимания</span>
-        <input v-model="entity.pullUp" type="number" name="pushUp" autocomplete="off" />
+        <input v-model="entity.pushUp" type="number" name="pushUp" autocomplete="off" />
       </label>
       <label>
         <span>Подтягивания</span>
-        <input v-model="entity.pushUp" type="number" name="pullUp" autocomplete="off" />
+        <input v-model="entity.pullUp" type="number" name="pullUp" autocomplete="off" />
       </label>
       <label>
         <span>Пресс</span>
