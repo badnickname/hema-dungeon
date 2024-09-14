@@ -23,11 +23,11 @@ const entity = computed(() => store.character);
         <input v-model="entity.abdominal" type="number" name="abdominal" autocomplete="off" />
       </label>
       <label>
-        <span>Челнок (секунды)</span>
+        <span>Челнок 4х14</span>
         <input v-model="entity.runTwenty" type="number" step=".01" name="runTwenty" autocomplete="off" />
       </label>
       <label>
-        <span>Челнок (кол-во раз)</span>
+        <span>Челнок 15 м</span>
         <input v-model="entity.runFifteen" type="number" name="runFifteen" autocomplete="off" />
       </label>
       <label>
@@ -39,7 +39,7 @@ const entity = computed(() => store.character);
         <input v-model="entity.rang" type="number" name="rang" autocomplete="off" />
       </label>
       <label>
-        <span>ОФП</span>
+        <span>Баллы за ОФП</span>
         <input v-model="entity.score" type="number" name="score" autocomplete="off" />
       </label>
       <hr />

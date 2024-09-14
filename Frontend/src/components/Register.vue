@@ -58,11 +58,11 @@
     <input type="number" name="abdominal" autocomplete="off" />
   </label>
   <label>
-    <span>Челнок (секунды)</span>
+    <span>Челнок 4х14</span>
     <input type="number" step=".01" name="runTwenty" autocomplete="off" />
   </label>
   <label>
-    <span>Челнок (кол-во раз)</span>
+    <span>Челнок 15 м</span>
     <input type="number" name="runFifteen" autocomplete="off" />
   </label>
   <label>
@@ -74,7 +74,7 @@
     <input type="number" name="rang" autocomplete="off" />
   </label>
   <label>
-    <span>ОФП</span>
+    <span>Баллы за ОФП</span>
     <input type="number" name="score" autocomplete="off" />
   </label>
   <hr />
