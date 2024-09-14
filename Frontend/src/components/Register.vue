@@ -62,6 +62,10 @@
     <input type="number" step=".01" name="runTwenty" autocomplete="off" />
   </label>
   <label>
+    <span>Челнок (кол-во раз)</span>
+    <input type="number" name="runFifteen" autocomplete="off" />
+  </label>
+  <label>
     <span>Скакалка</span>
     <input type="number" name="rope" autocomplete="off" />
   </label>

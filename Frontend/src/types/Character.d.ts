@@ -12,6 +12,7 @@ export type Character = {
 	pullUp?: number;
 	abdominal?: number;
 	runTwenty?: number;
+	runFifteen?: number;
 	rang?: number;
 	score?: number;
 	stamina?: number;

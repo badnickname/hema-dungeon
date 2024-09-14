@@ -26,6 +26,8 @@ public sealed class Character : IdentityUser
 
     public float RunTwenty { get; set; }
 
+    public float RunFifteen { get; set; }
+
     public int Rang { get; set; }
 
     public int Score { get; set; }
@@ -45,7 +47,7 @@ public sealed class Character : IdentityUser
     public float Wisdom => Rang > 0 ? (11 - Rang) * 10 : 0;
 
     [NotMapped] 
-    public double Stamina => Rope / 10.0 + RunTwenty * 2.5;
+    public double Stamina => Rope / 10.0 + RunFifteen * 2.5;
 
     [NotMapped]
     // public double Vitality => (Score > 0 ? Score : 1) * (Rang > 0 ? (11 - Rang) * 10 : 10) * (Visits?.Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);

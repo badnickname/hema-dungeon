@@ -32,6 +32,8 @@ public sealed class SignUpModel
 
     public float? RunTwenty { get; set; }
 
+    public int? RunFifteen { get; set; }
+
     public int? Rang { get; set; }
 
     public int? Score { get; set; }

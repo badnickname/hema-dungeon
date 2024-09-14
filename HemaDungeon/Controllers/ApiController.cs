@@ -30,6 +30,7 @@ public sealed class ApiController : ControllerBase
             PushUp = model.PushUp ?? 0,
             PullUp = model.PullUp ?? 0,
             RunTwenty = model.RunTwenty ?? 0,
+            RunFifteen = model.RunFifteen ?? 0,
             Abdominal = model.Abdominal ?? 0,
             Rope = model.Rope ?? 0,
             Rang = model.Rang ?? 0,
@@ -168,6 +169,7 @@ public sealed class ApiController : ControllerBase
         user.PullUp = model.PullUp;
         user.Abdominal = model.Abdominal;
         user.RunTwenty = model.RunTwenty;
+        user.RunFifteen = model.RunFifteen;
         user.Rang = model.Rang;
         user.Score = model.Score;
         user.Rope = model.Rope;
