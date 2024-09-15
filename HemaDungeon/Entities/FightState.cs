@@ -9,4 +9,6 @@ public sealed class FightState
     public int ScoreHealth { get; set; }
 
     public double Damage { get; set; }
+
+    public string AuthorId { get; set; }
 }
