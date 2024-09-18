@@ -29,7 +29,7 @@ public sealed class FightController : ControllerBase
         context.FightCharacters.RemoveRange(context.FightCharacters.Where(x => x.AuthorId == userId).ToList());
         await context.SaveChangesAsync();
 
-        foreach (var user in context.Users.Where(x => model.Names.Contains(x.Name)))
+        foreach (var user in context.Users.Where(x => model.Ids.Contains(x.Id)))
         {
             context.FightCharacters.Add(new FightCharacter
             {
@@ -86,7 +86,7 @@ public sealed class FightController : ControllerBase
         await context.SaveChangesAsync();
 
         var states = new List<FightState>();
-        foreach (var user in context.FightCharacters.Where(x => x.AuthorId == userId).Include(x => x.Character).Include(x => x.Character).Where(x => model.Names.Contains(x.Character.Name)))
+        foreach (var user in context.FightCharacters.Where(x => x.AuthorId == userId).Include(x => x.Character).Include(x => x.Character).Where(x => model.Ids.Contains(x.Character.Id)))
         {
             var state = new FightState
             {

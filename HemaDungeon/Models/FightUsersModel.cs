@@ -2,5 +2,5 @@
 
 public sealed class FightUsersModel
 {
-    public string[] Names { get; set; }
+    public string[] Ids { get; set; }
 }

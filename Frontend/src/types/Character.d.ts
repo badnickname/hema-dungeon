@@ -1,4 +1,5 @@
 export type Character = {
+	id: string;
 	avatar: string;
 	name: string;
 	age: number;

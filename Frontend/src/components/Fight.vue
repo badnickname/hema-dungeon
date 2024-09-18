@@ -64,7 +64,7 @@ onMounted(store.getFight);
           </div>
           <label class="buttons">
             <span>Выбран</span>
-            <input type="checkbox" name="names" :value="entity.name" />
+            <input type="checkbox" name="ids" :value="entity.id" />
           </label>
         </li>
       </ul>
@@ -111,7 +111,7 @@ onMounted(store.getFight);
           </div>
           <label class="buttons">
             <span>Выбран</span>
-            <input :id="`${entity.character.name}`" type="checkbox" name="names" :disabled="!(canSelect || names.includes(entity.character.name)) || entity.health < 0.001" :value="entity.character.name" @change="onSelect($event, entity)" />
+            <input :id="`${entity.character.name}`" type="checkbox" name="ids" :disabled="!(canSelect || names.includes(entity.character.name)) || entity.health < 0.001" :value="entity.character.id" @change="onSelect($event, entity)" />
           </label>
         </li>
       </ul>

@@ -80,40 +80,18 @@ function back() {
             <span>{{ visit.character.name }}</span>
           </div>
           <div>
-            <strong>Ранг: </strong>
-            <span>{{ visit.character.rang }}</span>
-          </div>
-          <div>
-            <strong>Жизни: </strong>
-            <span>{{ visit.character.vitality.toFixed(1) }}</span>
-          </div>
-          <div>
-            <strong>Выносливость: </strong>
-            <span>{{ visit.character.stamina?.toFixed(1) }}</span>
-          </div>
-          <div class="stats">
-            <span>
-              <img src="../assets/power.png" width="16px" height="16px" alt="Power" />
-              <span>{{ visit.character.power.toFixed(1) }}</span>
-            </span>
-            <span>
-              <img src="../assets/wisdom.png" width="16px" height="16px" alt="Wisdom" />
-              <span>{{ visit.character.wisdom.toFixed(1) }}</span>
-            </span>
-            <span>
-              <img src="../assets/agility.png" width="16px" height="16px" alt="Agility" />
-              <span>{{ visit.character.agility.toFixed(1) }}</span>
-            </span>
+            <strong>Автор: </strong>
+            <span>{{ visit.character.author }}</span>
           </div>
         </div>
         <div class="checkboxes">
           <label>
             <span>Был на занятии</span>
-            <input type="checkbox" name="names" :value="visit.character.name" :checked="visit.wasHere" />
+            <input type="checkbox" name="ids" :value="visit.character.id" :checked="visit.wasHere" />
           </label>
           <label>
             <span>Пропустил по ув. причине</span>
-            <input type="checkbox" name="skipNames" :value="visit.character.name" :checked="visit.canSkip" />
+            <input type="checkbox" name="skipIds" :value="visit.character.id" :checked="visit.canSkip" />
           </label>
         </div>
       </li>
@@ -197,17 +175,6 @@ button {
 h2 {
   color: #ffe071;
   border-bottom: 2px #ffe071 solid;
-}
-
-.stats {
-  display: flex;
-  gap: 4px;
-  margin-top: 8px;
-  > * {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-  }
 }
 
 input[type="checkbox"] {

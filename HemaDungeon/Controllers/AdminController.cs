@@ -27,8 +27,8 @@ public sealed class AdminController : ControllerBase
     public async Task<IActionResult> SaveVisits([FromForm] VisitModel model, [FromServices] Context context)
     {
         var date = model.DateTime.Date;
-        model.SkipNames ??= [];
-        model.Names ??= [];
+        model.SkipIds ??= [];
+        model.Ids ??= [];
 
         var visits = await context.Visits.Where(x => x.Date == date).ToListAsync();
         context.Visits.RemoveRange(visits);
@@ -42,8 +42,8 @@ public sealed class AdminController : ControllerBase
                 Character = user,
                 Date = date,
                 Id = Guid.NewGuid().ToString(),
-                WasHere = model.Names.Contains(user.Name),
-                CanSkip = model.SkipNames.Contains(user.Name)
+                WasHere = model.Ids.Contains(user.Id),
+                CanSkip = model.SkipIds.Contains(user.Id)
             });
         }
         await context.SaveChangesAsync();
