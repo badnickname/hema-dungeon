@@ -86,10 +86,10 @@ onMounted(store.getFight);
               <strong>Ранг: </strong>
               <span>{{ entity.character.rang }}</span>
             </div>
-            <div>
-              <strong>Жизни: </strong>
-              <span>{{ entity.health.toFixed(1) }}</span>
-            </div>
+<!--            <div>-->
+<!--              <strong>Жизни: </strong>-->
+<!--              <span>{{ entity.health.toFixed(1) }}</span>-->
+<!--            </div>-->
             <div>
               <strong>Выносливость: </strong>
               <span>{{ entity.character.stamina?.toFixed(1) }}</span>
@@ -133,10 +133,10 @@ onMounted(store.getFight);
                 <strong>Ранг: </strong>
                 <span>{{ entity.character.character.rang }}</span>
               </div>
-              <div>
-                <strong>Жизни: </strong>
-                <span>{{ entity.character.health.toFixed(1) }}</span>
-              </div>
+<!--              <div>-->
+<!--                <strong>Жизни: </strong>-->
+<!--                <span>{{ entity.character.health.toFixed(1) }}</span>-->
+<!--              </div>-->
               <div>
                 <strong>Выносливость: </strong>
                 <span>{{ entity.character.character.stamina?.toFixed(1) }}</span>
@@ -156,10 +156,10 @@ onMounted(store.getFight);
               </span>
               </div>
             </div>
-            <div>
-              <strong>Очки жизней: </strong>
-              <span>{{ entity.scoreHealth }}</span>
-            </div>
+<!--            <div>-->
+<!--              <strong>Очки жизней: </strong>-->
+<!--              <span>{{ entity.scoreHealth }}</span>-->
+<!--            </div>-->
             <div>
               <strong>Урон: </strong>
               <span>{{ entity.damage.toFixed(1) }}</span>
