@@ -2,6 +2,7 @@
 import { useStore } from '../store';
 import { computed, onMounted, ref } from 'vue';
 import type { FightCharacter } from '../types/FightCharacter';
+import Difference from './Difference.vue';
 
 const store = useStore();
 const characters = computed(() => store.characters);
@@ -17,20 +18,6 @@ function onSelect(event: Event, entity: FightCharacter) {
   if (el.checked) names.value.push(entity.character.name); else names.value = names.value.filter(x => x !== entity.character.name);
 }
 const canSelect = computed(() => names.value.length < 2);
-
-function getCalculations(first: FightCharacter, second: FightCharacter) {
-  const power = Math.max(first.character.power - second.character.power, 1);
-  const agility = Math.max(first.character.agility - second.character.agility, 1);
-  const wisdom = Math.max(first.character.wisdom - second.character.wisdom, 1);
-  const stamina = Math.max((first.character.stamina ?? 0) - (second.character.stamina ?? 0), 1);
-
-  const firstRang = first.character.rang ?? 10;
-  const secondRang = second.character.rang ?? 10;
-
-  const diffRang = firstRang < secondRang ? `${secondRang} - ${firstRang} + 1` : `${firstRang} - ${secondRang} + 1`;
-
-  return `( (${power.toFixed(1).replace('.0', '')} + ${agility.toFixed(1).replace('.0', '')} + ${wisdom.toFixed(1).replace('.0', '')} + ${stamina.toFixed(1).replace('.0', '')}) * 5 ) ${(firstRang) < (secondRang) ? '/' : '*'} (${diffRang})`;
-}
 
 onMounted(store.getFight);
 </script>
@@ -179,10 +166,10 @@ onMounted(store.getFight);
             </div>
             <div v-if="entity.isOpened" class="damage">
               <strong>Расчёт урона: </strong>
-              <span>{{ getCalculations(entity.character, fightStates[(i + 1) % 2].character) }}</span>
+              <Difference :first="entity.character" :second="fightStates[(i + 1) % 2].character" />
             </div>
             <div v-else>
-              <a @click="entity.isOpened = true">ЧТО С УРОНОМ???</a>
+              <a @click="entity.isOpened = true">А ЧТО С УРОНОМ???</a>
             </div>
             <label class="buttons">
               <span>Очки за бой</span>
