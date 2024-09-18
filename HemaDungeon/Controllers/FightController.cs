@@ -17,7 +17,7 @@ public sealed class FightController : ControllerBase
     public async Task<IActionResult> GetUser([FromServices] Context context, [FromServices] UserManager<Character> manager)
     {
         var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
-        var users = await context.FightCharacters.Where(x => x.AuthorId == userId).Include(x => x.Character).ToListAsync();
+        var users = await context.FightCharacters.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Visits).ToListAsync();
         return new JsonResult(users);
     }
 
@@ -166,7 +166,7 @@ public sealed class FightController : ControllerBase
     {
         var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
 
-        var states = await context.FightStates.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Character).ToListAsync();
+        var states = await context.FightStates.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Character).ThenInclude(x => x.Visits).ToListAsync();
         return new JsonResult(states);
     }
 }
