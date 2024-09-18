@@ -105,9 +105,9 @@ public sealed class FightController : ControllerBase
         var buff1 = service.Accept(states[1], states[0]);
 
         states[0].Damage =
-            Math.Max(states[0].Character.Character.Agility + buff0.Agility - states[1].Character.Character.Agility, 1) +
+            Math.Max(states[0].Character.Character.Agility + buff0.Agility - states[1].Character.Character.Agility - buff1.Agility, 1) +
             Math.Max(states[0].Character.Character.Power - states[1].Character.Character.Power, 1) +
-            Math.Max(states[0].Character.Character.Wisdom + buff0.Wisdom - states[1].Character.Character.Wisdom, 1) +
+            Math.Max(states[0].Character.Character.Wisdom + buff0.Wisdom - states[1].Character.Character.Wisdom - buff1.Wisdom, 1) +
             Math.Max(states[0].Character.Character.Stamina - states[1].Character.Character.Stamina, 1);
         states[0].Damage *= 5;
         if (states[0].Character.Character.Rang > states[1].Character.Character.Rang)
@@ -120,9 +120,9 @@ public sealed class FightController : ControllerBase
         }
 
         states[1].Damage =
-            Math.Max(states[1].Character.Character.Agility + buff1.Agility - states[0].Character.Character.Agility, 1) +
+            Math.Max(states[1].Character.Character.Agility + buff1.Agility - states[0].Character.Character.Agility - buff0.Agility, 1) +
             Math.Max(states[1].Character.Character.Power - states[0].Character.Character.Power, 1) +
-            Math.Max(states[1].Character.Character.Wisdom + buff1.Wisdom - states[0].Character.Character.Wisdom, 1) +
+            Math.Max(states[1].Character.Character.Wisdom + buff1.Wisdom - states[0].Character.Character.Wisdom - buff0.Wisdom, 1) +
             Math.Max(states[1].Character.Character.Stamina - states[0].Character.Character.Stamina, 1);
         states[1].Damage *= 5;
         if (states[1].Character.Character.Rang > states[0].Character.Character.Rang)
