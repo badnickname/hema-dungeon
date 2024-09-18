@@ -10,6 +10,8 @@ public sealed class Context : IdentityDbContext<Character>
 
     public DbSet<FightState> FightStates { get; set; }
 
+    public DbSet<Visit> Visits { get; set; }
+
     public Context(DbContextOptions options) : base(options)
     {
 #if RELEASE
