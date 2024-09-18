@@ -172,8 +172,8 @@ onMounted(store.getFight);
               <a @click="entity.isOpened = true">А ЧТО С УРОНОМ???</a>
             </div>
             <label class="buttons">
-              <span>Очки за бой</span>
-              <input type="number" name="score" value="0">
+              <strong>{{ entity.name }}<span v-if="entity.calculated">(посчитано)</span></strong>
+              <span :class="entity.calculated ? 'accepted' : ''">{{ entity.description }}</span>
             </label>
           </div>
         </li>
@@ -295,5 +295,9 @@ h2 {
 input[type="checkbox"] {
   width: 24px;
   height: 24px;
+}
+
+.accepted {
+  color: #616161;
 }
 </style>

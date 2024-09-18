@@ -11,6 +11,10 @@ public sealed class Buff
     public bool CopyStats { get; set; }
 
     public int Wisdom { get; set; }
-    
+
     public bool Calculated { get; set; }
+
+    public string? Name { get; set; }
+
+    public string? Description { get; set; }
 }

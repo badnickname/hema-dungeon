@@ -13,4 +13,8 @@ public sealed class FightState
     public string AuthorId { get; set; }
 
     public bool Calculated { get; set; }
+
+    public string Name { get; set; }
+
+    public string Description { get; set; }
 }

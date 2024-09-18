@@ -2,5 +2,5 @@
 
 public sealed class FightStateModel
 {
-    public int?[] Score { get; set; }
+    public int?[]? Score { get; set; }
 }

@@ -62,6 +62,7 @@ public sealed class FightController : ControllerBase
     public async Task<IActionResult> CompleteState([FromForm] FightStateModel model, [FromServices] Context context, [FromServices] UserManager<Character> manager)
     {
         var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
+        model.Score ??= [0, 0];
 
         var states = await context.FightStates.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Character).ToListAsync();
         states[0].Character.Health -= states[1].Damage * (model.Score[1] ?? 0);
@@ -117,7 +118,6 @@ public sealed class FightController : ControllerBase
         {
             states[0].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang + 1);
         }
-        states[0].Damage = (int) (states[0].Damage * buff1.ResistFactor) + buff0.Damage;
 
         states[1].Damage =
             Math.Max(states[1].Character.Character.Agility + buff1.Agility - states[0].Character.Character.Agility, 1) +
@@ -133,16 +133,21 @@ public sealed class FightController : ControllerBase
         {
             states[1].Damage /= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
         }
-        states[1].Damage = (int) (states[1].Damage * buff0.ResistFactor) + buff1.Damage;
 
         if (buff0.CopyStats || buff1.CopyStats)
         {
             states[0].Damage = 20;
             states[1].Damage = 20;
         }
+        states[1].Damage = (int) (states[1].Damage * (buff0.ResistFactor > 0 ? buff0.ResistFactor : 1)) + buff1.Damage;
+        states[0].Damage = (int) (states[0].Damage * (buff1.ResistFactor > 0 ? buff1.ResistFactor : 1)) + buff0.Damage;
 
         states[0].Calculated = buff0.Calculated;
+        states[0].Name = buff0.Name ?? string.Empty;
+        states[0].Description = buff0.Description ?? string.Empty;
         states[1].Calculated = buff1.Calculated;
+        states[1].Name = buff1.Name ?? string.Empty;
+        states[1].Description = buff1.Description ?? string.Empty;
 
         states[0].ScoreHealth = (int) Math.Ceiling(states[0].Character.Health / states[1].Damage);
         if (states[0].ScoreHealth == 0) states[0].ScoreHealth = 1;
