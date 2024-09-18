@@ -11,4 +11,6 @@ public sealed class FightState
     public double Damage { get; set; }
 
     public string AuthorId { get; set; }
+
+    public bool Calculated { get; set; }
 }

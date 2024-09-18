@@ -1,4 +1,5 @@
-﻿using HemaDungeon.Entities;
+﻿using HemaDungeon.Abilities;
+using HemaDungeon.Entities;
 using HemaDungeon.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -78,7 +79,7 @@ public sealed class FightController : ControllerBase
 
     [HttpPost("state")]
     [Authorize]
-    public async Task<IActionResult> PostState([FromForm] FightUsersModel model, [FromServices] UserManager<Character> manager, [FromServices] Context context)
+    public async Task<IActionResult> PostState([FromForm] FightUsersModel model, [FromServices] AbilityService service, [FromServices] UserManager<Character> manager, [FromServices] Context context)
     {
         var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
 
@@ -99,10 +100,13 @@ public sealed class FightController : ControllerBase
             context.FightStates.Add(state);
         }
 
+        var buff0 = service.Accept(states[0], states[1]);
+        var buff1 = service.Accept(states[1], states[0]);
+
         states[0].Damage =
-            Math.Max(states[0].Character.Character.Agility - states[1].Character.Character.Agility, 1) +
+            Math.Max(states[0].Character.Character.Agility + buff0.Agility - states[1].Character.Character.Agility, 1) +
             Math.Max(states[0].Character.Character.Power - states[1].Character.Character.Power, 1) +
-            Math.Max(states[0].Character.Character.Wisdom - states[1].Character.Character.Wisdom, 1) +
+            Math.Max(states[0].Character.Character.Wisdom + buff0.Wisdom - states[1].Character.Character.Wisdom, 1) +
             Math.Max(states[0].Character.Character.Stamina - states[1].Character.Character.Stamina, 1);
         states[0].Damage *= 5;
         if (states[0].Character.Character.Rang > states[1].Character.Character.Rang)
@@ -113,12 +117,12 @@ public sealed class FightController : ControllerBase
         {
             states[0].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang + 1);
         }
-        states[0].Damage = (int) states[0].Damage;
+        states[0].Damage = (int) (states[0].Damage * buff1.ResistFactor) + buff0.Damage;
 
         states[1].Damage =
-            Math.Max(states[1].Character.Character.Agility - states[0].Character.Character.Agility, 1) +
+            Math.Max(states[1].Character.Character.Agility + buff1.Agility - states[0].Character.Character.Agility, 1) +
             Math.Max(states[1].Character.Character.Power - states[0].Character.Character.Power, 1) +
-            Math.Max(states[1].Character.Character.Wisdom - states[0].Character.Character.Wisdom, 1) +
+            Math.Max(states[1].Character.Character.Wisdom + buff1.Wisdom - states[0].Character.Character.Wisdom, 1) +
             Math.Max(states[1].Character.Character.Stamina - states[0].Character.Character.Stamina, 1);
         states[1].Damage *= 5;
         if (states[1].Character.Character.Rang > states[0].Character.Character.Rang)
@@ -129,7 +133,16 @@ public sealed class FightController : ControllerBase
         {
             states[1].Damage /= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
         }
-        states[1].Damage = (int) states[1].Damage;
+        states[1].Damage = (int) (states[1].Damage * buff0.ResistFactor) + buff1.Damage;
+
+        if (buff0.CopyStats || buff1.CopyStats)
+        {
+            states[0].Damage = 20;
+            states[1].Damage = 20;
+        }
+
+        states[0].Calculated = buff0.Calculated;
+        states[1].Calculated = buff1.Calculated;
 
         states[0].ScoreHealth = (int) Math.Ceiling(states[0].Character.Health / states[1].Damage);
         if (states[0].ScoreHealth == 0) states[0].ScoreHealth = 1;

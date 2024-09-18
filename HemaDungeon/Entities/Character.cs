@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using HemaDungeon.Abilities;
 using Microsoft.AspNetCore.Identity;
 
 namespace HemaDungeon.Entities;
@@ -34,6 +35,8 @@ public sealed class Character : IdentityUser
     public int Score { get; set; }
 
     public int Rope { get; set; }
+
+    public AbilityType? Ability { get; set; }
     // Physics
 
     // Stats

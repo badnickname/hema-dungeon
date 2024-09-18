@@ -1,4 +1,5 @@
 using HemaDungeon;
+using HemaDungeon.Abilities;
 using HemaDungeon.Entities;
 using HemaDungeon.Options;
 using HemaDungeon.Workers;
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.Configure<EmailOption>(builder.Configuration.GetSection("Email"));
 builder.Services.Configure<AdminOptions>(builder.Configuration.GetSection("Admin"));
 builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("default")));
+builder.Services.AddTransient<AbilityService>();
 builder.Services.AddIdentity<Character, IdentityRole>(options =>
 {
     options.Password = new PasswordOptions
