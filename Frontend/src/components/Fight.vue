@@ -18,6 +18,20 @@ function onSelect(event: Event, entity: FightCharacter) {
 }
 const canSelect = computed(() => names.value.length < 2);
 
+function getCalculations(first: FightCharacter, second: FightCharacter) {
+  const power = Math.max(first.character.power - second.character.power, 1);
+  const agility = Math.max(first.character.agility - second.character.agility, 1);
+  const wisdom = Math.max(first.character.wisdom - second.character.wisdom, 1);
+  const stamina = Math.max((first.character.stamina ?? 0) - (second.character.stamina ?? 0), 1);
+
+  const firstRang = first.character.rang ?? 10;
+  const secondRang = second.character.rang ?? 10;
+
+  const diffRang = firstRang < secondRang ? `${secondRang} - ${firstRang} + 1` : `${firstRang} - ${secondRang} + 1`;
+
+  return `( (${power.toFixed(1).replace('.0', '')} + ${agility.toFixed(1).replace('.0', '')} + ${wisdom.toFixed(1).replace('.0', '')} + ${stamina.toFixed(1).replace('.0', '')}) * 5 ) ${(firstRang) < (secondRang) ? '/' : '*'} (${diffRang})`;
+}
+
 onMounted(store.getFight);
 </script>
 
@@ -120,26 +134,27 @@ onMounted(store.getFight);
       <h2>Сражение</h2>
       <h4>Укажите результаты</h4>
       <ul>
-        <li v-for="entity in fightStates">
+        <li v-for="(entity, i) in fightStates" class="body-fight">
           <img :src="entity.character.character.avatar" :alt="entity.character.character.name"/>
           <div>
             <div>
-              <strong>Имя: </strong>
-              <span>{{ entity.character.character.name }}</span>
-            </div>
-            <div>
-              <strong>Ранг: </strong>
-              <span>{{ entity.character.character.rang }}</span>
-            </div>
-            <div>
-              <strong>Жизни: </strong>
-              <span>{{ entity.character.health.toFixed(1) }}</span>
-            </div>
-            <div>
-              <strong>Выносливость: </strong>
-              <span>{{ entity.character.character.stamina?.toFixed(1) }}</span>
-            </div>
-            <div class="stats">
+              <div>
+                <strong>Имя: </strong>
+                <span>{{ entity.character.character.name }}</span>
+              </div>
+              <div>
+                <strong>Ранг: </strong>
+                <span>{{ entity.character.character.rang }}</span>
+              </div>
+              <div>
+                <strong>Жизни: </strong>
+                <span>{{ entity.character.health.toFixed(1) }}</span>
+              </div>
+              <div>
+                <strong>Выносливость: </strong>
+                <span>{{ entity.character.character.stamina?.toFixed(1) }}</span>
+              </div>
+              <div class="stats">
               <span>
                 <img src="../assets/power.png" width="16px" height="16px" alt="Power" />
                 <span>{{ entity.character.character.power.toFixed(1) }}</span>
@@ -152,20 +167,28 @@ onMounted(store.getFight);
                 <img src="../assets/agility.png" width="16px" height="16px" alt="Agility" />
                 <span>{{ entity.character.character.agility.toFixed(1) }}</span>
               </span>
+              </div>
             </div>
+            <div>
+              <strong>Очки жизней: </strong>
+              <span>{{ entity.scoreHealth }}</span>
+            </div>
+            <div>
+              <strong>Урон: </strong>
+              <span>{{ entity.damage.toFixed(1) }}</span>
+            </div>
+            <div v-if="entity.isOpened" class="damage">
+              <strong>Расчёт урона: </strong>
+              <span>{{ getCalculations(entity.character, fightStates[(i + 1) % 2].character) }}</span>
+            </div>
+            <div v-else>
+              <a @click="entity.isOpened = true">ЧТО С УРОНОМ???</a>
+            </div>
+            <label class="buttons">
+              <span>Очки за бой</span>
+              <input type="number" name="score" value="0">
+            </label>
           </div>
-          <div>
-            <strong>Очки жизней: </strong>
-            <span>{{ entity.scoreHealth }}</span>
-          </div>
-          <div>
-            <strong>Урон: </strong>
-            <span>{{ entity.damage.toFixed(1) }}</span>
-          </div>
-          <label class="buttons">
-            <span>Очки за бой</span>
-            <input type="number" name="score" value="0">
-          </label>
         </li>
       </ul>
       <button>Завершить бой</button>
@@ -227,6 +250,28 @@ onMounted(store.getFight);
         flex: 5;
       }
     }
+  }
+}
+
+.body-fight {
+  flex-direction: row;
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  a {
+    color: #ffe071;
+    cursor: pointer;
+  }
+  .stats {
+    > * {
+      flex: 1 !important;
+    }
+  }
+  .damage {
+    display: flex;
+    flex-direction: column;
   }
 }
 
