@@ -6,6 +6,7 @@ using HemaDungeon.Options;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace HemaDungeon.Controllers;
@@ -112,7 +113,7 @@ public sealed class ApiController : ControllerBase
     [HttpGet("users")]
     public IActionResult GetUser([FromServices] Context context)
     {
-        return new JsonResult(context.Users.ToList());
+        return new JsonResult(context.Users.Include(x => x.Visits).ToList());
     }
 
     [HttpPost("user")]

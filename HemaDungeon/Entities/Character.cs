@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 namespace HemaDungeon.Entities;
@@ -51,8 +52,17 @@ public sealed class Character : IdentityUser
 
     [NotMapped]
     // public double Vitality => (Score > 0 ? Score : 1) * (Rang > 0 ? (11 - Rang) * 10 : 10) * (Visits?.Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
-    public double Vitality => (Score > 0 ? Score : 1) * 5 * (Visits?.OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
+    public double Vitality {
+        get
+        {
+            var value = (Score > 0 ? Score : 1) * 5;
+            var visits = (Visits?.OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
+            if (visits < 1) return value;
+            return value * visits;
+        } 
+    }
     // Stats
 
+    [JsonIgnore]
     public ICollection<Visit>? Visits { get; set; }
 }

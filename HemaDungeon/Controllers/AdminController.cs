@@ -16,12 +16,14 @@ public sealed class AdminController : ControllerBase
     public async Task<IActionResult> GetVisits([FromServices] Context context)
     {
         var visits = await context.Visits.Include(x => x.Character).ToListAsync();
-        var result = visits.ToDictionary(x => x.Date, x => x);
+        var result = visits
+            .GroupBy(x => x.Date)
+            .ToDictionary(x => $"{x.Key!.Value.Year}-{x.Key!.Value.Month}-{x.Key!.Value.Day}", x => x.ToList());
         return new JsonResult(result);
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpPut("visits")]
+    [HttpPost("visits")]
     public async Task<IActionResult> SaveVisits([FromForm] VisitModel model, [FromServices] Context context)
     {
         var date = model.DateTime.Date;

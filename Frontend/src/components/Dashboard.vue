@@ -8,6 +8,8 @@ const store = useStore();
 const router = useRouter();
 const characters = computed(() => store.characters);
 
+const isAdmin = computed(() => store.isAdmin);
+
 async function open(character: Character) {
   store.visibleCharacter = character;
   await router.replace('/character');
@@ -27,6 +29,10 @@ async function edit() {
     <h2>Сражения</h2>
     <RouterLink class="fight" to="/fight">
      <button>Открыть</button>
+    </RouterLink>
+    <h2 v-if="isAdmin">Посещаемость</h2>
+    <RouterLink v-if="isAdmin" class="fight" to="/visit">
+      <button>Открыть</button>
     </RouterLink>
     <h2>Персонажи</h2>
     <ul>

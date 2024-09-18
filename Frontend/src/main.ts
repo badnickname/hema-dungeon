@@ -11,6 +11,7 @@ import Character from './components/Character.vue';
 import Edit from './components/Edit.vue';
 import Fight from './components/Fight.vue';
 import Password from './components/Password.vue';
+import Visit from './components/Visit.vue';
 
 const router = createRouter({
 	history: createMemoryHistory(), routes: [{
@@ -29,6 +30,8 @@ const router = createRouter({
 		path: '/fight', component: Fight
 	}, {
 		path: '/password', component: Password
+	}, {
+		path: '/visit', component: Visit
 	}]
 });
 
