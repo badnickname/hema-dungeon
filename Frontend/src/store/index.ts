@@ -67,7 +67,8 @@ export const useStore = defineStore('app', {
 					date: moment(x.date),
 					id: x.id,
 					character: x.character,
-					wasHere: x.wasHere
+					wasHere: x.wasHere,
+					canSkip: x.canSkip
 				}));
 				return list;
 			}, {} as Record<string, Visit[]>)

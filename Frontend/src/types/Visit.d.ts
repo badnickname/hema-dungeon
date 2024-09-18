@@ -6,4 +6,5 @@ export type Visit = {
 	character: Character;
 	date: Moment;
 	wasHere: boolean;
+	canSkip: boolean;
 }

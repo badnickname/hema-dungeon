@@ -37,7 +37,8 @@ function addToday(date: string) {
     id: x.name,
     character: x,
     date: moment('YYYY-MM-DD', date),
-    wasHere: false
+    wasHere: false,
+    canSkip: false
   }));
   visitsDate.value = date;
 }
@@ -105,9 +106,15 @@ function back() {
             </span>
           </div>
         </div>
-        <div class="buttons">
-          <span>Был на занятии</span>
-          <input type="checkbox" name="names" :value="visit.character.name" :checked="visit.wasHere" />
+        <div class="checkboxes">
+          <label>
+            <span>Был на занятии</span>
+            <input type="checkbox" name="names" :value="visit.character.name" :checked="visit.wasHere" />
+          </label>
+          <label>
+            <span>Пропустил по ув. причине</span>
+            <input type="checkbox" name="skipNames" :value="visit.character.name" :checked="visit.canSkip" />
+          </label>
         </div>
       </li>
     </ul>
@@ -173,12 +180,17 @@ button {
   max-height: 50px;
 }
 
-.buttons {
+.checkboxes {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
   > * {
-    flex: none !important;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    > * {
+      flex: none !important;
+    }
   }
 }
 

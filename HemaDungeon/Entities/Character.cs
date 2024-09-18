@@ -56,10 +56,10 @@ public sealed class Character : IdentityUser
         get
         {
             var value = (Score > 0 ? Score : 1) * 5;
-            var visits = (Visits?.OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
-            if (visits < 1) return value;
+            var visits = (Visits?.Where(x => !x.CanSkip).OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
+            if (value * visits == 0) return value;
             return value * visits;
-        } 
+        }
     }
     // Stats
 

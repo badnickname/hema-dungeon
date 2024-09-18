@@ -10,5 +10,7 @@ public sealed class Visit
 
     public DateTime? Date { get; set; }
 
+    public bool CanSkip { get; set; }
+    
     public bool WasHere { get; set; }
 }
