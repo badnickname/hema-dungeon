@@ -71,7 +71,7 @@ async function edit() {
           </div>
         </div>
         <div class="buttons">
-          <button @click="open(entity)">К персонажу</button>
+          <button @click="open(entity)">Персонаж</button>
           <button v-if="checkIsMe(entity)" @click="edit">Изменить</button>
         </div>
       </li>
