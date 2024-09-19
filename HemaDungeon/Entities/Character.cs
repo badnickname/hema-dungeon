@@ -37,6 +37,8 @@ public sealed class Character : IdentityUser
     public int Rope { get; set; }
 
     public AbilityType? Ability { get; set; }
+
+    public ICollection<Page> Pages { get; set; }
     // Physics
 
     // Stats
