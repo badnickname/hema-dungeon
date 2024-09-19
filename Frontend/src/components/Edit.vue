@@ -119,6 +119,7 @@ const entity = computed(() => store.character);
 }
 button {
   background-color: #ff6800;
+  color: #000;
   width: 100%;
 }
 h2 {

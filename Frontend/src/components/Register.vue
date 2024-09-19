@@ -111,6 +111,7 @@
 }
 button {
   background-color: #ff6800;
+  color: #000;
 }
 h2 {
   color: #ff6800;

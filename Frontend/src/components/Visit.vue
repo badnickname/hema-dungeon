@@ -155,6 +155,7 @@ function back() {
 button {
   background-color: #ff6800;
   height: fit-content;
+  color: #000;
   max-height: 50px;
 }
 

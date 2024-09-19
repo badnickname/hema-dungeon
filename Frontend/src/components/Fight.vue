@@ -264,6 +264,7 @@ onMounted(store.getFight);
 
 button {
   background-color: #ff6800;
+  color: #000;
   height: fit-content;
 }
 

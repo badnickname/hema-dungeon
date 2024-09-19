@@ -69,6 +69,7 @@ async function back() {
 
 button {
   background-color: #ff6800;
+  color: #000;
   height: fit-content;
   width: 300px;
 }

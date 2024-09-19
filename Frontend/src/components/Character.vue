@@ -155,6 +155,7 @@ function getGender(gender: string) {
 
 button {
   background-color: #ff6800;
+  color: #000;
   height: fit-content;
   width: 300px;
 }

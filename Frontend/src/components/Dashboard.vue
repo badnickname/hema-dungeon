@@ -132,6 +132,7 @@ async function edit() {
 
 button {
   background-color: #ff6800;
+  color: #000;
   height: fit-content;
   max-height: 50px;
 }
