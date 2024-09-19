@@ -113,7 +113,7 @@ public sealed class ApiController : ControllerBase
     [HttpGet("users")]
     public IActionResult GetUser([FromServices] Context context)
     {
-        return new JsonResult(context.Users.Include(x => x.Visits).ToList());
+        return new JsonResult(context.Users.Include(x => x.Visits).Include(x => x.Pages).ToList());
     }
 
     [HttpPost("user")]

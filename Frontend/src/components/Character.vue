@@ -1,9 +1,40 @@
 <script setup lang="ts">
 import { useStore } from '../store';
 import { computed } from 'vue';
+import type { Page } from '../types/Page';
+import { useRouter } from 'vue-router';
+import type { Character } from '../types/Character';
 
 const store = useStore();
+const router = useRouter();
 const entity = computed(() => store.visibleCharacter!);
+
+async function openPage(page: Page) {
+  store.page = page;
+  page.isEditing = false;
+  await router.replace('/page');
+}
+
+async function editPage(page: Page) {
+  store.page = page;
+  page.isEditing = true;
+  await router.replace('/page');
+}
+
+async function createPage() {
+  store.page = { isEditing: true };
+  await router.replace('/page');
+}
+
+async function removePage(page: Page) {
+  if (!confirm('Вы действительно хотите удалить страницу?')) return;
+  await store.removePage(page);
+  store.visibleCharacter!.pages = store.visibleCharacter!.pages?.filter(x => x.id !== page.id);
+}
+
+function checkIsMe(character: Character) {
+  return store.character.name === character.name;
+}
 
 function getGender(gender: string) {
   switch (gender) {
@@ -68,6 +99,22 @@ function getGender(gender: string) {
     </div>
     <hr />
     <div>
+      <strong>История</strong>
+      <ul class="pages">
+        <li v-for="page in (entity.pages ?? [])">
+          <div>
+            <a @click="openPage(page)">{{ page.name }}</a>
+          </div>
+          <div v-if="checkIsMe(entity)">
+            <button @click="editPage(page)">Изменить</button>
+            <button @click="removePage(page)">Удалить</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <button v-if="checkIsMe(entity)" @click="createPage">Добавить страницу</button>
+    <hr />
+    <div>
       <strong>Автор персонажа: </strong>
       <span>{{ entity.author ?? '--' }}</span>
     </div>
@@ -110,6 +157,27 @@ button {
   background-color: #ffe071;
   height: fit-content;
   width: 300px;
+}
+
+.pages {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  gap: 14px;
+  > li {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    a {
+      color: #ffe071;
+      cursor: pointer;
+    }
+  }
+  button {
+    width: auto !important;
+  }
 }
 
 h2 {

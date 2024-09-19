@@ -5,6 +5,7 @@ import type { FightCharacter } from '../types/FightCharacter';
 import type { FightState } from '../types/FightState';
 import type { Visit } from '../types/Visit';
 import moment from 'moment';
+import type { Page } from '../types/Page';
 
 export const useStore = defineStore('app', {
 	state: () => {
@@ -21,7 +22,8 @@ export const useStore = defineStore('app', {
 		const fightCharacters = ref<FightCharacter[]>([]);
 		const fightStates = ref<FightState[]>([]);
 		const visits = ref<Record<string, Visit[]>>({});
-		return { character, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits };
+		const page = ref<Page>();
+		return { character, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits, page };
 	}, actions: {
 		async getCharacter() {
 			// return true;
@@ -72,6 +74,13 @@ export const useStore = defineStore('app', {
 				}));
 				return list;
 			}, {} as Record<string, Visit[]>)
+			return true;
+		},
+		async removePage(page: Page) {
+			const headers = new Headers();
+			headers.append('content-type', 'application/json');
+			const result = await fetch('/api/pages/delete', { method: 'POST', headers, body: JSON.stringify({ id: page.id }) });
+			if (result.status === 401) return false;
 			return true;
 		}
 	},

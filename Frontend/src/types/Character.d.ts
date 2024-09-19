@@ -1,3 +1,5 @@
+import type { Page } from './Page';
+
 export type Character = {
 	id: string;
 	avatar: string;
@@ -19,4 +21,5 @@ export type Character = {
 	stamina?: number;
 	rope?: number;
 	author?: string;
+	pages?: Page[];
 }

@@ -29,14 +29,14 @@ public sealed class PageController : ControllerBase
     private Page CreatePage(Character character)
     {
         var count = character.Pages.Count;
-        var page = new Page { Number = count };
+        var page = new Page { Number = count, Id = Guid.NewGuid().ToString()};
         character.Pages.Add(page);
         return page;
     }
 
-    [HttpDelete]
+    [HttpPost("delete")]
     [Authorize]
-    public async Task<IActionResult> Remove([FromForm] PageModel model, [FromServices] Context context, [FromServices] UserManager<Character> manager)
+    public async Task<IActionResult> Remove([FromBody] PageModel model, [FromServices] Context context, [FromServices] UserManager<Character> manager)
     {
         var userId = manager.GetUserId(HttpContext.User)!;
         var user = context.Users.Include(x => x.Pages).First(x => x.Id == userId);
