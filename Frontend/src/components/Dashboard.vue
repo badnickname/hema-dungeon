@@ -28,7 +28,7 @@ async function edit() {
   <div class="body">
     <h2>Сражения</h2>
     <RouterLink class="fight" to="/fight">
-     <button>Открыть</button>
+     <button>Начать</button>
     </RouterLink>
     <h2 v-if="isAdmin">Посещаемость</h2>
     <RouterLink v-if="isAdmin" class="fight" to="/visit">
@@ -71,7 +71,7 @@ async function edit() {
           </div>
         </div>
         <div class="buttons">
-          <button @click="open(entity)">Открыть</button>
+          <button @click="open(entity)">К персонажу</button>
           <button v-if="checkIsMe(entity)" @click="edit">Изменить</button>
         </div>
       </li>
