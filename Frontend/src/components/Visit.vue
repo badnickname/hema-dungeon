@@ -153,7 +153,7 @@ function back() {
 }
 
 button {
-  background-color: #ffe071;
+  background-color: #ff6800;
   height: fit-content;
   max-height: 50px;
 }
@@ -173,8 +173,8 @@ button {
 }
 
 h2 {
-  color: #ffe071;
-  border-bottom: 2px #ffe071 solid;
+  color: #ff6800;
+  border-bottom: 2px #ff6800 solid;
 }
 
 input[type="checkbox"] {

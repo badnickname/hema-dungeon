@@ -4,6 +4,7 @@ import { RouterView } from 'vue-router';
 </script>
 
 <template>
+  <img src="./assets/logo.png" alt="logo" />
 <RouterView></RouterView>
 </template>
 

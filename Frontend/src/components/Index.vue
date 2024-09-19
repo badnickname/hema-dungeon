@@ -58,6 +58,6 @@ onMounted(async () => {
   }
 }
 button {
-  background-color: #ffe071;
+  background-color: #ff6800;
 }
 </style>
