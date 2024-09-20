@@ -23,7 +23,7 @@ public sealed class PageController : ControllerBase
         page.Name = model.Name ?? string.Empty;
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 
     private Page CreatePage(Character character)
@@ -45,6 +45,6 @@ public sealed class PageController : ControllerBase
         context.Remove(page);
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 }

@@ -23,7 +23,8 @@ export const useStore = defineStore('app', {
 		const fightStates = ref<FightState[]>([]);
 		const visits = ref<Record<string, Visit[]>>({});
 		const page = ref<Page>();
-		return { character, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits, page };
+		const isRefreshed = ref<boolean>();
+		return { character, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits, page, isRefreshed };
 	}, actions: {
 		async getCharacter() {
 			// return true;

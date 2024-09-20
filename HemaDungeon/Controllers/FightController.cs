@@ -42,7 +42,7 @@ public sealed class FightController : ControllerBase
         }
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 
     [HttpPost("complete")]
@@ -75,7 +75,7 @@ public sealed class FightController : ControllerBase
         context.FightStates.RemoveRange(states);
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 
     [HttpPost("state")]
@@ -157,7 +157,7 @@ public sealed class FightController : ControllerBase
 
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 
     [HttpGet("state")]

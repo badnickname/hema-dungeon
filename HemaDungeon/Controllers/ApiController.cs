@@ -132,7 +132,7 @@ public sealed class ApiController : ControllerBase
         context.Users.Update(user);
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 
     [HttpPost("avatar")]
@@ -156,7 +156,7 @@ public sealed class ApiController : ControllerBase
         context.Users.Update(user);
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 
     [HttpPost("state")]
@@ -178,6 +178,6 @@ public sealed class ApiController : ControllerBase
         context.Users.Update(user);
         await context.SaveChangesAsync();
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 }

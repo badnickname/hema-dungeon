@@ -83,7 +83,7 @@ const entity = computed(() => store.character);
       </label>
       <hr />
       <button>Сохранить</button>
-      <RouterLink to="/dashboard">
+      <RouterLink to="/">
         <button>Назад</button>
       </RouterLink>
     </form>

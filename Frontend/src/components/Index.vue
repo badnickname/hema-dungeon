@@ -1,18 +1,29 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 
 const store = useStore();
 const router = useRouter();
 const loading = ref(true);
 
+const display = computed(() => store.character && !store.isRefreshed);
+
 onMounted(async () => {
+  const uri = window.location.search.substring(1);
+  const params = new URLSearchParams(uri);
+
+  if (store.isRefreshed === undefined) {
+    store.isRefreshed = !!params.get('dashboard');
+  } else {
+    store.isRefreshed = false;
+  }
+
   const result = await store.getCharacter();
   if (result) {
-    if (await store.getFight()) {
+    if (await store.getFight() && store.isRefreshed) {
       await router.replace('/fight');
-    } else {
+    } else if (store.isRefreshed) {
       await router.replace('/dashboard');
     }
   }
@@ -24,7 +35,7 @@ onMounted(async () => {
   <div v-if="loading" class="body">
     Загрузка...
   </div>
-  <div v-else class="body">
+  <div v-else-if="!display" class="body">
     <span>WELCOME TO DEEP DARK FANTASY</span>
     <div class="tools">
       <RouterLink to="login">
@@ -33,6 +44,13 @@ onMounted(async () => {
       <RouterLink to="register">
         <button>Создать персонажа</button>
       </RouterLink>
+    </div>
+  </div>
+  <div v-else class="body">
+    <div class="icons">
+      <RouterLink to="/fight" class="fight-ico" />
+      <RouterLink to="/dashboard" class="character-ico" />
+      <RouterLink to="/visit" class="schedule-ico" />
     </div>
   </div>
 </template>
@@ -60,5 +78,49 @@ onMounted(async () => {
 button {
   background-color: #ff6800;
   color: #000;
+}
+
+.icons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fight-ico {
+  cursor: pointer;
+  display: block;
+  width: 100px;
+  height: 100px;
+  background: url('../assets/fight.png');
+  background-size: contain;
+}
+.fight-ico:hover {
+  background: url('../assets/fight_clicked.png');
+  background-size: contain;
+}
+
+.character-ico {
+  cursor: pointer;
+  display: block;
+  width: 100px;
+  height: 100px;
+  background: url('../assets/character.png');
+  background-size: contain;
+}
+.character-ico:hover {
+  background: url('../assets/character_clicked.png');
+  background-size: contain;
+}
+
+.schedule-ico {
+  cursor: pointer;
+  display: block;
+  width: 100px;
+  height: 100px;
+  background: url('../assets/schedule.png');
+  background-size: contain;
+}
+.schedule-ico:hover {
+  background: url('../assets/schedule_clicked.png');
+  background-size: contain;
 }
 </style>

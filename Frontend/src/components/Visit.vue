@@ -6,6 +6,8 @@ import moment from 'moment';
 
 const store = useStore();
 
+const isAdmin = computed(() => store.isAdmin);
+
 onMounted(store.getVisits);
 
 const dates = computed(() => Object.keys(store.visits));
@@ -52,11 +54,11 @@ function back() {
 <template>
   <div v-if="!visits" class="body">
     <h2>Внести посещаемость</h2>
-    <label>
+    <label v-if="isAdmin">
       <span>Дата тренировки</span>
       <input type="date" v-model="createDate" />
     </label>
-    <button @click="addToday(createDate)">Продолжить</button>
+    <button v-if="isAdmin" @click="addToday(createDate)">Продолжить</button>
     <hr />
     <h2>Посещаемость</h2>
     <ul>
@@ -64,7 +66,7 @@ function back() {
         <button @click="openDate(date)">{{ date }}</button>
       </li>
     </ul>
-    <RouterLink to="/dashboard">
+    <RouterLink to="/">
       <button>Назад</button>
     </RouterLink>
   </div>
@@ -87,16 +89,16 @@ function back() {
         <div class="checkboxes">
           <label>
             <span>Был на занятии</span>
-            <input type="checkbox" name="ids" :value="visit.character.id" :checked="visit.wasHere" />
+            <input :disabled="!isAdmin" type="checkbox" name="ids" :value="visit.character.id" :checked="visit.wasHere" />
           </label>
           <label>
             <span>Пропустил по ув. причине</span>
-            <input type="checkbox" name="skipIds" :value="visit.character.id" :checked="visit.canSkip" />
+            <input :disabled="!isAdmin" type="checkbox" name="skipIds" :value="visit.character.id" :checked="visit.canSkip" />
           </label>
         </div>
       </li>
     </ul>
-    <button>Сохранить</button>
+    <button v-if="isAdmin">Сохранить</button>
     <a @click="back">Назад</a>
   </form>
 </template>

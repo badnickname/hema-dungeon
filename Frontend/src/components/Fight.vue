@@ -183,7 +183,7 @@ onMounted(store.getFight);
     <form action="/api/fight/complete" method="POST" onsubmit="return confirm('Вы уверены, что хотите прекратить сражения?')">
       <button v-if="!isNewFight">Остановить</button>
     </form>
-    <RouterLink v-if="isNewFight" to="/dashboard">
+    <RouterLink v-if="isNewFight" to="/">
       <button>Вернуться</button>
     </RouterLink>
   </div>

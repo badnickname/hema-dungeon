@@ -11,7 +11,6 @@ namespace HemaDungeon.Controllers;
 [Route("api/admin")]
 public sealed class AdminController : ControllerBase
 {
-    [Authorize(Roles = "Admin")]
     [HttpGet("visits")]
     public async Task<IActionResult> GetVisits([FromServices] Context context)
     {
@@ -60,7 +59,7 @@ public sealed class AdminController : ControllerBase
         var visits = await context.Visits.Where(x => x.Date == date).ToListAsync();
         context.Visits.RemoveRange(visits);
 
-        return Redirect("/");
+        return Redirect("/?dashboard=true");
     }
 
     [Authorize]
