@@ -93,7 +93,8 @@ button {
   background: url('../assets/fight.png');
   background-size: contain;
 }
-.fight-ico:hover {
+.fight-ico:hover,
+.fight-ico:active {
   background: url('../assets/fight_clicked.png');
   background-size: contain;
 }
@@ -106,7 +107,8 @@ button {
   background: url('../assets/character.png');
   background-size: contain;
 }
-.character-ico:hover {
+.character-ico:hover,
+.character-ico:active {
   background: url('../assets/character_clicked.png');
   background-size: contain;
 }
@@ -119,7 +121,8 @@ button {
   background: url('../assets/schedule.png');
   background-size: contain;
 }
-.schedule-ico:hover {
+.schedule-ico:hover,
+.schedule-ico:active {
   background: url('../assets/schedule_clicked.png');
   background-size: contain;
 }
