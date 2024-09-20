@@ -33,17 +33,19 @@ async function edit() {
             <strong>Имя: </strong>
             <span>{{ entity.name }}</span>
           </div>
-          <div>
-            <strong>Ранг: </strong>
-            <span>{{ entity.rang }}</span>
-          </div>
-          <div>
-            <strong>Жизни: </strong>
-            <span>{{ entity.vitality.toFixed(1) }}</span>
-          </div>
-          <div>
-            <strong>Выносливость: </strong>
-            <span>{{ entity.stamina?.toFixed(1) }}</span>
+          <div class="stats">
+            <div>
+              <img src="../assets/rang.png" width="16px" height="16px" alt="Rang" />
+              <span>{{ entity.rang }}</span>
+            </div>
+            <div>
+              <img src="../assets/health.png" width="16px" height="16px" alt="Health" />
+              <span>{{ entity.vitality.toFixed(1) }}</span>
+            </div>
+            <div>
+              <img src="../assets/stamina.png" width="16px" height="16px" alt="Stamina" />
+              <span>{{ entity.stamina?.toFixed(1) }}</span>
+            </div>
           </div>
           <div class="stats">
             <span>

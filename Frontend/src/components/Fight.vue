@@ -35,17 +35,19 @@ onMounted(store.getFight);
               <strong>Имя: </strong>
               <span>{{ entity.name }}</span>
             </div>
-            <div>
-              <strong>Ранг: </strong>
-              <span>{{ entity.rang }}</span>
-            </div>
-            <div>
-              <strong>Жизни: </strong>
-              <span>{{ entity.vitality.toFixed(1) }}</span>
-            </div>
-            <div>
-              <strong>Выносливость: </strong>
-              <span>{{ entity.stamina?.toFixed(1) }}</span>
+            <div class="stats">
+              <div>
+                <img src="../assets/rang.png" width="16px" height="16px" alt="Rang" />
+                <span>{{ entity.rang }}</span>
+              </div>
+              <div>
+                <img src="../assets/health.png" width="16px" height="16px" alt="Health" />
+                <span>{{ entity.vitality.toFixed(1) }}</span>
+              </div>
+              <div>
+                <img src="../assets/stamina.png" width="16px" height="16px" alt="Stamina" />
+                <span>{{ entity.stamina?.toFixed(1) }}</span>
+              </div>
             </div>
             <div class="stats">
             <span>
@@ -82,18 +84,20 @@ onMounted(store.getFight);
               <strong>Имя: </strong>
               <span>{{ entity.character.name }}</span>
             </div>
-            <div>
-              <strong>Ранг: </strong>
-              <span>{{ entity.character.rang }}</span>
+            <div class="stats">
+              <div>
+                <img src="../assets/rang.png" width="16px" height="16px" alt="Rang" />
+                <span>{{ entity.character.rang }}</span>
+              </div>
+              <div>
+                <img src="../assets/stamina.png" width="16px" height="16px" alt="Stamina" />
+                <span>{{ entity.character.stamina?.toFixed(1) }}</span>
+              </div>
             </div>
 <!--            <div>-->
 <!--              <strong>Жизни: </strong>-->
 <!--              <span>{{ entity.health.toFixed(1) }}</span>-->
 <!--            </div>-->
-            <div>
-              <strong>Выносливость: </strong>
-              <span>{{ entity.character.stamina?.toFixed(1) }}</span>
-            </div>
             <div class="stats">
             <span>
               <img src="../assets/power.png" width="16px" height="16px" alt="Power" />
@@ -129,18 +133,24 @@ onMounted(store.getFight);
                 <strong>Имя: </strong>
                 <span>{{ entity.character.character.name }}</span>
               </div>
-              <div>
-                <strong>Ранг: </strong>
-                <span>{{ entity.character.character.rang }}</span>
+              <div class="stats">
+                <div>
+                  <img src="../assets/damage.png" width="16px" height="16px" alt="Damage" />
+                  <span>{{ entity.damage.toFixed(1) }}</span>
+                </div>
+                <div>
+                  <img src="../assets/rang.png" width="16px" height="16px" alt="Rang" />
+                  <span>{{ entity.character.character.rang }}</span>
+                </div>
+                <div>
+                  <img src="../assets/stamina.png" width="16px" height="16px" alt="Stamina" />
+                  <span>{{ entity.character.character.stamina?.toFixed(1) }}</span>
+                </div>
               </div>
 <!--              <div>-->
 <!--                <strong>Жизни: </strong>-->
 <!--                <span>{{ entity.character.health.toFixed(1) }}</span>-->
 <!--              </div>-->
-              <div>
-                <strong>Выносливость: </strong>
-                <span>{{ entity.character.character.stamina?.toFixed(1) }}</span>
-              </div>
               <div class="stats">
               <span>
                 <img src="../assets/power.png" width="16px" height="16px" alt="Power" />
@@ -160,10 +170,6 @@ onMounted(store.getFight);
 <!--              <strong>Очки жизней: </strong>-->
 <!--              <span>{{ entity.scoreHealth }}</span>-->
 <!--            </div>-->
-            <div>
-              <strong>Урон: </strong>
-              <span>{{ entity.damage.toFixed(1) }}</span>
-            </div>
             <div v-if="entity.isOpened" class="damage">
               <strong>Расчёт урона: </strong>
               <Difference :first="entity.character" :second="fightStates[(i + 1) % 2].character" />

@@ -28,6 +28,7 @@ const diffRang = firstRang < secondRang ? `${secondRang} - ${firstRang} + 1` : `
   <img src="../assets/agility.png" width="16px" height="16px" alt="Power" />
   <span> + </span>
   <span>{{ stamina.toFixed(1).replace('.0', '') }}</span>
+  <img src="../assets/stamina.png" width="16px" height="16px" alt="Stamina" />
   <span> ) * 5 </span>
   <span>{{ firstRang < secondRang ? '/' : '*' }}</span>
   <span>( </span>
