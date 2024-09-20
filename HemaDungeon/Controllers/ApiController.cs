@@ -7,14 +7,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 namespace HemaDungeon.Controllers;
 
 [ApiController]
 [Route("api")]
-public sealed class ApiController : ControllerBase
+public sealed class ApiController(IMemoryCache cache) : ControllerBase
 {
+    private const string UsersCache = "users-cache";
+
     [HttpPost("sign-up")]
     public async Task<IActionResult> SignUp([FromForm] SignUpModel model, [FromServices] UserManager<Character> userManager, Context context, [FromServices] SignInManager<Character> signInManager)
     {
@@ -57,6 +60,8 @@ public sealed class ApiController : ControllerBase
 
         user = await userManager.FindByEmailAsync(model.Email);
         await signInManager.SignInAsync(user!, true);
+
+        cache.Remove(UsersCache);
 
         return Redirect("/");
     }
@@ -113,7 +118,14 @@ public sealed class ApiController : ControllerBase
     [HttpGet("users")]
     public IActionResult GetUser([FromServices] Context context)
     {
-        return new JsonResult(context.Users.Include(x => x.Visits).Include(x => x.Pages).ToList());
+        if (cache.TryGetValue(UsersCache, out List<Character>? characters))
+        {
+            return new JsonResult(characters);
+        }
+
+        var result = context.Users.Include(x => x.Visits).Include(x => x.Pages).ToList();
+        cache.Set(UsersCache, result);
+        return new JsonResult(result);
     }
 
     [HttpPost("user")]
@@ -131,6 +143,8 @@ public sealed class ApiController : ControllerBase
 
         context.Users.Update(user);
         await context.SaveChangesAsync();
+
+        cache.Remove(UsersCache);
 
         return Redirect("/?dashboard=true");
     }
@@ -156,6 +170,8 @@ public sealed class ApiController : ControllerBase
         context.Users.Update(user);
         await context.SaveChangesAsync();
 
+        cache.Remove(UsersCache);
+
         return Redirect("/?dashboard=true");
     }
 
@@ -177,6 +193,8 @@ public sealed class ApiController : ControllerBase
 
         context.Users.Update(user);
         await context.SaveChangesAsync();
+
+        cache.Remove(UsersCache);
 
         return Redirect("/?dashboard=true");
     }
