@@ -7,7 +7,7 @@ const store = useStore();
 const router = useRouter();
 const loading = ref(true);
 
-const display = computed(() => store.character && !store.isRefreshed);
+const isLoggedIn = computed(() => store.character.id !== '0');
 
 onMounted(async () => {
   const uri = window.location.search.substring(1);
@@ -35,7 +35,7 @@ onMounted(async () => {
   <div v-if="loading" class="body">
     Загрузка...
   </div>
-  <div v-else-if="!display" class="body">
+  <div v-else-if="!isLoggedIn" class="body">
     <span>WELCOME TO DEEP DARK FANTASY</span>
     <div class="tools">
       <RouterLink to="login">
