@@ -30,7 +30,7 @@ public sealed class FightController : ControllerBase
         context.FightCharacters.RemoveRange(context.FightCharacters.Where(x => x.AuthorId == userId).ToList());
         await context.SaveChangesAsync();
 
-        foreach (var user in context.Users.Where(x => model.Ids.Contains(x.Id)))
+        foreach (var user in context.Users.Include(x => x.Visits).Where(x => model.Ids.Contains(x.Id)))
         {
             context.FightCharacters.Add(new FightCharacter
             {

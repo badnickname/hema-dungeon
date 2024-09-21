@@ -93,6 +93,10 @@ onMounted(store.getFight);
                 <img src="../assets/stamina.png" width="16px" height="16px" alt="Stamina" />
                 <span>{{ entity.character.stamina?.toFixed(1) }}</span>
               </div>
+              <div>
+                <img src="../assets/health.png" width="16px" height="16px" alt="Health" />
+                <span>{{ entity.health.toFixed(1) }}</span>
+              </div>
             </div>
 <!--            <div>-->
 <!--              <strong>Жизни: </strong>-->
@@ -139,6 +143,10 @@ onMounted(store.getFight);
                   <span>{{ entity.damage.toFixed(1) }}</span>
                 </div>
                 <div>
+                  <img src="../assets/health.png" width="16px" height="16px" alt="Health" />
+                  <span>{{ entity.character.health.toFixed(1) }}</span>
+                </div>
+                <div>
                   <img src="../assets/rang.png" width="16px" height="16px" alt="Rang" />
                   <span>{{ entity.character.character.rang }}</span>
                 </div>
@@ -180,6 +188,10 @@ onMounted(store.getFight);
             <label class="buttons">
               <strong>{{ entity.name }}<span v-if="entity.calculated">(посчитано)</span></strong>
               <span :class="entity.calculated ? 'accepted' : ''">{{ entity.description }}</span>
+            </label>
+            <label class="buttons">
+              <span>Очки за бой</span>
+              <input type="number" name="score" value="0">
             </label>
           </div>
         </li>
