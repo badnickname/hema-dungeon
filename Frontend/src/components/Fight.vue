@@ -22,12 +22,6 @@ function onSelect(event: Event, entity: FightCharacter) {
 }
 const canSelect = computed(() => names.value.length < 2);
 
-function onChangeScore(event: Event, i: number) {
-  const el = document.getElementById(`state-${i}`) as HTMLInputElement;
-  const value = (event.target as any).value as string;
-  el.value = String(Number(value) * 2);
-}
-
 onMounted(store.getFight);
 </script>
 
@@ -235,17 +229,16 @@ onMounted(store.getFight);
               <span>{{ fightStates[(i + 1) % 2].scoreHealth }}</span>
             </label>
             <label class="buttons">
-              <span>Нанес попаданий</span>
-              <input type="number" name="score" value="0" @change="onChangeScore($event, i)">
+              <span>Нанес попаданий в старшую зону</span>
+              <input type="number" name="score" value="0">
+            </label>
+            <label class="buttons">
+              <span>Нанес попаданий в младшую зону</span>
+              <input type="number" name="result" value="0">
             </label>
             <label class="buttons">
               <span>Дополнительно нанес урона</span>
               <input type="number" name="damage" value="0">
-            </label>
-            <hr />
-            <label class="buttons">
-              <span>Счет</span>
-              <input :id="`state-${i}`" type="number" name="result" value="0">
             </label>
           </div>
         </li>

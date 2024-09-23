@@ -4,6 +4,8 @@ public sealed class Result
 {
     public string Id { get; set; }
 
+    public DateTime CreateDate { get; set; }
+
     public Character First { get; set; }
 
     public int FirstScore { get; set; }

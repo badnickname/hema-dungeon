@@ -69,10 +69,10 @@ public sealed class FightController : ControllerBase
         model.Damage ??= [0, 0];
 
         var states = await context.FightStates.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Character).ToListAsync();
-        states[0].Character.Health -= states[1].Damage * (model.Score[1] ?? 0) + (model.Damage?[1] ?? 0);
+        states[0].Character.Health -= states[1].Damage * ((model.Score[1] ?? 0) + (model.Result[1] ?? 0)) + (model.Damage?[1] ?? 0);
         if (states[0].Character.Health < 0) states[0].Character.Health = 0;
 
-        states[1].Character.Health -= states[0].Damage * (model.Score[0] ?? 0) + (model.Damage?[0] ?? 0);
+        states[1].Character.Health -= states[0].Damage * ((model.Score[0] ?? 0) + (model.Result[0] ?? 0)) + (model.Damage?[0] ?? 0);
         if (states[1].Character.Health < 0) states[1].Character.Health = 0;
         await context.SaveChangesAsync();
 
@@ -81,11 +81,12 @@ public sealed class FightController : ControllerBase
         context.Results.Add(new Result
         {
             Id = Guid.NewGuid().ToString(),
+            CreateDate = DateTime.UtcNow,
             DateTime = DateTime.UtcNow.Date,
             First = states[0].Character.Character,
             Second = states[1].Character.Character,
-            FirstScore = model.Result[0].Value,
-            SecondScore = model.Result[1].Value
+            FirstScore = model.Result[0].Value + model.Score[0].Value * 2,
+            SecondScore = model.Result[1].Value + model.Score[1].Value * 2
         });
         await context.SaveChangesAsync();
 
@@ -97,7 +98,7 @@ public sealed class FightController : ControllerBase
     public async Task<IActionResult> GetResultsToday([FromServices] Context context)
     {
         var date = DateTime.UtcNow.Date;
-        var results = context.Results.Include(x => x.First).Include(x => x.Second).Where(x => x.DateTime == date).ToList();
+        var results = context.Results.OrderBy(x => x.CreateDate).Include(x => x.First).Include(x => x.Second).Where(x => x.DateTime == date).ToList();
         return new JsonResult(results);
     }
 
