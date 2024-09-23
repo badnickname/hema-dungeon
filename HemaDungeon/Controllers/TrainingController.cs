@@ -5,17 +5,22 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace HemaDungeon.Controllers;
 
 [ApiController]
 [Route("api/trainings")]
-public sealed class TrainingController : ControllerBase
+public sealed class TrainingController(IMemoryCache cache) : ControllerBase
 {
+    private const string UsersCache = "users-cache";
+
     [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Start([FromForm] TrainingModel model, [FromServices] UserManager<Character> manager, [FromServices] Context context)
     {
+        cache.Remove(UsersCache);
+
         // Посещения
         var date = DateTime.ParseExact(model.DateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToUniversalTime().Date;
 
