@@ -54,10 +54,12 @@ const createDate = ref(`${moment().year().toString().padStart(2, '0')}-${(moment
             <input type="checkbox" :name="`users[${i}].skip`" value="true" :checked="visit.canSkip" />
           </label>
         </div>
-        <label>
-          <span>Урон, полученный от хлыста</span>
-          <input type="number" :name="`users[${i}].damage`" value="0" />
-        </label>
+        <div class="checkboxes">
+          <label>
+            <span>Урон, полученный от хлыста</span>
+            <input type="number" :name="`users[${i}].damage`" value="0" />
+          </label>
+        </div>
       </li>
     </ul>
     <button>Начать тренировку</button>
