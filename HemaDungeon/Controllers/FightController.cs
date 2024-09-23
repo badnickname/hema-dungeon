@@ -16,11 +16,12 @@ public sealed class FightController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetUser([FromServices] Context context, [FromServices] UserManager<Character> manager)
     {
-        var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
-        var users = await context.FightCharacters.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Visits).ToListAsync();
+        // var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
+        var users = await context.FightCharacters.Include(x => x.Character).ThenInclude(x => x.Visits).ToListAsync();
         return new JsonResult(users);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("users")]
     [Authorize]
     public async Task<IActionResult> PostUser([FromForm] FightUsersModel model, [FromServices] UserManager<Character> manager, [FromServices] Context context)
@@ -45,14 +46,15 @@ public sealed class FightController : ControllerBase
         return Redirect("/?dashboard=true");
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("complete")]
     [Authorize]
     public async Task<IActionResult> Complete([FromServices] Context context, [FromServices] UserManager<Character> manager)
     {
-        var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
+        // var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
 
-        context.FightStates.RemoveRange(context.FightStates.Where(x => x.AuthorId == userId).ToList());
-        context.FightCharacters.RemoveRange(context.FightCharacters.Where(x => x.AuthorId == userId).ToList());
+        context.FightStates.RemoveRange(context.FightStates.ToList());
+        context.FightCharacters.RemoveRange(context.FightCharacters.ToList());
         await context.SaveChangesAsync();
         return Redirect("/");
     }
@@ -65,10 +67,10 @@ public sealed class FightController : ControllerBase
         model.Score ??= [0, 0];
 
         var states = await context.FightStates.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Character).ToListAsync();
-        states[0].Character.Health -= states[1].Damage * (model.Score[1] ?? 0);
+        states[0].Character.Health -= states[1].Damage * (model.Score[1] ?? 0) + (model.Damage?[1] ?? 0);
         if (states[0].Character.Health < 0) states[0].Character.Health = 0;
 
-        states[1].Character.Health -= states[0].Damage * (model.Score[0] ?? 0);
+        states[1].Character.Health -= states[0].Damage * (model.Score[0] ?? 0) + (model.Damage?[0] ?? 0);
         if (states[1].Character.Health < 0) states[1].Character.Health = 0;
         await context.SaveChangesAsync();
 

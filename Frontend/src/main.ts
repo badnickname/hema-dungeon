@@ -13,6 +13,7 @@ import Fight from './components/Fight.vue';
 import Password from './components/Password.vue';
 import Visit from './components/Visit.vue';
 import Page from './components/Page.vue';
+import Training from './components/Training.vue';
 
 const router = createRouter({
 	history: createMemoryHistory(), routes: [{
@@ -35,6 +36,8 @@ const router = createRouter({
 		path: '/visit', component: Visit
 	}, {
 		path: '/page', component: Page
+	}, {
+		path: '/training', component: Training
 	}]
 });
 

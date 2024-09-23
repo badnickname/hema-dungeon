@@ -12,6 +12,8 @@ const fightStates = computed(() => store.fightStates);
 const isNewFight = computed(() => store.fightCharacters.length < 1);
 const isFighting = computed(() => store.fightStates.length > 0);
 
+const isAdmin = computed(() => store.isAdmin);
+
 const names = ref<string[]>([]);
 function onSelect(event: Event, entity: FightCharacter) {
   const el = document.getElementById((event.currentTarget as any).id ?? '') as HTMLInputElement;
@@ -190,15 +192,23 @@ onMounted(store.getFight);
               <span :class="entity.calculated ? 'accepted' : ''">{{ entity.description }}</span>
             </label>
             <label class="buttons">
-              <span>Очки за бой</span>
+              <strong>Нужно нанести попаданий по оппоненту:</strong>
+              <span>{{ fightStates[(i + 1) % 2].scoreHealth }}</span>
+            </label>
+            <label class="buttons">
+              <span>Заработал очков</span>
               <input type="number" name="score" value="0">
+            </label>
+            <label class="buttons">
+              <span>Дополнительно нанес урона</span>
+              <input type="number" name="damage" value="0">
             </label>
           </div>
         </li>
       </ul>
       <button>Завершить бой</button>
     </form>
-    <form action="/api/fight/complete" method="POST" onsubmit="return confirm('Вы уверены, что хотите прекратить сражения?')">
+    <form v-if="isAdmin" action="/api/fight/complete" method="POST" onsubmit="return confirm('Вы уверены, что хотите прекратить сражения?')">
       <button v-if="!isNewFight">Остановить</button>
     </form>
     <RouterLink v-if="isNewFight" to="/">

@@ -9,6 +9,10 @@ const loading = ref(true);
 
 const isLoggedIn = computed(() => store.character.id !== '0');
 
+const isAdmin = computed(() => store.isAdmin);
+
+const isFightStarted = ref(false);
+
 onMounted(async () => {
   const uri = window.location.search.substring(1);
   const params = new URLSearchParams(uri);
@@ -20,6 +24,8 @@ onMounted(async () => {
   }
 
   const result = await store.getCharacter();
+  await store.getFight();
+  isFightStarted.value = store.fightCharacters.length > 0;
   if (result) {
     if (await store.getFight() && store.isRefreshed) {
       await router.replace('/fight');
@@ -47,8 +53,13 @@ onMounted(async () => {
     </div>
   </div>
   <div v-else class="body">
+    <div v-if="isAdmin">
+      <RouterLink to="/training">
+        <button>Начать тренировку!</button>
+      </RouterLink>
+    </div>
     <div class="icons">
-      <RouterLink to="/fight" class="fight-ico" />
+      <RouterLink v-if="isFightStarted" to="/fight" class="fight-ico" />
       <RouterLink to="/dashboard" class="character-ico" />
       <RouterLink to="/visit" class="schedule-ico" />
     </div>
