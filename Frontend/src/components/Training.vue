@@ -31,9 +31,9 @@ const createDate = ref(`${moment().year().toString().padStart(2, '0')}-${(moment
       <input type="date" v-model="createDate" name="dateTime" />
     </label>
     <ul>
-      <li v-for="(visit, i) in users">
-        <img :src="visit.character.avatar" :alt="visit.character.name"/>
-        <div>
+      <li v-for="(visit, i) in users" style="flex-wrap: wrap">
+        <img :src="visit.character.avatar" :alt="visit.character.name" style="width: 20%"/>
+        <div style="width: 20%">
           <div>
             <strong>Имя: </strong>
             <span>{{ visit.character.name }}</span>
@@ -43,7 +43,7 @@ const createDate = ref(`${moment().year().toString().padStart(2, '0')}-${(moment
             <span>{{ visit.character.author }}</span>
           </div>
         </div>
-        <div class="checkboxes">
+        <div class="checkboxes" style="width: 40%">
           <input type="hidden" :name="`users[${i}].id`" :value="visit.character.id" />
           <label>
             <span>Присутствует</span>
@@ -54,7 +54,7 @@ const createDate = ref(`${moment().year().toString().padStart(2, '0')}-${(moment
             <input type="checkbox" :name="`users[${i}].skip`" value="true" :checked="visit.canSkip" />
           </label>
         </div>
-        <div class="checkboxes">
+        <div class="checkboxes" style="width: 100%">
           <label>
             <span>Урон, полученный от хлыста</span>
             <input type="number" :name="`users[${i}].damage`" value="0" />
