@@ -107,11 +107,11 @@ public sealed class FightController : ControllerBase
     {
         var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
 
-        context.FightStates.RemoveRange(context.FightStates.Where(x => x.AuthorId == userId).ToList());
+        context.FightStates.RemoveRange(context.FightStates.ToList());
         await context.SaveChangesAsync();
 
         var states = new List<FightState>();
-        foreach (var user in context.FightCharacters.Where(x => x.AuthorId == userId).Include(x => x.Character).Include(x => x.Character).ThenInclude(x => x.Visits).Where(x => model.Ids.Contains(x.Character.Id)))
+        foreach (var user in context.FightCharacters.Include(x => x.Character).Include(x => x.Character).ThenInclude(x => x.Visits).Where(x => model.Ids.Contains(x.Character.Id)))
         {
             var state = new FightState
             {
