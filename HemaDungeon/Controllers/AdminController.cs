@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace HemaDungeon.Controllers;
 
 [ApiController]
 [Route("api/admin")]
-public sealed class AdminController : ControllerBase
+public sealed class AdminController(IMemoryCache cache) : ControllerBase
 {
+    private const string UsersCache = "users-cache";
+
     [HttpGet("visits")]
     public async Task<IActionResult> GetVisits([FromServices] Context context)
     {
@@ -45,6 +48,7 @@ public sealed class AdminController : ControllerBase
                 CanSkip = model.SkipIds.Contains(user.Id)
             });
         }
+        cache.Remove(UsersCache);
         await context.SaveChangesAsync();
 
         return Redirect("/");
@@ -58,6 +62,8 @@ public sealed class AdminController : ControllerBase
 
         var visits = await context.Visits.Where(x => x.Date == date).ToListAsync();
         context.Visits.RemoveRange(visits);
+        await context.SaveChangesAsync();
+        cache.Remove(UsersCache);
 
         return Redirect("/?dashboard=true");
     }
