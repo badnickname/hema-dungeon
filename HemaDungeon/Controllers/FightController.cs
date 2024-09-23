@@ -65,6 +65,8 @@ public sealed class FightController : ControllerBase
     {
         var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
         model.Score ??= [0, 0];
+        model.Result ??= [0, 0];
+        model.Damage ??= [0, 0];
 
         var states = await context.FightStates.Where(x => x.AuthorId == userId).Include(x => x.Character).ThenInclude(x => x.Character).ToListAsync();
         states[0].Character.Health -= states[1].Damage * (model.Score[1] ?? 0) + (model.Damage?[1] ?? 0);
@@ -75,9 +77,28 @@ public sealed class FightController : ControllerBase
         await context.SaveChangesAsync();
 
         context.FightStates.RemoveRange(states);
+
+        context.Results.Add(new Result
+        {
+            Id = Guid.NewGuid().ToString(),
+            DateTime = DateTime.UtcNow.Date,
+            First = states[0].Character.Character,
+            Second = states[1].Character.Character,
+            FirstScore = model.Result[0].Value,
+            SecondScore = model.Result[1].Value
+        });
         await context.SaveChangesAsync();
 
         return Redirect("/?dashboard=true");
+    }
+
+    [HttpGet("results")]
+    [Authorize]
+    public async Task<IActionResult> GetResultsToday([FromServices] Context context)
+    {
+        var date = DateTime.UtcNow.Date;
+        var results = context.Results.Include(x => x.First).Include(x => x.Second).Where(x => x.DateTime == date).ToList();
+        return new JsonResult(results);
     }
 
     [HttpPost("state")]

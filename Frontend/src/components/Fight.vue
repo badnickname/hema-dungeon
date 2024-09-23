@@ -11,6 +11,7 @@ const fightStates = computed(() => store.fightStates);
 
 const isNewFight = computed(() => store.fightCharacters.length < 1);
 const isFighting = computed(() => store.fightStates.length > 0);
+const results = computed(() => store.results);
 
 const isAdmin = computed(() => store.isAdmin);
 
@@ -20,6 +21,12 @@ function onSelect(event: Event, entity: FightCharacter) {
   if (el.checked) names.value.push(entity.character.name); else names.value = names.value.filter(x => x !== entity.character.name);
 }
 const canSelect = computed(() => names.value.length < 2);
+
+function onChangeScore(event: Event, i: number) {
+  const el = document.getElementById(`state-${i}`) as HTMLInputElement;
+  const value = (event.target as any).value as string;
+  el.value = String(Number(value) * 2);
+}
 
 onMounted(store.getFight);
 </script>
@@ -77,6 +84,37 @@ onMounted(store.getFight);
     </form>
     <form v-else-if="!isFighting" class="body" action="/api/fight/state" method="POST">
       <h2>Сражение</h2>
+      <h4>Результаты боев</h4>
+      <ul>
+        <li v-for="result in results">
+          <div class="portrait">
+            <img :src="result.first.avatar" :alt="result.first.name"/>
+            <div>
+              <div>
+                <strong>Имя: </strong>
+                <span>{{ result.first.name }}</span>
+              </div>
+              <div>
+                <strong>Счет: </strong>
+                <span>{{ result.firstScore }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="portrait">
+            <img :src="result.second.avatar" :alt="result.second.name"/>
+            <div>
+              <div>
+                <strong>Имя: </strong>
+                <span>{{ result.second.name }}</span>
+              </div>
+              <div>
+                <strong>Счет: </strong>
+                <span>{{ result.secondScore }}</span>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
       <h4>Выберите двух бойцов</h4>
       <ul>
         <li v-for="entity in fightCharacters">
@@ -191,17 +229,23 @@ onMounted(store.getFight);
               <strong>{{ entity.name }}<span v-if="entity.calculated">(посчитано)</span></strong>
               <span :class="entity.calculated ? 'accepted' : ''">{{ entity.description }}</span>
             </label>
+            <hr />
             <label class="buttons">
-              <strong>Нужно нанести попаданий по оппоненту:</strong>
+              <strong>Нужно нанести попаданий, чтобы убить оппонента:</strong>
               <span>{{ fightStates[(i + 1) % 2].scoreHealth }}</span>
             </label>
             <label class="buttons">
-              <span>Заработал очков</span>
-              <input type="number" name="score" value="0">
+              <span>Нанес попаданий</span>
+              <input type="number" name="score" value="0" @change="onChangeScore($event, i)">
             </label>
             <label class="buttons">
               <span>Дополнительно нанес урона</span>
               <input type="number" name="damage" value="0">
+            </label>
+            <hr />
+            <label class="buttons">
+              <span>Счет</span>
+              <input :id="`state-${i}`" type="number" name="result" value="0">
             </label>
           </div>
         </li>
@@ -326,7 +370,13 @@ input[type="checkbox"] {
   height: 24px;
 }
 
-.accepted {
-  color: #616161;
+.portrait {
+  display: flex;
+  gap: 10px;
+  img {
+    max-width: 36px;
+    height: fit-content;
+    max-height: 50px;
+  }
 }
 </style>

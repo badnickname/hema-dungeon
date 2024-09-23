@@ -12,6 +12,8 @@ public sealed class Context : IdentityDbContext<Character>
 
     public DbSet<Visit> Visits { get; set; }
 
+    public DbSet<Result> Results { get; set; }
+
     public Context(DbContextOptions options) : base(options)
     {
 #if RELEASE

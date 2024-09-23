@@ -6,6 +6,7 @@ import type { FightState } from '../types/FightState';
 import type { Visit } from '../types/Visit';
 import moment from 'moment';
 import type { Page } from '../types/Page';
+import type { Result } from '../types/Result';
 
 export const useStore = defineStore('app', {
 	state: () => {
@@ -24,7 +25,8 @@ export const useStore = defineStore('app', {
 		const visits = ref<Record<string, Visit[]>>({});
 		const page = ref<Page>();
 		const isRefreshed = ref<boolean>();
-		return { character, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits, page, isRefreshed };
+		const results = ref<Result[]>([]);
+		return { character, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits, page, isRefreshed, results };
 	}, actions: {
 		async getCharacter() {
 			// return true;
@@ -51,6 +53,7 @@ export const useStore = defineStore('app', {
 			if (result.status === 401) return false;
 			this.fightCharacters = await result.json() as FightCharacter[];
 			await this.getFightState();
+			await this.getResults();
 			return this.fightCharacters.length > 0;
 		},
 		async getFightState() {
@@ -82,6 +85,12 @@ export const useStore = defineStore('app', {
 			headers.append('content-type', 'application/json');
 			const result = await fetch('/api/pages/delete', { method: 'POST', headers, body: JSON.stringify({ id: page.id }) });
 			if (result.status === 401) return false;
+			return true;
+		},
+		async getResults() {
+			const result = await fetch('/api/fight/results');
+			if (result.status === 401) return false;
+			this.results = await result.json() as Result[];
 			return true;
 		}
 	},
