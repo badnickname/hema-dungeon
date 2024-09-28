@@ -228,12 +228,13 @@ onMounted(store.getFight);
               <strong>Нужно нанести попаданий, чтобы убить оппонента:</strong>
               <span>{{ fightStates[(i + 1) % 2].scoreHealth }}</span>
             </label>
+<!--            <label class="buttons">-->
+<!--              <span>Нанес попаданий в старшую зону</span>-->
+<!--              <input type="number" name="score" value="0">-->
+<!--            </label>-->
+            <input type="hidden" name="score" value="0" />
             <label class="buttons">
-              <span>Нанес попаданий в старшую зону</span>
-              <input type="number" name="score" value="0">
-            </label>
-            <label class="buttons">
-              <span>Нанес попаданий в младшую зону</span>
+              <span>Нанес попаданий</span>
               <input type="number" name="result" value="0">
             </label>
             <label class="buttons">

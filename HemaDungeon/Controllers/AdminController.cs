@@ -26,7 +26,7 @@ public sealed class AdminController(IMemoryCache cache) : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost("visits")]
-    public async Task<IActionResult> SaveVisits([FromForm] VisitModel model, [FromServices] Context context)
+    public async Task<IActionResult> SaveVisits([FromForm] VisitModel model, [FromServices] UserManager<Character> manager, [FromServices] Context context)
     {
         var date = model.DateTime.Date;
         model.SkipIds ??= [];
@@ -49,6 +49,25 @@ public sealed class AdminController(IMemoryCache cache) : ControllerBase
             });
         }
         cache.Remove(UsersCache);
+        await context.SaveChangesAsync();
+        
+        // Сражения
+        if (context.FightCharacters.Any()) return Redirect("/");
+        var userId = (await manager.GetUserAsync(HttpContext.User))?.Id!;
+
+        context.FightCharacters.RemoveRange(context.FightCharacters.Where(x => x.AuthorId == userId).ToList());
+        await context.SaveChangesAsync();
+
+        foreach (var user in context.Users.Include(x => x.Visits).AsEnumerable().Where(x => model.Ids.Contains(x.Id)))
+        {
+            context.FightCharacters.Add(new FightCharacter
+            {
+                Id = Guid.NewGuid().ToString(),
+                Character = user,
+                AuthorId = userId,
+                Health = user.Vitality,
+            });
+        }
         await context.SaveChangesAsync();
 
         return Redirect("/");
