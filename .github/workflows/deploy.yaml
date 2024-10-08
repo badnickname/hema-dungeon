@@ -24,21 +24,33 @@ jobs:
       - name: Archive to zip
         run: |
           7z a web-build.zip *
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Connect to VPN
+        uses: "uzaysan/github-openvpn-connect-action@0.0.3"
+        with:
+          config: ${{ secrets.OVPN_CONFIG_CONTENT }}
       - name: Copy artifacts
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.LOCAL_HOST }}
+          username: ${{ secrets.LOCAL_USERNAME }}
+          password: ${{ secrets.LOCAL_PASSWORD }}
           port: 22
           source: 'web-build.zip'
-          target: '/root'
+          target: '/home/orangepi'
       - name: Disable Web
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.LOCAL_HOST }}
+          username: ${{ secrets.LOCAL_USERNAME }}
+          password: ${{ secrets.LOCAL_PASSWORD }}
           port: 22
           script: |
             systemctl status hema
@@ -46,16 +58,16 @@ jobs:
       - name: Replace and start Web
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.LOCAL_HOST }}
+          username: ${{ secrets.LOCAL_USERNAME }}
+          password: ${{ secrets.LOCAL_PASSWORD }}
           port: 22
           script: |
-            cd /root
+            cd /home/orangepi
             mkdir wwwroot
             cp -r hema/wwwroot/* wwwroot/
             cp hema/appsettings.Production.json appsettings.Production.json
-            rm -rf /root/hema/*
+            rm -rf /home/orangepi/hema/*
             7z x -ohema web-build.zip
             chmod 777 hema/HemaDungeon
             rm web-build.zip
