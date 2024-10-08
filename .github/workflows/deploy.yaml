@@ -86,3 +86,6 @@ jobs:
             rm -rf wwwroot
             systemctl start hema
             systemctl status hema
+      - name: kill vpn
+        if: always()
+        run: sudo killall openvpn
