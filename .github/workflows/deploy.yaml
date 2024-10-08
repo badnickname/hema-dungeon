@@ -24,6 +24,10 @@ jobs:
       - name: Archive to zip
         run: |
           7z a web-build.zip *
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
       - name: Connect to VPN
         uses: "kota65535/github-openvpn-connect-action@v2"
         with:
