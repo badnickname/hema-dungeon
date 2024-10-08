@@ -24,7 +24,7 @@ builder.Services.AddIdentity<Character, IdentityRole>(options =>
         RequireUppercase = false,
         RequiredLength = 3,
         RequireNonAlphanumeric = false,
-        RequiredUniqueChars = 1,
+        RequiredUniqueChars = 1
     };
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = null;
