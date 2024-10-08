@@ -21,7 +21,7 @@ public sealed class AdminController(IMemoryCache cache) : ControllerBase
         var result = visits
             .GroupBy(x => x.Date)
             .ToDictionary(x => $"{x.Key!.Value.Year}-{x.Key!.Value.Month}-{x.Key!.Value.Day}", x => x.ToList());
-        return new JsonResult(result); 
+        return new JsonResult(result);
     }
 
     [Authorize(Roles = "Admin")]

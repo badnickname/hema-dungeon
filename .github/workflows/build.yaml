@@ -17,11 +17,11 @@ jobs:
       - name: build
         run: |
           cd HemaDungeon
-          dotnet publish -c Release -r linux-x64
+          dotnet publish -c Release -r linux-arm64
       - name: Archive build
         uses: actions/upload-artifact@v4
         with:
           name: web-build
           retention-days: 1
           path: |
-            HemaDungeon/bin/Release/net8.0/linux-x64/publish/*
+            HemaDungeon/bin/Release/net8.0/linux-arm64/publish/*
