@@ -2,7 +2,7 @@
 
 on:
   push:
-    branches: ['master']
+#   branches: ['master']
     paths: ['HemaDungeon/**']
 
 jobs:
@@ -24,21 +24,29 @@ jobs:
       - name: Archive to zip
         run: |
           7z a web-build.zip *
+      - name: Connect to VPN
+        uses: "kota65535/github-openvpn-connect-action@v2"
+        with:
+          config_file: .github/workflows/github-0.ovpn
+          username: ${{ secrets.OVPN_USERNAME }}
+          password: ${{ secrets.OVPN_PASSWORD }}
+          client_key: ${{ secrets.OVPN_CLIENT_KEY }}
+          tls_auth_key: ${{ secrets.OVPN_TLS_AUTH_KEY }}
       - name: Copy artifacts
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.LOCAL_HOST }}
+          username: ${{ secrets.LOCAL_USERNAME }}
+          password: ${{ secrets.LOCAL_PASSWORD }}
           port: 22
           source: 'web-build.zip'
           target: '/root'
       - name: Disable Web
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.LOCAL_HOST }}
+          username: ${{ secrets.LOCAL_USERNAME }}
+          password: ${{ secrets.LOCAL_PASSWORD }}
           port: 22
           script: |
             systemctl status hema
@@ -46,16 +54,16 @@ jobs:
       - name: Replace and start Web
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          host: ${{ secrets.LOCAL_HOST }}
+          username: ${{ secrets.LOCAL_USERNAME }}
+          password: ${{ secrets.LOCAL_PASSWORD }}
           port: 22
           script: |
-            cd /root
+            cd /home/orangepi
             mkdir wwwroot
             cp -r hema/wwwroot/* wwwroot/
             cp hema/appsettings.Production.json appsettings.Production.json
-            rm -rf /root/hema/*
+            rm -rf /home/orangepi/hema/*
             7z x -ohema web-build.zip
             chmod 777 hema/HemaDungeon
             rm web-build.zip
