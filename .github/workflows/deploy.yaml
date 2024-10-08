@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.LOCAL_PASSWORD }}
           port: 22
           source: 'web-build.zip'
-          target: '/root'
+          target: '/home/orangepi'
       - name: Disable Web
         uses: appleboy/ssh-action@v1.0.3
         with:
