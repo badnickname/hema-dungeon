@@ -24,9 +24,9 @@ onMounted(async () => {
   }
 
   const result = await store.getCharacter();
-  await store.getFight();
   isFightStarted.value = store.fightCharacters.length > 0;
   if (result) {
+    await store.getFight();
     if (await store.getFight() && store.isRefreshed) {
       await router.replace('/fight');
     } else if (store.isRefreshed) {
