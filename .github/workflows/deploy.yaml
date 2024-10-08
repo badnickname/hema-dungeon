@@ -2,8 +2,8 @@
 
 on:
   push:
-#   branches: ['master']
-#    paths: ['HemaDungeon/**']
+    branches: ['master']
+    paths: ['HemaDungeon/**']
 
 jobs:
   web_build:
