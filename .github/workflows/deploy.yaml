@@ -28,20 +28,14 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y openvpn
-      - name: Connect VPN
-        uses: golfzaptw/action-connect-ovpn@master
-        id: connect_vpn
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+      - name: Connect to VPN
+        uses: "uzaysan/github-openvpn-connect-action@0.0.3"
         with:
-          PING_URL: '127.0.0.1'
-          FILE_OVPN: '.github/workflows/client.ovpn'
-          SECRET: ${{ secrets.OVPN_PASSWORD }}
-          TLS_KEY: ${{ secrets.OVPN_TLS_AUTH_KEY }}
-        env:
-          CA_CRT: ${{ secrets.OVPN_CA_CRT}}
-          USER_CRT: ${{ secrets.OVPN_CLIENT_CRT }}
-          USER_KEY: ${{ secrets.OVPN_CLIENT_KEY }}
-      - name: Check Connect VPN
-        run: echo ${{ steps.connect_vpn.outputs.STATUS }}
+          config: ${{ secrets.OVPN_CONFIG_CONTENT }}
       - name: Copy artifacts
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -86,6 +80,3 @@ jobs:
             rm -rf wwwroot
             systemctl start hema
             systemctl status hema
-      - name: kill vpn
-        if: always()
-        run: sudo killall openvpn
