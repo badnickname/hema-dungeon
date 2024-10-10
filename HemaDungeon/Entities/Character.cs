@@ -46,7 +46,6 @@ public sealed class Character : IdentityUser
     public float Power => Math.Min(60, PushUp) + PullUp * 3;
 
     [NotMapped]
-    // public double Agility => Math.Min(50.0, Abdominal) +  (RunTwenty > 0 ? (20 - RunTwenty) : 0) * 5;
     public double Agility => Math.Min(50.0, Abdominal) +  (RunTwenty > 0 ? (20 - RunTwenty) : 0) * 5;
 
     [NotMapped]
@@ -56,18 +55,22 @@ public sealed class Character : IdentityUser
     public double Stamina => Rope / 10.0 + RunFifteen * 2.5;
 
     [NotMapped]
-    // public double Vitality => (Score > 0 ? Score : 1) * (Rang > 0 ? (11 - Rang) * 10 : 10) * (Visits?.Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
     public double Vitality {
         get
         {
             var value = (Score > 0 ? Score : 1) * 5;
-            var visits = (Visits?.Where(x => !x.CanSkip).OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1);
+            var visits = Visits?.Where(x => !x.CanSkip).OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1;
             if (value * visits == 0) return value;
-            return value * visits;
+            var cataclysm = Cataclysms?.Count ?? 0;
+            if (cataclysm == 0) cataclysm = 1;
+            return value * visits / (float) cataclysm;
         }
     }
     // Stats
 
     [JsonIgnore]
     public ICollection<Visit>? Visits { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Cataclysm>? Cataclysms { get; set; }
 }
