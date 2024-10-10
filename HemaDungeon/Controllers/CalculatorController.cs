@@ -125,14 +125,14 @@ public sealed class CalculatorController : ControllerBase
         if (compare.SecondUser.Character.Health < 0) compare.SecondUser.Character.Health = 0;
 
         return new CalculateResult(
-            new CalculateResult.User(
+            new CalculateResult.CalculatedUser(
                 compare.FirstUser.Character.Character.Id,
                 (float) compare.FirstUser.Character.Health,
                 (int) Math.Ceiling(compare.FirstUser.Character.Health /
                              (compare.SecondUser.Damage * (model.SecondUser.Score ?? 0) +
                               (model.SecondUser.Damage ?? 0)))
             ),
-            new CalculateResult.User(
+            new CalculateResult.CalculatedUser(
                 compare.FirstUser.Character.Character.Id,
                 (float) compare.FirstUser.Character.Health,
                 (int)Math.Ceiling(compare.SecondUser.Character.Health /
@@ -144,8 +144,8 @@ public sealed class CalculatorController : ControllerBase
 
     public sealed record CompareResult(FightState FirstUser, FightState SecondUser);
 
-    public sealed record CalculateResult(CalculateResult.User FirstUser, CalculateResult.User SecondUser)
+    public sealed record CalculateResult(CalculateResult.CalculatedUser FirstUser, CalculateResult.CalculatedUser SecondUser)
     {
-        public sealed record User(string Id, float Health, float Hits);
+        public sealed record CalculatedUser(string Id, float Health, float Hits);
     };
 }
