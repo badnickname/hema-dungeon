@@ -38,7 +38,7 @@ function isMinimum() {
     <span>Жизни</span>
     <div class="health">
       <input type="number" v-model="health" />
-      <span>из {{ entity.vitality }}</span>
+      <span>из {{ Math.round(entity.vitality) }}</span>
     </div>
   </label>
   <div>

@@ -24,7 +24,7 @@ public sealed class CalculatorController : ControllerBase
     [HttpGet("users")]
     public async Task<IActionResult> GetCharacters([FromServices] Context context)
     {
-        var result = await context.Users.ToListAsync();
+        var result = await context.Users.Include(x => x.Visits).Include(x => x.Cataclysms).ToListAsync();
         return new JsonResult(result);
     }
 
