@@ -49,6 +49,7 @@ public sealed class CalculatorController : ControllerBase
             {
                 Character = await context.Users
                     .Include(x => x.Visits)
+                    .Include(x => x.Cataclysms)
                     .FirstAsync(x => x.Id == model.SecondUser.Id)
             }
         };
