@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/types/character.d.ts","./src/types/fightstate.d.ts","./src/types/result.d.ts","./src/types/state.d.ts","./src/app.vue","./src/components/calculator.vue","./src/components/character.vue","./src/components/characterlist.vue"],"version":"5.6.3"}

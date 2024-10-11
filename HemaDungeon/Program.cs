@@ -2,6 +2,7 @@ using HemaDungeon;
 using HemaDungeon.Abilities;
 using HemaDungeon.Entities;
 using HemaDungeon.Options;
+using HemaDungeon.Repositories;
 using HemaDungeon.Workers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.Configure<AdminOptions>(builder.Configuration.GetSection("Admin
 builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("default")));
 builder.Services.AddTransient<AbilityService>();
 builder.Services.AddMemoryCache();
+builder.Services.AddTransient<CharacterRepository>();
 builder.Services.AddIdentity<Character, IdentityRole>(options =>
 {
     options.Password = new PasswordOptions
@@ -48,7 +50,6 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
 app.MapControllers();
 app.MapGet("login", (HttpContext context) => context.Response.Redirect("/"));
 app.MapGet("dashboard", (HttpContext context) => context.Response.Redirect("/"));
