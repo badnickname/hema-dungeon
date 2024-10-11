@@ -118,9 +118,13 @@ public sealed class CalculatorController : ControllerBase
         if (model.FirstUser.Health.HasValue) compare.FirstUser.Character.Health = model.FirstUser.Health.Value;
         if (model.SecondUser.Health.HasValue) compare.SecondUser.Character.Health = model.SecondUser.Health.Value;
 
+        var firstHealth = model.FirstUser.Health ?? 0.0;
+        compare.FirstUser.Character.Health = firstHealth;
         compare.FirstUser.Character.Health -= compare.SecondUser.Damage * (model.SecondUser.Score ?? 0) + (model.SecondUser.Damage ?? 0);
         if (compare.FirstUser.Character.Health < 0) compare.FirstUser.Character.Health = 0;
 
+        var secondHealth = model.SecondUser.Health ?? 0.0;
+        compare.SecondUser.Character.Health = secondHealth;
         compare.SecondUser.Character.Health -= compare.FirstUser.Damage * (model.FirstUser.Score ?? 0) + (model.FirstUser.Damage ?? 0);
         if (compare.SecondUser.Character.Health < 0) compare.SecondUser.Character.Health = 0;
 
@@ -128,16 +132,12 @@ public sealed class CalculatorController : ControllerBase
             new CalculateResult.CalculatedUser(
                 compare.FirstUser.Character.Character.Id,
                 (float) compare.FirstUser.Character.Health,
-                (int) Math.Ceiling(compare.FirstUser.Character.Health /
-                             (compare.SecondUser.Damage * (model.SecondUser.Score ?? 0) +
-                              (model.SecondUser.Damage ?? 0)))
+                (int) Math.Ceiling(firstHealth / compare.SecondUser.Damage)
             ),
             new CalculateResult.CalculatedUser(
-                compare.FirstUser.Character.Character.Id,
-                (float) compare.FirstUser.Character.Health,
-                (int)Math.Ceiling(compare.SecondUser.Character.Health /
-                                  (compare.FirstUser.Damage * (model.FirstUser.Score ?? 0) +
-                                   (model.FirstUser.Damage ?? 0)))
+                compare.SecondUser.Character.Character.Id,
+                (float) compare.SecondUser.Character.Health,
+                (int) Math.Ceiling(secondHealth / compare.FirstUser.Damage)
             )
         );
     }
