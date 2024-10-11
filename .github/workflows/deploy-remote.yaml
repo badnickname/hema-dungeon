@@ -1,4 +1,4 @@
-﻿name: Deploy NetApi To Remote
+﻿name: Deploy NetApi
 
 on:
   push:
@@ -24,33 +24,21 @@ jobs:
       - name: Archive to zip
         run: |
           7z a web-build.zip *
-      - name: Install OpenVPN
-        run: |
-          sudo apt update
-          sudo apt install -y openvpn
-      - name: Install OpenVPN
-        run: |
-          sudo apt update
-          sudo apt install -y openvpn openvpn-systemd-resolved
-      - name: Connect to VPN
-        uses: "uzaysan/github-openvpn-connect-action@0.0.3"
-        with:
-          config: ${{ secrets.OVPN_CONFIG_CONTENT }}
       - name: Copy artifacts
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.LOCAL_HOST }}
-          username: ${{ secrets.LOCAL_USERNAME }}
-          password: ${{ secrets.LOCAL_PASSWORD }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
           port: 22
           source: 'web-build.zip'
-          target: '/home/orangepi'
+          target: '/root'
       - name: Disable Web
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.LOCAL_HOST }}
-          username: ${{ secrets.LOCAL_USERNAME }}
-          password: ${{ secrets.LOCAL_PASSWORD }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
           port: 22
           script: |
             systemctl status hema
@@ -58,16 +46,16 @@ jobs:
       - name: Replace and start Web
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.LOCAL_HOST }}
-          username: ${{ secrets.LOCAL_USERNAME }}
-          password: ${{ secrets.LOCAL_PASSWORD }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
           port: 22
           script: |
-            cd /home/orangepi
+            cd /root
             mkdir wwwroot
             cp -r hema/wwwroot/* wwwroot/
             cp hema/appsettings.Production.json appsettings.Production.json
-            rm -rf /home/orangepi/hema/*
+            rm -rf /root/hema/*
             7z x -ohema web-build.zip
             chmod 777 hema/HemaDungeon
             rm web-build.zip
@@ -75,7 +63,7 @@ jobs:
             rm -rf wwwroot/index.html
             rm -rf wwwroot/vite.svg
             cp appsettings.Production.json hema/appsettings.Production.json
-            cp -r wwwroot/* hema/wwwroot/
+            cp wwwroot/* hema/wwwroot/
             rm appsettings.Production.json
             rm -rf wwwroot
             systemctl start hema
