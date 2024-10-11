@@ -24,4 +24,4 @@ jobs:
           name: web-build
           retention-days: 1
           path: |
-            HemaDungeon/bin/Release/net8.0/linux-arm64/publish/*
+            HemaDungeon/bin/Release/net8.0/linux-x64/publish/*

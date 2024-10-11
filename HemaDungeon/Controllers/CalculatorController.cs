@@ -20,7 +20,7 @@ public sealed class CalculatorController : ControllerBase
         if (!provider.TryGetContentType($"wwwroot/{name}", out var contentType)) contentType = "image";
         return File(file, contentType);
     }
-
+    
     [HttpGet("users")]
     public async Task<IActionResult> GetCharacters([FromServices] Context context)
     {
