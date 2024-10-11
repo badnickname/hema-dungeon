@@ -25,13 +25,13 @@ onMounted(async function () {
     firstUser: {
       id: props.characters[0].id,
       damage: 0,
-      health: props.characters[0].vitality,
+      health: Math.round(props.characters[0].vitality),
       score: 0,
     },
     secondUser: {
       id: props.characters[1].id,
       damage: 0,
-      health: props.characters[1].vitality,
+      health: Math.round(props.characters[1].vitality),
       score: 0,
     },
   }

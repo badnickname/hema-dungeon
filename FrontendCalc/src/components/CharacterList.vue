@@ -8,7 +8,7 @@ const characters = ref<Character[]>([]);
 
 onMounted(async () => {
   characters.value = await fetch('/api/users').then(x => x.json());
-  characters.value = characters.value.filter(x => !x.name.startsWith('Тимофей'))
+  characters.value = characters.value.filter(x => !x.name.startsWith('Плотников'))
 })
 
 function pick(entity: Character) {
