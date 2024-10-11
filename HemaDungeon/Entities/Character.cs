@@ -61,8 +61,7 @@ public sealed class Character : IdentityUser
             var value = (Score > 0 ? Score : 1) * 5;
             var visits = Visits?.Where(x => !x.CanSkip).OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1;
             if (value * visits == 0) return value;
-            var cataclysm = Cataclysms?.Count ?? 0;
-            if (cataclysm == 0) cataclysm = 1;
+            var cataclysm = (Cataclysms?.Count ?? 0) + 1;
             return value * visits / (float) cataclysm;
         }
     }
