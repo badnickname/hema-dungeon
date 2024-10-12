@@ -81,7 +81,7 @@ const calculate = debounce(rawCalculate, 800);
     />
     <div>
       <h3>ХП после боя:</h3>
-      <span>{{ fightState.secondUser.health }}</span>
+      <span>{{ fightState.secondUser.health ?? '--' }}</span>
     </div>
   </div>
 </div>
