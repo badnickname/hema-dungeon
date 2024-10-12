@@ -16,7 +16,6 @@ public sealed class FightController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetUser([FromServices] Context context, [FromServices] UserManager<Character> manager)
     {
-        // var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
         var users = await context.FightCharacters.Include(x => x.Character).ThenInclude(x => x.Visits).ToListAsync();
         return new JsonResult(users);
     }
@@ -31,7 +30,7 @@ public sealed class FightController : ControllerBase
         context.FightCharacters.RemoveRange(context.FightCharacters.Where(x => x.AuthorId == userId).ToList());
         await context.SaveChangesAsync();
 
-        foreach (var user in context.Users.Include(x => x.Visits).Where(x => model.Ids.Contains(x.Id)))
+        foreach (var user in context.Users.Include(x => x.Visits).Include(x => x.Tournaments).Include(x => x.Cataclysms).Where(x => model.Ids.Contains(x.Id)))
         {
             context.FightCharacters.Add(new FightCharacter
             {
@@ -51,8 +50,6 @@ public sealed class FightController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Complete([FromServices] Context context, [FromServices] UserManager<Character> manager)
     {
-        // var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
-
         context.FightStates.RemoveRange(context.FightStates.ToList());
         context.FightCharacters.RemoveRange(context.FightCharacters.ToList());
         await context.SaveChangesAsync();
@@ -112,7 +109,17 @@ public sealed class FightController : ControllerBase
         await context.SaveChangesAsync();
 
         var states = new List<FightState>();
-        foreach (var user in context.FightCharacters.Include(x => x.Character).Include(x => x.Character).ThenInclude(x => x.Visits).Where(x => model.Ids.Contains(x.Character.Id)))
+        foreach (var user in context.FightCharacters
+                     .Include(x => x.Character)
+                     .Include(x => x.Character)
+                     .ThenInclude(x => x.Visits)
+                     .Include(x => x.Character)
+                     .Include(x => x.Character)
+                     .ThenInclude(x => x.Tournaments)
+                     .Include(x => x.Character)
+                     .Include(x => x.Character)
+                     .ThenInclude(x => x.Cataclysms)
+                     .Where(x => model.Ids.Contains(x.Character.Id)))
         {
             var state = new FightState
             {
@@ -134,6 +141,10 @@ public sealed class FightController : ControllerBase
             Math.Max(states[0].Character.Character.Wisdom + buff0.Wisdom - states[1].Character.Character.Wisdom - buff1.Wisdom, 1) +
             Math.Max(states[0].Character.Character.Stamina - states[1].Character.Character.Stamina, 1);
         states[0].Damage *= 5;
+        if (states[0].Character.Character.Tournaments is not null && states[0].Character.Character.Tournaments.Count > 0)
+        {
+            states[0].Damage *= states[0].Character.Character.Tournaments.Count * 1.5;
+        }
         if (states[0].Character.Character.Rang > states[1].Character.Character.Rang)
         {
             states[0].Damage *= (states[0].Character.Character.Rang - states[1].Character.Character.Rang + 1);
@@ -149,6 +160,10 @@ public sealed class FightController : ControllerBase
             Math.Max(states[1].Character.Character.Wisdom + buff1.Wisdom - states[0].Character.Character.Wisdom - buff0.Wisdom, 1) +
             Math.Max(states[1].Character.Character.Stamina - states[0].Character.Character.Stamina, 1);
         states[1].Damage *= 5;
+        if (states[1].Character.Character.Tournaments is not null && states[1].Character.Character.Tournaments.Count > 0)
+        {
+            states[1].Damage *= states[1].Character.Character.Tournaments.Count * 1.5;
+        }
         if (states[1].Character.Character.Rang > states[0].Character.Character.Rang)
         {
             states[1].Damage *= (states[1].Character.Character.Rang - states[0].Character.Character.Rang);

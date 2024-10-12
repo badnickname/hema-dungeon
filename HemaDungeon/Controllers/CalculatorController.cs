@@ -38,6 +38,7 @@ public sealed class CalculatorController : ControllerBase
                 Character = await context.Users
                     .Include(x => x.Visits)
                     .Include(x => x.Cataclysms)
+                    .Include(x => x.Tournaments)
                     .FirstAsync(x => x.Id == model.FirstUser.Id)
             }
         };
@@ -50,6 +51,7 @@ public sealed class CalculatorController : ControllerBase
                 Character = await context.Users
                     .Include(x => x.Visits)
                     .Include(x => x.Cataclysms)
+                    .Include(x => x.Tournaments)
                     .FirstAsync(x => x.Id == model.SecondUser.Id)
             }
         };
@@ -64,6 +66,10 @@ public sealed class CalculatorController : ControllerBase
             Math.Max(firstState.Character.Character.Wisdom + buff0.Wisdom - secondState.Character.Character.Wisdom - buff1.Wisdom, 1) +
             Math.Max(firstState.Character.Character.Stamina - secondState.Character.Character.Stamina, 1);
         firstState.Damage *= 5;
+        if (firstState.Character.Character.Tournaments is not null && firstState.Character.Character.Tournaments.Count > 0)
+        {
+            firstState.Damage *= firstState.Character.Character.Tournaments.Count * 1.5;
+        }
         if (firstState.Character.Character.Rang > secondState.Character.Character.Rang)
         {
             firstState.Damage *= (firstState.Character.Character.Rang - secondState.Character.Character.Rang + 1);
@@ -79,6 +85,10 @@ public sealed class CalculatorController : ControllerBase
             Math.Max(secondState.Character.Character.Wisdom + buff1.Wisdom - firstState.Character.Character.Wisdom - buff0.Wisdom, 1) +
             Math.Max(secondState.Character.Character.Stamina - firstState.Character.Character.Stamina, 1);
         secondState.Damage *= 5;
+        if (secondState.Character.Character.Tournaments is not null && secondState.Character.Character.Tournaments.Count > 0)
+        {
+            secondState.Damage *= secondState.Character.Character.Tournaments.Count * 1.5;
+        }
         if (secondState.Character.Character.Rang > firstState.Character.Character.Rang)
         {
             secondState.Damage *= (secondState.Character.Character.Rang - firstState.Character.Character.Rang);

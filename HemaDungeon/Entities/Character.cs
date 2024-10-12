@@ -72,4 +72,7 @@ public sealed class Character : IdentityUser
 
     [JsonIgnore]
     public ICollection<Cataclysm>? Cataclysms { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Tournament>? Tournaments { get; set; }
 }
