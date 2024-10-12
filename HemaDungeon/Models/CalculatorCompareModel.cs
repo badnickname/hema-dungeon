@@ -6,5 +6,5 @@ public sealed class CalculatorCompareModel
 
     public User SecondUser { get; set; }
  
-    public sealed record User(string Id, int? Health, int? Score, int? Damage);
+    public sealed record User(string Id, int? Health, int? Score, int? Damage, bool? DisableAbility);
 }

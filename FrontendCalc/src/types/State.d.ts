@@ -8,4 +8,5 @@ type User = {
 	health?: number;
 	score?: number;
 	damage?: number;
+	disableAbility?: boolean;
 }

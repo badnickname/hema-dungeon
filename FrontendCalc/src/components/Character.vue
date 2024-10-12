@@ -4,11 +4,12 @@ import type { Character } from '../types/Character';
 
 const props = defineProps({
   health: { type: Number },
+  disableAbility: {type: Boolean },
   maxHits: { type: Number },
   hits: { type: Number },
   entity: { type: Object as PropType<Character>, required: true }
 });
-const emit = defineEmits(['update:health', 'update:hits']);
+const emit = defineEmits(['update:health', 'update:hits', 'update:disableAbility']);
 
 onMounted(() => {
   if (!props.health) emit('update:health', props.entity?.vitality ?? 0);
@@ -25,6 +26,11 @@ const hits = computed({
   set: (value: number) => emit('update:hits', value),
 })
 
+const ability = computed({
+  get: () => !props.disableAbility,
+  set: (value: boolean) => emit('update:disableAbility', !value),
+})
+
 function isMinimum() {
   return hits.value < 1;
 }
@@ -34,6 +40,10 @@ function isMinimum() {
 <div class="character">
   <h1>{{ entity.name }}</h1>
   <img :src="`/api/image/${entity.avatar}`" :alt="entity.name" />
+  <label style="display: flex">
+    <span>Способность</span>
+    <input v-model="ability" type="checkbox" />
+  </label>
   <label>
     <span>Жизни</span>
     <div class="health">

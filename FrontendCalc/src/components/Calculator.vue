@@ -27,12 +27,14 @@ onMounted(async function () {
       damage: 0,
       health: Math.round(props.characters[0].vitality),
       score: 0,
+      disableAbility: false,
     },
     secondUser: {
       id: props.characters[1].id,
       damage: 0,
       health: Math.round(props.characters[1].vitality),
       score: 0,
+      disableAbility: false,
     },
   }
   await calculate();
@@ -60,9 +62,11 @@ const calculate = debounce(rawCalculate, 800);
         :entity="props.characters[0]"
         v-model:health="state!.firstUser.health"
         v-model:hits="state!.firstUser.score"
+        v-model:disableAbility="state!.firstUser.disableAbility"
         :max-hits="fightState?.secondUser.scoreHealth"
         @update:health="calculate"
         @update:hits="calculate"
+        @update:disableAbility="calculate"
     />
     <div>
       <h3>ХП после боя:</h3>
@@ -75,9 +79,11 @@ const calculate = debounce(rawCalculate, 800);
         :entity="props.characters[1]"
         v-model:health="state!.secondUser.health"
         v-model:hits="state!.secondUser.score"
+        v-model:disableAbility="state!.secondUser.disableAbility"
         :max-hits="fightState?.firstUser.scoreHealth"
         @update:health="calculate"
         @update:hits="calculate"
+        @update:disableAbility="calculate"
     />
     <div>
       <h3>ХП после боя:</h3>

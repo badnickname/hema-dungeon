@@ -57,8 +57,8 @@ public sealed class CalculatorController : ControllerBase
         };
         secondState.Character.Health = secondState.Character.Character.Vitality;
 
-        var buff0 = service.Accept(firstState, secondState);
-        var buff1 = service.Accept(secondState, firstState);
+        var buff0 = model.FirstUser.DisableAbility == true ? new Buff() : service.Accept(firstState, secondState);
+        var buff1 = model.SecondUser.DisableAbility == true ? new Buff() : service.Accept(secondState, firstState);
 
         var agility0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Agility * 2) : firstState.Character.Character.Agility;
         var power0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Power * 2) : firstState.Character.Character.Power;
