@@ -15,5 +15,6 @@ public enum AbilityType
     Poison = 10,
     Wisdom = 11,
     Calm = 12,
-    Gnome = 13
+    Gnome = 13,
+    DungeonMaster = 14
 }

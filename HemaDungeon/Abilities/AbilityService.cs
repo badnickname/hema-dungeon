@@ -133,6 +133,24 @@ public sealed class AbilityService
                     Name = "Гномьи технологии",
                     Description = "Оружие, на 10 см ниже максимальной допустимой длины наносит дополнительно 10 ед. урона при попадании"
                 };
+            case AbilityType.DungeonMaster:
+            {
+                if (second.Character.Character.Rang > 3) return new Buff
+                {
+                    Name = "Мастер",
+                    Description = "Снижает получаемый урон на 80% с участниками не достигшими 3 ранга. Увеличивает статы в 2 раза",
+                    ResistFactor = 0.2f,
+                    StatesFactor = 2,
+                    Calculated = true
+                };
+                return new Buff
+                {
+                    Name = "Мастер",
+                    Description = "Снижает получаемый урон на 80% с участниками не достигшими 3 ранга. Увеличивает статы в 2 раза",
+                    StatesFactor = 2,
+                    Calculated = true
+                };
+            }
         }
 
         return new Buff();
