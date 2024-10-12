@@ -54,15 +54,13 @@ public sealed class AbilityService
             }
             case AbilityType.Armor:
             {
-                if (second.Character.Character.Ability != AbilityType.Poison) 
-                    return new Buff
-                    {
-                        Name = "Стальная броня",
-                        Description = "Снижает получаемый урон на 20%. На механизмы не действуют яды",
-                        ResistFactor = 0.8f, 
-                        Calculated = true
-                    };
-                break;
+                return new Buff
+                {
+                    Name = "Стальная броня",
+                    Description = "Снижает получаемый урон на 20%. На механизмы не действуют яды",
+                    ResistFactor = 0.8f, 
+                    Calculated = true
+                };
             }
             case AbilityType.Mimic:
             {
