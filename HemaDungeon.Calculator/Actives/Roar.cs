@@ -2,7 +2,7 @@
 
 internal sealed class Roar : IModificator
 {
-    public int Priority => int.MaxValue - 7;
+    public int Priority => int.MaxValue - 22;
 
     public void Accept(Character character, Character enemy)
     {

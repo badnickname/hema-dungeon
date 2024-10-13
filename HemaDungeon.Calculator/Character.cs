@@ -40,12 +40,4 @@ public sealed class Character
     public AbilityType Ability { get; set; }
 
     internal IList<IModificator> List { get; set; } = new List<IModificator>();
-
-    internal void Accept(Character enemy)
-    {
-        foreach (var item in List.OrderBy(x => x.Priority))
-        {
-            item.Accept(this, enemy);
-        }
-    }
 }

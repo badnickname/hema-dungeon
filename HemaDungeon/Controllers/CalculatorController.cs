@@ -4,6 +4,8 @@ using HemaDungeon.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using AbilityType = HemaDungeon.Calculator.AbilityType;
+using Character = HemaDungeon.Calculator.Character;
 
 namespace HemaDungeon.Controllers;
 
@@ -29,147 +31,93 @@ public sealed class CalculatorController : ControllerBase
     }
 
     [HttpPost("users/compare")]
-    public async Task<CompareResult> Compare(CalculatorCompareModel model, [FromServices] AbilityService service, [FromServices] Context context)
+    public async Task<CompareResult> Compare(CalculatorCompareModel model, [FromServices] Calculator.Calculator service, [FromServices] Context context)
     {
-        var firstState = new FightState
+        var firstState = await GetState(model.FirstUser.Id, context);
+        var secondState = await GetState(model.SecondUser.Id, context);
+
+        var ability = new AbilityService();
+        var buff0 = ability.Accept(firstState, secondState, model.FirstUser.DisableAbility == false);
+        firstState.Name = buff0.Name;
+        firstState.Description = buff0.Description;
+        
+        var buff1 = ability.Accept(secondState, firstState, model.FirstUser.DisableAbility == false);
+        secondState.Name = buff1.Name;
+        secondState.Description = buff1.Description;
+
+        var first = new Character(
+            model.FirstUser.Health ?? firstState.Character.Character.Vitality, 
+            0, 
+            firstState.Character.Character.Wisdom,
+            firstState.Character.Character.Stamina,
+            firstState.Character.Character.Agility,
+            firstState.Character.Character.Power,
+            (AbilityType) firstState.Character.Character.Ability!,
+            firstState.Character.Character.Rang,
+            firstState.Character.Character.Tournaments?.Count ?? 0
+        )
         {
-            Character = new FightCharacter
-            {
-                Character = await context.Users
-                    .Include(x => x.Visits)
-                    .Include(x => x.Cataclysms)
-                    .Include(x => x.Tournaments)
-                    .FirstAsync(x => x.Id == model.FirstUser.Id)
-            }
+            UseActive = model.FirstUser.DisableAbility == false
         };
-        firstState.Character.Health = firstState.Character.Character.Vitality;
-
-        var secondState = new FightState
+        var second = new Character(
+            model.SecondUser.Health ?? secondState.Character.Character.Vitality, 
+            0, 
+            secondState.Character.Character.Wisdom,
+            secondState.Character.Character.Stamina,
+            secondState.Character.Character.Agility,
+            secondState.Character.Character.Power,
+            (AbilityType) secondState.Character.Character.Ability!,
+            secondState.Character.Character.Rang,
+            secondState.Character.Character.Tournaments?.Count ?? 0
+        )
         {
-            Character = new FightCharacter
-            {
-                Character = await context.Users
-                    .Include(x => x.Visits)
-                    .Include(x => x.Cataclysms)
-                    .Include(x => x.Tournaments)
-                    .FirstAsync(x => x.Id == model.SecondUser.Id)
-            }
+            UseActive = model.SecondUser.DisableAbility == false
         };
-        secondState.Character.Health = secondState.Character.Character.Vitality;
+        service.Accept(first, second);
 
-        var buff0 = model.FirstUser.DisableAbility == true ? new Buff() : service.Accept(firstState, secondState, model.FirstUser.DisableAbility == false);
-        var buff1 = model.SecondUser.DisableAbility == true ? new Buff() : service.Accept(secondState, firstState, model.SecondUser.DisableAbility == false);
-        firstState.Character.Health += buff0.Health;
-        secondState.Character.Health += buff1.Health;
-
-        var agility0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Agility * 2) : firstState.Character.Character.Agility;
-        var power0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Power * 2) : firstState.Character.Character.Power;
-        var wisdom0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Wisdom * 2) : firstState.Character.Character.Wisdom;
-        var stamina0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Stamina * 2) : firstState.Character.Character.Stamina;
-        
-        var agility1 = buff1.StatesFactor is not null ? Math.Min(100, secondState.Character.Character.Agility * 2) : secondState.Character.Character.Agility;
-        var power1 = buff1.StatesFactor is not null ? Math.Min(100, secondState.Character.Character.Power * 2) : secondState.Character.Character.Power;
-        var wisdom1 = buff1.StatesFactor is not null ? Math.Min(100, secondState.Character.Character.Wisdom * 2) : secondState.Character.Character.Wisdom;
-        var stamina1 = buff1.StatesFactor is not null ? Math.Min(100, secondState.Character.Character.Stamina * 2) : secondState.Character.Character.Stamina;
-        
-        
-        firstState.Damage =
-            Math.Max(agility0 + buff0.Agility - agility1 - buff1.Agility, 1) +
-            Math.Max(power0 - power1, 1) +
-            Math.Max(wisdom0 + buff0.Wisdom - wisdom1 - buff1.Wisdom, 1) +
-            Math.Max(stamina0 - stamina1, 1);
-        firstState.Damage *= 5;
-        if (firstState.Character.Character.Tournaments is not null && firstState.Character.Character.Tournaments.Count > 0)
-        {
-            firstState.Damage *= firstState.Character.Character.Tournaments.Count * 1.5;
-        }
-        if (firstState.Character.Character.Rang > secondState.Character.Character.Rang)
-        {
-            firstState.Damage *= (firstState.Character.Character.Rang - secondState.Character.Character.Rang + 1);
-        }
-        else if (firstState.Character.Character.Rang < secondState.Character.Character.Rang)
-        {
-            firstState.Damage /= (secondState.Character.Character.Rang - firstState.Character.Character.Rang + 1);
-        }
-
-        secondState.Damage =
-            Math.Max(agility1 + buff1.Agility - agility0 - buff0.Agility, 1) +
-            Math.Max(power1 - power0, 1) +
-            Math.Max(wisdom1 + buff1.Wisdom - wisdom0 - buff0.Wisdom, 1) +
-            Math.Max(stamina1 - stamina0, 1);
-        secondState.Damage *= 5;
-        if (secondState.Character.Character.Tournaments is not null && secondState.Character.Character.Tournaments.Count > 0)
-        {
-            secondState.Damage *= secondState.Character.Character.Tournaments.Count * 1.5;
-        }
-        if (secondState.Character.Character.Rang > firstState.Character.Character.Rang)
-        {
-            secondState.Damage *= (secondState.Character.Character.Rang - firstState.Character.Character.Rang);
-        }
-        else if (secondState.Character.Character.Rang < firstState.Character.Character.Rang)
-        {
-            secondState.Damage /= (firstState.Character.Character.Rang - secondState.Character.Character.Rang);
-        }
-
-        if (buff0.CopyStats || buff1.CopyStats)
-        {
-            firstState.Damage = 20;
-            secondState.Damage = 20;
-        }
-        secondState.Damage = (int) (secondState.Damage * (buff0.ResistFactor > 0 ? buff0.ResistFactor : 1)) + buff1.Damage;
-        firstState.Damage = (int) (firstState.Damage * (buff1.ResistFactor > 0 ? buff1.ResistFactor : 1)) + buff0.Damage;
-
-        firstState.Calculated = buff0.Calculated;
-        firstState.Name = buff0.Name ?? string.Empty;
-        firstState.Description = buff0.Description ?? string.Empty;
-        secondState.Calculated = buff1.Calculated;
-        secondState.Name = buff1.Name ?? string.Empty;
-        secondState.Description = buff1.Description ?? string.Empty;
-
-        firstState.ScoreHealth = (int) Math.Ceiling(firstState.Character.Health / secondState.Damage);
-        if (firstState.ScoreHealth == 0) firstState.ScoreHealth = 1;
-
-        secondState.ScoreHealth = (int) Math.Ceiling(secondState.Character.Health / firstState.Damage);
-        if (secondState.ScoreHealth == 0) secondState.ScoreHealth = 1;
-
-        if (buff0.Survive) firstState.Character.Character.Harmed += 50;
-        if (buff1.Survive) secondState.Character.Character.Harmed += 50;
-        firstState.Character.Character.Harmed += buff1.Burst;
-        secondState.Character.Character.Harmed += buff0.Burst;
-        firstState.Character.Character.Healed += buff0.Health;
-        secondState.Character.Character.Healed += buff1.Health;
+        firstState.Character.Health = first.Health;
+        firstState.ScoreHealth = first.ScoreHealth;
+        firstState.Calculated = first.IsPassive || first.UseActive;
+        firstState.Damage = first.Damage;
+        secondState.Character.Health = second.Health;
+        secondState.ScoreHealth = second.ScoreHealth;
+        secondState.Calculated = second.IsPassive || second.UseActive;
+        secondState.Damage = second.Damage;
 
         var result = new CompareResult(firstState, secondState);
         return result;
     }
 
+    private static async Task<FightState> GetState(string id, Context context)
+    {
+        return new FightState
+        {
+            Character = new FightCharacter
+            {
+                Character = await context.Users
+                    .Include(x => x.Visits)
+                    .Include(x => x.Cataclysms)
+                    .Include(x => x.Tournaments)
+                    .FirstAsync(x => x.Id == id)
+            }
+        };
+    }
+
     [HttpPost("users/calculate")]
-    public async Task<CalculateResult> Calculate(CalculatorCompareModel model, [FromServices] Context context, [FromServices] AbilityService service)
+    public async Task<CalculateResult> Calculate(CalculatorCompareModel model, [FromServices] Context context, [FromServices] Calculator.Calculator service)
     {
         var compare = await Compare(model, service, context);
-        if (model.FirstUser.Health.HasValue) compare.FirstUser.Character.Health = model.FirstUser.Health.Value + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed;
-        if (model.SecondUser.Health.HasValue) compare.SecondUser.Character.Health = model.SecondUser.Health.Value + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed;
-
-        var firstHealth = model.FirstUser.Health ?? 0.0 + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed;
-        compare.FirstUser.Character.Health = firstHealth + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed;
-        compare.FirstUser.Character.Health -= compare.SecondUser.Damage * (model.SecondUser.Score ?? 0) + (model.SecondUser.Damage ?? 0);
-        if (compare.FirstUser.Character.Health < 0) compare.FirstUser.Character.Health = 0;
-
-        var secondHealth = model.SecondUser.Health ?? 0.0 + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed;
-        compare.SecondUser.Character.Health = secondHealth + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed;
-        compare.SecondUser.Character.Health -= compare.FirstUser.Damage * (model.FirstUser.Score ?? 0) + (model.FirstUser.Damage ?? 0);
-        if (compare.SecondUser.Character.Health < 0) compare.SecondUser.Character.Health = 0;
 
         return new CalculateResult(
             new CalculateResult.CalculatedUser(
                 compare.FirstUser.Character.Character.Id,
-                (float) compare.FirstUser.Character.Health,
-                (int) Math.Ceiling((firstHealth + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed) / compare.SecondUser.Damage)
+                (float) Math.Floor(Math.Max(0, compare.FirstUser.Character.Health - compare.SecondUser.Damage * (model.SecondUser.Score ?? 0))),
+                compare.FirstUser.ScoreHealth
             ),
             new CalculateResult.CalculatedUser(
                 compare.SecondUser.Character.Character.Id,
-                (float) compare.SecondUser.Character.Health,
-                (int) Math.Ceiling((secondHealth + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed) / compare.FirstUser.Damage)
+                (float) Math.Floor(Math.Max(0, compare.SecondUser.Character.Health - compare.FirstUser.Damage * (model.FirstUser.Score ?? 0))),
+                compare.SecondUser.ScoreHealth
             )
         );
     }

@@ -14,8 +14,10 @@ public sealed class Calculator
         AcceptAbility(first);
         AcceptAbility(second);
 
-        first.Accept(second);
-        second.Accept(first);
+        var firstList = first.List.Select(x => new { Modificator = x, x.Priority, Character = first, Enemy = second });
+        var secondList = second.List.Select(x => new { Modificator = x, x.Priority, Character = second, Enemy = first });
+        var list = firstList.Concat(secondList).OrderBy(x => x.Priority);
+        foreach (var item in list) item.Modificator.Accept(item.Character, item.Enemy);
     }
 
     private static void AcceptBase(Character character)

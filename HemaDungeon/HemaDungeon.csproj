@@ -22,4 +22,8 @@
       <Folder Include="wwwroot\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\HemaDungeon.Calculator\HemaDungeon.Calculator.csproj" />
+    </ItemGroup>
+
 </Project>
