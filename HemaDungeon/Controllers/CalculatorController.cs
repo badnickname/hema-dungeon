@@ -57,8 +57,10 @@ public sealed class CalculatorController : ControllerBase
         };
         secondState.Character.Health = secondState.Character.Character.Vitality;
 
-        var buff0 = model.FirstUser.DisableAbility == true ? new Buff() : service.Accept(firstState, secondState);
-        var buff1 = model.SecondUser.DisableAbility == true ? new Buff() : service.Accept(secondState, firstState);
+        var buff0 = model.FirstUser.DisableAbility == true ? new Buff() : service.Accept(firstState, secondState, model.FirstUser.DisableAbility == false);
+        var buff1 = model.SecondUser.DisableAbility == true ? new Buff() : service.Accept(secondState, firstState, model.SecondUser.DisableAbility == false);
+        firstState.Character.Health += buff0.Health;
+        secondState.Character.Health += buff1.Health;
 
         var agility0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Agility * 2) : firstState.Character.Character.Agility;
         var power0 = buff0.StatesFactor is not null ? Math.Min(100, firstState.Character.Character.Power * 2) : firstState.Character.Character.Power;
@@ -130,6 +132,13 @@ public sealed class CalculatorController : ControllerBase
         secondState.ScoreHealth = (int) Math.Ceiling(secondState.Character.Health / firstState.Damage);
         if (secondState.ScoreHealth == 0) secondState.ScoreHealth = 1;
 
+        if (buff0.Survive) firstState.Character.Character.Harmed += 50;
+        if (buff1.Survive) secondState.Character.Character.Harmed += 50;
+        firstState.Character.Character.Harmed += buff1.Burst;
+        secondState.Character.Character.Harmed += buff0.Burst;
+        firstState.Character.Character.Healed += buff0.Health;
+        secondState.Character.Character.Healed += buff1.Health;
+
         var result = new CompareResult(firstState, secondState);
         return result;
     }
@@ -138,16 +147,16 @@ public sealed class CalculatorController : ControllerBase
     public async Task<CalculateResult> Calculate(CalculatorCompareModel model, [FromServices] Context context, [FromServices] AbilityService service)
     {
         var compare = await Compare(model, service, context);
-        if (model.FirstUser.Health.HasValue) compare.FirstUser.Character.Health = model.FirstUser.Health.Value;
-        if (model.SecondUser.Health.HasValue) compare.SecondUser.Character.Health = model.SecondUser.Health.Value;
+        if (model.FirstUser.Health.HasValue) compare.FirstUser.Character.Health = model.FirstUser.Health.Value + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed;
+        if (model.SecondUser.Health.HasValue) compare.SecondUser.Character.Health = model.SecondUser.Health.Value + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed;
 
-        var firstHealth = model.FirstUser.Health ?? 0.0;
-        compare.FirstUser.Character.Health = firstHealth;
+        var firstHealth = model.FirstUser.Health ?? 0.0 + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed;
+        compare.FirstUser.Character.Health = firstHealth + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed;
         compare.FirstUser.Character.Health -= compare.SecondUser.Damage * (model.SecondUser.Score ?? 0) + (model.SecondUser.Damage ?? 0);
         if (compare.FirstUser.Character.Health < 0) compare.FirstUser.Character.Health = 0;
 
-        var secondHealth = model.SecondUser.Health ?? 0.0;
-        compare.SecondUser.Character.Health = secondHealth;
+        var secondHealth = model.SecondUser.Health ?? 0.0 + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed;
+        compare.SecondUser.Character.Health = secondHealth + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed;
         compare.SecondUser.Character.Health -= compare.FirstUser.Damage * (model.FirstUser.Score ?? 0) + (model.FirstUser.Damage ?? 0);
         if (compare.SecondUser.Character.Health < 0) compare.SecondUser.Character.Health = 0;
 
@@ -155,12 +164,12 @@ public sealed class CalculatorController : ControllerBase
             new CalculateResult.CalculatedUser(
                 compare.FirstUser.Character.Character.Id,
                 (float) compare.FirstUser.Character.Health,
-                (int) Math.Ceiling(firstHealth / compare.SecondUser.Damage)
+                (int) Math.Ceiling((firstHealth + compare.FirstUser.Character.Character.Healed - compare.FirstUser.Character.Character.Harmed) / compare.SecondUser.Damage)
             ),
             new CalculateResult.CalculatedUser(
                 compare.SecondUser.Character.Character.Id,
                 (float) compare.SecondUser.Character.Health,
-                (int) Math.Ceiling(secondHealth / compare.FirstUser.Damage)
+                (int) Math.Ceiling((secondHealth + compare.SecondUser.Character.Character.Healed - compare.SecondUser.Character.Character.Harmed) / compare.FirstUser.Damage)
             )
         );
     }

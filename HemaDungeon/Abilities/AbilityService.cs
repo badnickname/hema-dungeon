@@ -4,7 +4,7 @@ namespace HemaDungeon.Abilities;
 
 public sealed class AbilityService
 {
-    public Buff Accept(FightState state, FightState second)
+    public Buff Accept(FightState state, FightState second, bool force = false)
     {
         switch (state.Character.Character.Ability)
         {
@@ -87,19 +87,25 @@ public sealed class AbilityService
                 return new Buff
                 {
                     Name = "Держите анек",
-                    Description = "Во время тренировки может рассказать анекдот, пока другие участники стоят в планке. Добавляет 50 хп на 1 день. Можно применять не более 1 раза в день. Не срабатывает, если анекдот не смешной."
+                    Description = "Во время тренировки может рассказать анекдот, пока другие участники стоят в планке. Добавляет 50 хп на 1 день. Можно применять не более 1 раза в день. Не срабатывает, если анекдот не смешной.",
+                    Calculated = force,
+                    Health = force ? 50 : 0,
                 };
             case AbilityType.Tail:
                 return new Buff
                 {
                     Name = "Хвост ящерицы",
-                    Description = "Отбрасывает хвост, теряет 50 хп, но не умирает в бою (если есть жизни). Действует не более раза в неделю."
+                    Description = "Отбрасывает хвост, теряет 50 хп, но не умирает в бою (если есть жизни). Действует не более раза в неделю.",
+                    Calculated = force,
+                    Survive = force,
                 };
             case AbilityType.Roar:
                 return new Buff
                 {
                     Name = "Львиный рык",
-                    Description = "После успешного удара крик идущий от души наносит 100 урона противнику. Не может быть активирован больше 1 раза за поединок. Не может быть активирован не более трех раз за день"
+                    Description = "После успешного удара крик идущий от души наносит 100 урона противнику. Не может быть активирован больше 1 раза за поединок. Не может быть активирован не более трех раз за день",
+                    Calculated = force,
+                    Burst = force ? 100 : 0,
                 };
             case AbilityType.Klukalo:
                 return new Buff
@@ -129,7 +135,9 @@ public sealed class AbilityService
                 return new Buff
                 {
                     Name = "Гномьи технологии",
-                    Description = "Оружие, на 10 см ниже максимальной допустимой длины наносит дополнительно 10 ед. урона при попадании"
+                    Description = "Оружие, на 10 см ниже максимальной допустимой длины наносит дополнительно 10 ед. урона при попадании",
+                    Calculated = force,
+                    Damage = force ? 10 : 0
                 };
             case AbilityType.DungeonMaster:
             {

@@ -5,6 +5,7 @@ import type { Character } from '../types/Character';
 const props = defineProps({
   health: { type: Number },
   disableAbility: {type: Boolean },
+  abilityName: { type: String },
   maxHits: { type: Number },
   hits: { type: Number },
   entity: { type: Object as PropType<Character>, required: true }
@@ -41,7 +42,7 @@ function isMinimum() {
   <h1>{{ entity.name }}</h1>
   <img :src="`/api/image/${entity.avatar}`" :alt="entity.name" />
   <label style="display: flex">
-    <span>Способность</span>
+    <span>{{ abilityName }}</span>
     <input v-model="ability" type="checkbox" />
   </label>
   <label>

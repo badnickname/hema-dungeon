@@ -62,10 +62,16 @@ public sealed class Character : IdentityUser
             var visits = Visits?.Where(x => !x.CanSkip).OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 2) ?? 1;
             if (value * visits == 0) return value;
             var cataclysm = (Cataclysms?.Count ?? 0) + 1;
-            return value * visits / (float) cataclysm;
+            return value * visits / (float) cataclysm - Harmed;
         }
     }
     // Stats
+
+    [NotMapped]
+    public int Harmed { get; set; }
+
+    [NotMapped]
+    public int Healed { get; set; }
 
     [JsonIgnore]
     public ICollection<Visit>? Visits { get; set; }

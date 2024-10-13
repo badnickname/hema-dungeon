@@ -19,4 +19,10 @@ public sealed class Buff
     public string? Description { get; set; }
     
     public float? StatesFactor { get; set; }
+
+    public int Health { get; set; }
+
+    public bool Survive { get; set; }
+
+    public int Burst { get; set; }
 }
