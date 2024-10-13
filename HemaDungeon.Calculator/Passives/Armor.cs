@@ -7,7 +7,7 @@ internal sealed class Armor : IModificator
     public void Accept(Character character, Character enemy)
     {
         if (character.Force == false) return;
-        enemy.Damage *= 0.2f;
+        enemy.Damage *= 0.8f;
         character.IsPassive = true;
     }
 }
