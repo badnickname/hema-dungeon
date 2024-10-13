@@ -6,6 +6,7 @@ internal sealed class AirBender : IModificator
 
     public void Accept(Character character, Character enemy)
     {
+        if (character.Force == false) return;
         character.Agility += 10;
         character.IsPassive = true;
     }

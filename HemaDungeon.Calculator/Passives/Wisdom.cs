@@ -6,6 +6,7 @@ internal sealed class Wisdom : IModificator
 
     public void Accept(Character character, Character enemy)
     {
+        if (character.Force == false) return;
         character.Wisdom += 10;
         character.IsPassive = true;
     }

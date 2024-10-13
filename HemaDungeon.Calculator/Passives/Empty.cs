@@ -6,6 +6,7 @@ internal sealed class EmptyAbility : IModificator
 
     public void Accept(Character character, Character enemy)
     {
+        if (character.Force == false) return;
         character.IsPassive = true;
     }
 }

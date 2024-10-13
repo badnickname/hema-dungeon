@@ -6,6 +6,7 @@ internal sealed class GodDefence : IModificator
 
     public void Accept(Character character, Character enemy)
     {
+        if (character.Force == false) return;
         if (enemy.Rang > 3) enemy.Damage *= 0.2f;
         character.IsPassive = true;
     }

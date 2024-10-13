@@ -6,6 +6,7 @@ internal sealed class Food : IModificator
 
     public void Accept(Character character, Character enemy)
     {
+        if (character.Force == false) return;
         if (character.Stamina > enemy.Stamina) character.Damage += 10;
         character.IsPassive = true;
     }
