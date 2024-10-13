@@ -102,7 +102,7 @@ public sealed class CalculatorController : ControllerBase
             }
         };
     }
-
+ 
     [HttpPost("users/calculate")]
     public async Task<CalculateResult> Calculate(CalculatorCompareModel model, [FromServices] Context context, [FromServices] Calculator.Calculator service)
     {
