@@ -2,7 +2,7 @@
 
 internal sealed class Gnome : IModificator
 {
-    public int Priority => 50;
+    public int Priority => int.MaxValue - 14;
 
     public void Accept(Character character, Character enemy)
     {
