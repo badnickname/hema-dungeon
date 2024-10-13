@@ -6,6 +6,6 @@ internal sealed class Gnome : IModificator
 
     public void Accept(Character character, Character enemy)
     {
-        if (character.UseActive) character.Damage += 10;
+        if (character.Force == true) character.Damage += 10;
     }
 }

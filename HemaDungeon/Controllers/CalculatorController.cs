@@ -57,7 +57,7 @@ public sealed class CalculatorController : ControllerBase
             firstState.Character.Character.Tournaments?.Count ?? 0
         )
         {
-            UseActive = model.FirstUser.DisableAbility == false
+            Force = !model.FirstUser.DisableAbility
         };
         var second = new Character(
             model.SecondUser.Health ?? secondState.Character.Character.Vitality, 
@@ -71,17 +71,17 @@ public sealed class CalculatorController : ControllerBase
             secondState.Character.Character.Tournaments?.Count ?? 0
         )
         {
-            UseActive = model.SecondUser.DisableAbility == false
+            Force = !model.SecondUser.DisableAbility
         };
         service.Accept(first, second);
 
         firstState.Character.Health = first.Health;
         firstState.ScoreHealth = first.ScoreHealth;
-        firstState.Calculated = first.IsPassive || first.UseActive;
+        firstState.Calculated = first.IsPassive || first.Force == true;
         firstState.Damage = first.Damage;
         secondState.Character.Health = second.Health;
         secondState.ScoreHealth = second.ScoreHealth;
-        secondState.Calculated = second.IsPassive || second.UseActive;
+        secondState.Calculated = second.IsPassive || second.Force == true;
         secondState.Damage = second.Damage;
 
         var result = new CompareResult(firstState, secondState);

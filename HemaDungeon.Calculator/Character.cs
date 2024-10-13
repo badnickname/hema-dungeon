@@ -31,7 +31,7 @@ public sealed class Character
 
     public int ScoreHealth { get; set; }
 
-    public bool UseActive { get; set; }
+    public bool? Force { get; set; }
 
     public bool IsPassive { get; set; }
     
