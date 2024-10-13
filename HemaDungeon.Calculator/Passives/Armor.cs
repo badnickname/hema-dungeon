@@ -2,7 +2,7 @@
 
 internal sealed class Armor : IModificator
 {
-    public int Priority => int.MaxValue - 10;
+    public int Priority => int.MaxValue - 15;
 
     public void Accept(Character character, Character enemy)
     {

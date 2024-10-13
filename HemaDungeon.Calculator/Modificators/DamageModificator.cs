@@ -2,7 +2,7 @@
 
 internal sealed class DamageModificator : IModificator
 {
-    public int Priority => int.MaxValue - 5;
+    public int Priority => int.MaxValue - 15;
 
     public void Accept(Character character, Character enemy)
     {
