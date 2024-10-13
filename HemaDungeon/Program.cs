@@ -1,5 +1,6 @@
 using HemaDungeon;
 using HemaDungeon.Abilities;
+using HemaDungeon.Adapters;
 using HemaDungeon.Calculator;
 using HemaDungeon.Options;
 using HemaDungeon.Repositories;
@@ -17,6 +18,7 @@ builder.Services.Configure<AdminOptions>(builder.Configuration.GetSection("Admin
 builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("default")));
 builder.Services.AddTransient<AbilityService>();
 builder.Services.AddTransient<Calculator>();
+builder.Services.AddTransient<FightStateAdapter>();
 builder.Services.AddMemoryCache();
 builder.Services.AddTransient<CharacterRepository>();
 builder.Services.AddIdentity<Character, IdentityRole>(options =>

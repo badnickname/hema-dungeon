@@ -1,4 +1,5 @@
 ﻿using HemaDungeon.Abilities;
+using HemaDungeon.Adapters;
 using HemaDungeon.Entities;
 using HemaDungeon.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -101,7 +102,7 @@ public sealed class FightController : ControllerBase
 
     [HttpPost("state")]
     [Authorize]
-    public async Task<IActionResult> PostState([FromForm] FightUsersModel model, [FromServices] AbilityService service, [FromServices] UserManager<Character> manager, [FromServices] Context context)
+    public async Task<IActionResult> PostState([FromForm] FightUsersModel model, [FromServices] Calculator.Calculator service, [FromServices] FightStateAdapter adapter, [FromServices] UserManager<Character> manager, [FromServices] Context context)
     {
         var userId = (await manager.GetUserAsync(HttpContext.User))?.Id;
 
@@ -132,77 +133,13 @@ public sealed class FightController : ControllerBase
             context.FightStates.Add(state);
         }
 
-        var buff0 = service.Accept(states[0], states[1]);
-        var buff1 = service.Accept(states[1], states[0]);
+        var first = adapter.ToCharacter(states[0], null, null);
+        var second = adapter.ToCharacter(states[1], null, null);
 
-        var agility0 = buff0.StatesFactor is not null ? Math.Min(100, states[0].Character.Character.Agility * 2) : states[0].Character.Character.Agility;
-        var power0 = buff0.StatesFactor is not null ? Math.Min(100, states[0].Character.Character.Power * 2) : states[0].Character.Character.Power;
-        var wisdom0 = buff0.StatesFactor is not null ? Math.Min(100, states[0].Character.Character.Wisdom * 2) : states[0].Character.Character.Wisdom;
-        var stamina0 = buff0.StatesFactor is not null ? Math.Min(100, states[0].Character.Character.Stamina * 2) : states[0].Character.Character.Stamina;
+        service.Accept(first, second);
 
-        var agility1 = buff1.StatesFactor is not null ? Math.Min(100, states[1].Character.Character.Agility * 2) : states[1].Character.Character.Agility;
-        var power1 = buff1.StatesFactor is not null ? Math.Min(100, states[1].Character.Character.Power * 2) : states[1].Character.Character.Power;
-        var wisdom1 = buff1.StatesFactor is not null ? Math.Min(100, states[1].Character.Character.Wisdom * 2) : states[1].Character.Character.Wisdom;
-        var stamina1 = buff1.StatesFactor is not null ? Math.Min(100, states[1].Character.Character.Stamina * 2) : states[1].Character.Character.Stamina;
-
-        states[0].Damage =
-            Math.Max(agility0 + buff0.Agility - agility1 - buff1.Agility, 1) +
-            Math.Max(power0 - power1, 1) +
-            Math.Max(wisdom0 + buff0.Wisdom - wisdom1 - buff1.Wisdom, 1) +
-            Math.Max(stamina0 - stamina1, 1);
-        states[0].Damage *= 5;
-        if (states[0].Character.Character.Tournaments is not null && states[0].Character.Character.Tournaments.Count > 0)
-        {
-            states[0].Damage *= states[0].Character.Character.Tournaments.Count * 1.5;
-        }
-        if (states[0].Character.Character.Rang > states[1].Character.Character.Rang)
-        {
-            states[0].Damage *= (states[0].Character.Character.Rang - states[1].Character.Character.Rang + 1);
-        }
-        else if (states[0].Character.Character.Rang < states[1].Character.Character.Rang)
-        {
-            states[0].Damage /= (states[1].Character.Character.Rang - states[0].Character.Character.Rang + 1);
-        }
-
-        states[1].Damage =
-            Math.Max(agility1 + buff1.Agility - agility0 - buff0.Agility, 1) +
-            Math.Max(power1 - power0, 1) +
-            Math.Max(wisdom1 + buff1.Wisdom - wisdom0 - buff0.Wisdom, 1) +
-            Math.Max(stamina1 - stamina0, 1);
-        states[1].Damage *= 5;
-        if (states[1].Character.Character.Tournaments is not null && states[1].Character.Character.Tournaments.Count > 0)
-        {
-            states[1].Damage *= states[1].Character.Character.Tournaments.Count * 1.5;
-        }
-        if (states[1].Character.Character.Rang > states[0].Character.Character.Rang)
-        {
-            states[1].Damage *= (states[1].Character.Character.Rang - states[0].Character.Character.Rang);
-        }
-        else if (states[1].Character.Character.Rang < states[0].Character.Character.Rang)
-        {
-            states[1].Damage /= (states[0].Character.Character.Rang - states[1].Character.Character.Rang);
-        }
-
-        if (buff0.CopyStats || buff1.CopyStats)
-        {
-            states[0].Damage = 20;
-            states[1].Damage = 20;
-        }
-        states[1].Damage = (int) (states[1].Damage * (buff0.ResistFactor > 0 ? buff0.ResistFactor : 1)) + buff1.Damage;
-        states[0].Damage = (int) (states[0].Damage * (buff1.ResistFactor > 0 ? buff1.ResistFactor : 1)) + buff0.Damage;
-
-        states[0].Calculated = buff0.Calculated;
-        states[0].Name = buff0.Name ?? string.Empty;
-        states[0].Description = buff0.Description ?? string.Empty;
-        states[1].Calculated = buff1.Calculated;
-        states[1].Name = buff1.Name ?? string.Empty;
-        states[1].Description = buff1.Description ?? string.Empty;
-
-        states[0].ScoreHealth = (int) Math.Ceiling(states[0].Character.Health / states[1].Damage);
-        if (states[0].ScoreHealth == 0) states[0].ScoreHealth = 1;
-
-        states[1].ScoreHealth = (int) Math.Ceiling(states[1].Character.Health / states[0].Damage);
-        if (states[1].ScoreHealth == 0) states[1].ScoreHealth = 1;
+        adapter.EnrichFromCharacter(states[0], first);
+        adapter.EnrichFromCharacter(states[1], second);
 
         await context.SaveChangesAsync();
 

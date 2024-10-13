@@ -1,10 +1,10 @@
 ﻿using HemaDungeon.Abilities;
+using HemaDungeon.Adapters;
 using HemaDungeon.Entities;
 using HemaDungeon.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using AbilityType = HemaDungeon.Calculator.AbilityType;
 using Character = HemaDungeon.Calculator.Character;
 
 namespace HemaDungeon.Controllers;
@@ -31,58 +31,18 @@ public sealed class CalculatorController : ControllerBase
     }
 
     [HttpPost("users/compare")]
-    public async Task<CompareResult> Compare(CalculatorCompareModel model, [FromServices] Calculator.Calculator service, [FromServices] Context context)
+    public async Task<CompareResult> Compare(CalculatorCompareModel model, [FromServices] Calculator.Calculator service, [FromServices] FightStateAdapter adapter, [FromServices] Context context)
     {
         var firstState = await GetState(model.FirstUser.Id, context);
         var secondState = await GetState(model.SecondUser.Id, context);
-
-        var ability = new AbilityService();
-        var buff0 = ability.Accept(firstState, secondState, model.FirstUser.DisableAbility == false);
-        firstState.Name = buff0.Name;
-        firstState.Description = buff0.Description;
         
-        var buff1 = ability.Accept(secondState, firstState, model.FirstUser.DisableAbility == false);
-        secondState.Name = buff1.Name;
-        secondState.Description = buff1.Description;
+        var first = adapter.ToCharacter(firstState, model.FirstUser.DisableAbility, model.FirstUser.Health);
+        var second = adapter.ToCharacter(secondState, model.SecondUser.DisableAbility, model.SecondUser.Health);
 
-        var first = new Character(
-            model.FirstUser.Health ?? firstState.Character.Character.Vitality, 
-            0, 
-            firstState.Character.Character.Wisdom,
-            firstState.Character.Character.Stamina,
-            firstState.Character.Character.Agility,
-            firstState.Character.Character.Power,
-            (AbilityType) firstState.Character.Character.Ability!,
-            firstState.Character.Character.Rang,
-            firstState.Character.Character.Tournaments?.Count ?? 0
-        )
-        {
-            Force = !model.FirstUser.DisableAbility
-        };
-        var second = new Character(
-            model.SecondUser.Health ?? secondState.Character.Character.Vitality, 
-            0, 
-            secondState.Character.Character.Wisdom,
-            secondState.Character.Character.Stamina,
-            secondState.Character.Character.Agility,
-            secondState.Character.Character.Power,
-            (AbilityType) secondState.Character.Character.Ability!,
-            secondState.Character.Character.Rang,
-            secondState.Character.Character.Tournaments?.Count ?? 0
-        )
-        {
-            Force = !model.SecondUser.DisableAbility
-        };
         service.Accept(first, second);
 
-        firstState.Character.Health = first.Health;
-        firstState.ScoreHealth = first.ScoreHealth;
-        firstState.Calculated = first.IsPassive || first.Force == true;
-        firstState.Damage = first.Damage;
-        secondState.Character.Health = second.Health;
-        secondState.ScoreHealth = second.ScoreHealth;
-        secondState.Calculated = second.IsPassive || second.Force == true;
-        secondState.Damage = second.Damage;
+        adapter.EnrichFromCharacter(firstState, first);
+        adapter.EnrichFromCharacter(secondState, second);
 
         var result = new CompareResult(firstState, secondState);
         return result;
@@ -104,9 +64,9 @@ public sealed class CalculatorController : ControllerBase
     }
 
     [HttpPost("users/calculate")]
-    public async Task<CalculateResult> Calculate(CalculatorCompareModel model, [FromServices] Context context, [FromServices] Calculator.Calculator service)
+    public async Task<CalculateResult> Calculate(CalculatorCompareModel model, [FromServices] Context context, [FromServices] FightStateAdapter adapter, [FromServices] Calculator.Calculator service)
     {
-        var compare = await Compare(model, service, context);
+        var compare = await Compare(model, service, adapter, context);
 
         return new CalculateResult(
             new CalculateResult.CalculatedUser(
