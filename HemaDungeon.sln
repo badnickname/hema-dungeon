@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HemaDungeon", "HemaDungeon\HemaDungeon.csproj", "{2D955952-FF58-4416-9AF3-ADFACA0E3F22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HemaDungeon.Calculator", "HemaDungeon.Calculator\HemaDungeon.Calculator.csproj", "{C0C6F51A-4C25-4B74-AC2B-3D9CAA85DF9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{2D955952-FF58-4416-9AF3-ADFACA0E3F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D955952-FF58-4416-9AF3-ADFACA0E3F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D955952-FF58-4416-9AF3-ADFACA0E3F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0C6F51A-4C25-4B74-AC2B-3D9CAA85DF9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0C6F51A-4C25-4B74-AC2B-3D9CAA85DF9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0C6F51A-4C25-4B74-AC2B-3D9CAA85DF9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0C6F51A-4C25-4B74-AC2B-3D9CAA85DF9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
