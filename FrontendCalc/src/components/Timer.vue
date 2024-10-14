@@ -11,6 +11,8 @@ const isRunning = ref(false);
 
 const isCompleted = ref(false);
 
+const stopSound = new Audio('stop.wav');
+
 const timer = setInterval(function () {
   if (!isRunning.value || isCompleted.value) return;
   time.value -= 1;
@@ -18,7 +20,8 @@ const timer = setInterval(function () {
     isCompleted.value = true;
     isRunning.value = false;
     try {
-      navigator.vibrate(200);
+      stopSound.play();
+      navigator.vibrate(1000);
     } catch {
       console.error('Нет вибрации соре')
     }
@@ -40,6 +43,7 @@ function change(value: number) {
     isCompleted.value = true;
     isRunning.value = false;
     try {
+      stopSound.play();
       navigator.vibrate(1000);
     } catch {
       console.error('Нет вибрации соре')
