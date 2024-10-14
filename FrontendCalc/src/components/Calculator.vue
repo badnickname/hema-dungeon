@@ -6,6 +6,7 @@ import type { State } from '../types/State';
 import type { FightState } from '../types/FightState';
 import type { Result } from '../types/Result';
 import { debounce } from 'lodash';
+import Timer from './Timer.vue';
 
 const props = defineProps({ characters: { type: Array as PropType<CharacterType[]>, required: true } });
 const emit = defineEmits(['back']);
@@ -96,8 +97,11 @@ const calculate = debounce(rawCalculate, 800);
 <div v-else>
   Загрузка...
 </div>
+<div style="height: 200px;"></div>
 <div class="button">
-  <button @click="emit('back')">Назад</button>
+  <Timer>
+    <button style="width: 200px;" @click="emit('back')">Назад</button>
+  </Timer>
 </div>
 </template>
 

@@ -54,14 +54,9 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-.card {
-  padding: 2em;
-}
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -98,4 +93,10 @@ button {
     margin-bottom: 40px;
     width: 200px;
   }
+}
+
+.button-top {
+  bottom: unset;
+  box-shadow: 0 5px 5px #ff6800;
+  top: 0;
 }
