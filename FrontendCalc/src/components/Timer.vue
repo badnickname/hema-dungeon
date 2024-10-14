@@ -40,7 +40,7 @@ function change(value: number) {
     isCompleted.value = true;
     isRunning.value = false;
     try {
-      navigator.vibrate(200);
+      navigator.vibrate(1000);
     } catch {
       console.error('Нет вибрации соре')
     }
@@ -48,7 +48,7 @@ function change(value: number) {
 }
 
 function restart() {
-  isRunning.value = true;
+  isRunning.value = false;
   isCompleted.value = false;
   time.value = 120;
 }
@@ -67,7 +67,7 @@ onUnmounted(function () {
     <button @click="change(-30)">
       -30с
     </button>
-    <h1 style="color: #f9f9f9;">{{ minutes.toString().padStart(2, '0') }} : {{ seconds.toString().padStart(2, '0') }}</h1>
+    <h2 style="color: #f9f9f9;">{{ minutes.toString().padStart(2, '0') }} : {{ seconds.toString().padStart(2, '0') }}</h2>
     <button @click="change(30)">
       +30с
     </button>
@@ -96,6 +96,7 @@ onUnmounted(function () {
 .timer {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   padding-bottom: 4px;
   .buttons {
@@ -110,12 +111,18 @@ onUnmounted(function () {
   }
   .dial {
     padding-top: 4px;
+    gap: 4px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     > button {
-      font-size: 24px;
+      font-size: 16px;
       padding: 4px;
+    }
+    > h2 {
+      padding: 0;
+      margin: 0;
+      font-size: 36px;
     }
   }
 }
