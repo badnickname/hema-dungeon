@@ -18,5 +18,9 @@ internal sealed class DamageModificator : IModificator
             character.Damage *= character.Rang - enemy.Rang + 1;
         else if (character.Rang < enemy.Rang)
             character.Damage /= enemy.Rang - character.Rang + 1;
+        if (character.League > enemy.League)
+            character.Damage *= character.League - enemy.League + 1;
+        else if (character.League < enemy.League)
+            character.Damage /= enemy.League - character.League + 1;
     }
 }

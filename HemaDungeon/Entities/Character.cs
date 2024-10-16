@@ -65,6 +65,9 @@ public sealed class Character : IdentityUser
             return value * visits / (float) cataclysm - Harmed;
         }
     }
+
+    [NotMapped]
+    public int League { get; set; }
     // Stats
 
     [NotMapped]

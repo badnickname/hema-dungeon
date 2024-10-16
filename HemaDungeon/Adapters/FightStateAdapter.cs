@@ -22,7 +22,8 @@ public sealed class FightStateAdapter(AbilityService ability)
             state.Character.Character.Power,
             (AbilityType) state.Character.Character.Ability!,
             state.Character.Character.Rang,
-            state.Character.Character.Tournaments?.Count ?? 0
+            state.Character.Character.Tournaments?.Count ?? 0,
+            state.Character.Character.League
         )
         {
             Force = !disable

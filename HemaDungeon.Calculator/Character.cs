@@ -2,7 +2,7 @@
 
 public sealed class Character
 {
-    public Character(double health, double damage, double wisdom, double stamina, double agility, double power, AbilityType ability, int rang, int tournamentsCount)
+    public Character(double health, double damage, double wisdom, double stamina, double agility, double power, AbilityType ability, int rang, int tournamentsCount, int league)
     {
         Health = health;
         Damage = damage;
@@ -12,10 +12,13 @@ public sealed class Character
         Power = power;
         Ability = ability;
         Rang = rang;
+        League = league;
         TournamentsCount = tournamentsCount;
     }
 
     public int Rang { get; set; }
+
+    public int League { get; set; }
 
     public double Health { get; set; }
 
