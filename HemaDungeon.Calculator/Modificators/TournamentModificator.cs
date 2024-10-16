@@ -2,10 +2,11 @@
 
 public sealed class TournamentModificator : IModificator
 {
-    public int Priority => int.MaxValue - 13;
+    public int Priority => int.MaxValue - 10;
 
     public void Accept(Character character, Character enemy)
     {
-        character.Damage *= 5;
+        for (var i = 0; i < character.TournamentsCount; i++)
+            character.Damage *= 1.5f;
     }
 }

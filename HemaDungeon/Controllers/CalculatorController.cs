@@ -29,7 +29,7 @@ public sealed class CalculatorController : ControllerBase
         var result = await context.Users.Include(x => x.Visits).Include(x => x.Cataclysms).ToListAsync();
         return new JsonResult(result);
     }
-
+ 
     [HttpPost("users/compare")]
     public async Task<CompareResult> Compare(CalculatorCompareModel model, [FromServices] Calculator.Calculator service, [FromServices] FightStateAdapter adapter, [FromServices] Context context)
     {
