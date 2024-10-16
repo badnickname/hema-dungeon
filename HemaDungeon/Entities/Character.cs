@@ -66,8 +66,7 @@ public sealed class Character : IdentityUser
         }
     }
 
-    [NotMapped]
-    public int League { get; set; }
+    [NotMapped] public int League => Name.ToLower() == "кокос" ? 6 : 7;
     // Stats
 
     [NotMapped]
