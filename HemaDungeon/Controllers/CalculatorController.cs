@@ -17,9 +17,9 @@ public sealed class CalculatorController : ControllerBase
     [ResponseCache(Duration = 3600)]
     public async Task<IActionResult> GetImage(string name)
     {
-        var file = await System.IO.File.ReadAllBytesAsync($"wwwroot/{name}");
+        var file = await System.IO.File.ReadAllBytesAsync($"wwwroot/images/{name}");
         var provider = new FileExtensionContentTypeProvider();
-        if (!provider.TryGetContentType($"wwwroot/{name}", out var contentType)) contentType = "image";
+        if (!provider.TryGetContentType($"wwwroot/images/{name}", out var contentType)) contentType = "image";
         return File(file, contentType);
     }
 

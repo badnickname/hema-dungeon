@@ -33,6 +33,7 @@ export const useStore = defineStore('app', {
 			const result = await fetch('/api/user');
 			if (result.status === 401) return false;
 			this.character = await result.json() as Character;
+			this.character.avatar = `images/${this.character.avatar}`
 			await this.getCharacters();
 			await this.getIsAdmin();
 			return true;
@@ -46,12 +47,16 @@ export const useStore = defineStore('app', {
 		async getCharacters() {
 			const result = await fetch('/api/users');
 			this.characters = await result.json() as Character[];
+			this.characters.forEach(x => x.avatar = `images/${x.avatar}`);
 		},
 		async getFight() {
 			// return false;
 			const result = await fetch('/api/fight/users');
 			if (result.status === 401) return false;
 			this.fightCharacters = await result.json() as FightCharacter[];
+			this.fightCharacters.forEach(x => {
+				if (x.character) x.character.avatar = `images/${x.character.avatar}`;
+			});
 			await this.getFightState();
 			await this.getResults();
 			return this.fightCharacters.length > 0;
@@ -60,6 +65,9 @@ export const useStore = defineStore('app', {
 			const result = await fetch('/api/fight/state');
 			if (result.status === 401) return false;
 			this.fightStates = await result.json() as FightState[];
+			this.fightStates.forEach(x => {
+				if (x.character?.character) x.character.character.avatar = `images/${x.character.character.avatar}`;
+			});
 			return true;
 		},
 		async getVisits() {
@@ -69,13 +77,16 @@ export const useStore = defineStore('app', {
 			this.visits = Object.keys(visits).reduce((list, y) =>
 			{
 				const date = moment(y, 'YYYY-MM-DD').format("YYYY-MM-DD");
-				list[date] = visits[y].map(x => ({
-					date: moment(x.date),
-					id: x.id,
-					character: x.character,
-					wasHere: x.wasHere,
-					canSkip: x.canSkip
-				}));
+				list[date] = visits[y].map(x => {
+					x.character.avatar = `images/${x.character.avatar}`;
+					return {
+						date: moment(x.date),
+						id: x.id,
+						character: x.character,
+						wasHere: x.wasHere,
+						canSkip: x.canSkip
+					};
+				});
 				return list;
 			}, {} as Record<string, Visit[]>)
 			return true;

@@ -24,6 +24,7 @@ public sealed class Calculator
     {
         character.List.Add(new DamageModificator());
         character.List.Add(new ScoreHealthModificator());
+        character.List.Add(new TournamentModificator());
         if (character.Ability != AbilityType.Armor) character.List.Add(new Poisonable());
     }
 
