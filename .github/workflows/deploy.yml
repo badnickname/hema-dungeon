@@ -29,4 +29,5 @@ jobs:
       - name: Deploy
         run: |
           sudo apt-get install -y jq curl
+          chmod 777 deploy.sh
           ./deploy.sh ${{ secrets.PORTAINER_HTTPS }} ${{ secrets.PORTAINER_USERNAME }} ${{ secrets.PORTAINER_PASSWORD }} ${{ secrets.PORTAINER_STACK }} ${{ secrets.PORTAINER_ENDPOINT }}
