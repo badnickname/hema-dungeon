@@ -6,7 +6,7 @@ stack=$4
 endpoint=$5
 
 dotnet publish -c Release -r linux-arm64 -o ./publish
-docker buildx build --push --platform linux/arm64 . -t ghcr.io/badnickname/hema-dungeon/hema-dungeon:1.0
+docker build --platform linux/arm64 . -t ghcr.io/badnickname/hema-dungeon/hema-dungeon:1.0
 docker push ghcr.io/badnickname/hema-dungeon/hema-dungeon:1.0
 rm -rf publish
 
