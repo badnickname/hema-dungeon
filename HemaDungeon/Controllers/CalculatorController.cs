@@ -47,7 +47,7 @@ public sealed class CalculatorController : ControllerBase
         var result = new CompareResult(firstState, secondState);
         return result;
     }
-
+ 
     private static async Task<FightState> GetState(string id, Context context)
     {
         return new FightState
