@@ -5,6 +5,13 @@ password=$3
 stack=$4
 endpoint=$5
 
+pwd
+cd HemaDugneon
+dotnet publish -c Release -r linux-arm64 -o ./publish
+docker buildx build --platform linux/arm64 . -t ghcr.io/badnickname/hema-dungeon:1.0
+docker push ghcr.io/badnickname/hema-dungeon:1.0
+rm -rf publish
+
 JWT=$(curl -s -X POST ${https}/api/auth -H "Content-Type: application/json" -d "{\"username\": \"${username}\", \"password\": \"${password}\"}" | jq '.jwt' -r)
 
 CONTENT=$(curl -s -X GET ${https}/api/stacks/${stack}/file -H "Content-Type: application/json" -H "Authorization: Bearer ${JWT}"  | jq '.StackFileContent' -r -a | tr -d '"')
