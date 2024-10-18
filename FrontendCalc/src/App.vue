@@ -25,7 +25,7 @@ function needToSelect() {
 <style scoped>
 .list {
   max-width: 600px;
-  justify-content: space-between;
+  justify-content: center;
   gap: 8px;
   display: flex;
   flex-direction: row;
