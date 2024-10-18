@@ -47,8 +47,7 @@ function calculate() {
   display: grid;
   grid-template-areas: 'name name' 'author author' 'pick icon';
   padding: 4px;
-  width: 90px;
-  height: 100px;
+  width: 100px;
   img {
     height: 36px;
     width: 36px;
