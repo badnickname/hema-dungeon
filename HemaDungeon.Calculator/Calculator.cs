@@ -27,7 +27,7 @@ public sealed class Calculator
         character.List.Add(new TournamentModificator());
         if (character.Ability != AbilityType.Armor) character.List.Add(new Poisonable());
     }
-
+ 
     private static void AcceptAbility(Character character)
     {
         switch (character.Ability)
