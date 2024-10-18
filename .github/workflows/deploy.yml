@@ -24,7 +24,7 @@ jobs:
         with:
           context: .
           tags: ghcr.io/badnickname/hema-dungeon/hema-dungeon:1.0
-          platforms: linux/arm64
+          platforms: linux/arm64/v8
           push: true
       - name: Deploy
         run: |
