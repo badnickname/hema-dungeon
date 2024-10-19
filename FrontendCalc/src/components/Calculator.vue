@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, PropType, ref } from 'vue';
+import { onMounted, onUnmounted, PropType, ref } from 'vue';
 import Character from './Character.vue';
 import type { Character as CharacterType } from '../types/Character';
 import type { State } from '../types/State';
@@ -14,7 +14,16 @@ const emit = defineEmits(['back']);
 const state = ref<State>();
 const fightState = ref<{ firstUser: FightState, secondUser: FightState }>();
 
+const sentiel = ref<WakeLockSentinel>();
+
 onMounted(async function () {
+  try {
+    if ('wakeLock' in navigator) {
+      sentiel.value = await navigator.wakeLock.request('screen');
+    }
+  } catch {
+    console.log('No WakeLock :c ')
+  }
   const payload = {
     firstUser: { id: props.characters[0].id },
     secondUser: { id: props.characters[1].id },
@@ -54,6 +63,14 @@ async function rawCalculate() {
 }
 
 const calculate = debounce(rawCalculate, 800);
+
+onUnmounted(function () {
+  try {
+    if (sentiel.value) sentiel.value.release();
+  } catch {
+    console.log('No WakeLock :c ')
+  }
+})
 </script>
 
 <template>
