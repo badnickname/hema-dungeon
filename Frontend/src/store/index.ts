@@ -7,6 +7,7 @@ import type { Visit } from '../types/Visit';
 import moment from 'moment';
 import type { Page } from '../types/Page';
 import type { Result } from '../types/Result';
+import { mapAvatar } from './map-avatar.ts';
 
 export const useStore = defineStore('app', {
 	state: () => {
@@ -33,6 +34,7 @@ export const useStore = defineStore('app', {
 			const result = await fetch('/api/user');
 			if (result.status === 401) return false;
 			this.character = await result.json() as Character;
+			mapAvatar(this.character);
 			await this.getCharacters();
 			await this.getIsAdmin();
 			return true;
@@ -46,12 +48,14 @@ export const useStore = defineStore('app', {
 		async getCharacters() {
 			const result = await fetch('/api/users');
 			this.characters = await result.json() as Character[];
+			this.characters.forEach(mapAvatar);
 		},
 		async getFight() {
 			// return false;
 			const result = await fetch('/api/fight/users');
 			if (result.status === 401) return false;
 			this.fightCharacters = await result.json() as FightCharacter[];
+			this.fightCharacters.map(x => x.character).forEach(mapAvatar);
 			await this.getFightState();
 			await this.getResults();
 			return this.fightCharacters.length > 0;
@@ -60,6 +64,7 @@ export const useStore = defineStore('app', {
 			const result = await fetch('/api/fight/state');
 			if (result.status === 401) return false;
 			this.fightStates = await result.json() as FightState[];
+			this.fightStates.map(x => x.character.character).forEach(mapAvatar);
 			return true;
 		},
 		async getVisits() {
@@ -72,12 +77,12 @@ export const useStore = defineStore('app', {
 				list[date] = visits[y].map(x => ({
 					date: moment(x.date),
 					id: x.id,
-					character: x.character,
+					character: mapAvatar(x.character),
 					wasHere: x.wasHere,
 					canSkip: x.canSkip
 				}));
 				return list;
-			}, {} as Record<string, Visit[]>)
+			}, {} as Record<string, Visit[]>);
 			return true;
 		},
 		async removePage(page: Page) {
