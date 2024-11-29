@@ -55,18 +55,9 @@ public sealed class Character : IdentityUser
     public double Stamina => Rope / 10.0 + RunFifteen * 2.5;
 
     [NotMapped]
-    public double Vitality {
-        get
-        {
-            var value = (Score > 0 ? Score : 1) * 5;
-            var visits = Visits?.Where(x => !x.CanSkip).OrderBy(x => x.Date).Aggregate(0.0, (factor, visit) => visit.WasHere ? factor + 1 : factor / 3) ?? 1;
-            if (value * visits == 0) return value;
-            var cataclysm = (Cataclysms?.Count ?? 0) + 1;
-            return value * visits / (float) cataclysm - Harmed;
-        }
-    }
+    public double Vitality => new HealthService().Enrich(this);
 
-    [NotMapped] public int League => Name.ToLower() == "кокос" ? 6 : 7;
+    [NotMapped] public int League => Name.ToLower() == "кокос" || Name.ToLower() == "брен тебрил" ? 6 : 7;
     // Stats
 
     [NotMapped]
