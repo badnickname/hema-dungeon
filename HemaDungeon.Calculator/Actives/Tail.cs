@@ -6,6 +6,12 @@ internal sealed class Tail : IModificator
 
     public void Accept(Character character, Character enemy)
     {
-        if (character is { Force: true, Health: > 50 }) character.Health -= 50;
+        var health = 50f;
+        for (var i = 0; i < character.TournamentsCount; i++)
+            health *= 1.5f;
+        if (character.Force == true && character.Health > health)
+        {
+            character.Health -= health;
+        }
     }
 }

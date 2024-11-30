@@ -6,6 +6,12 @@ internal sealed class Joke : IModificator
 
     public void Accept(Character character, Character enemy)
     {
-        if (character.Force == true) character.Health += 50;
+        if (character.Force == true)
+        {
+            var health = 50f;
+            for (var i = 0; i < character.TournamentsCount; i++)
+                health *= 1.5f;
+            character.Health += health;
+        }
     }
 }
