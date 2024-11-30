@@ -7,7 +7,10 @@ internal sealed class Roar : IModificator
     public void Accept(Character character, Character enemy)
     {
         if (character.Force != true) return;
-        enemy.Health -= 100;
+        var damage = 100f;
+        for (var i = 0; i < character.TournamentsCount; i++)
+            damage *= 1.5f;
+        enemy.Health -= damage;
         if (enemy.Health < 0) enemy.Health = 0;
     }
 }
