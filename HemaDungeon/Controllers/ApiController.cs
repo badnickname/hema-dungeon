@@ -46,7 +46,7 @@ public sealed class ApiController : ControllerBase
         if (avatar is not null)
         {
             var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
-            await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
+            await using var filestream = System.IO.File.Create($"wwwroot/images/{filename}");
             await using var input = avatar.OpenReadStream();
             await input.CopyToAsync(filestream);
             filestream.Flush();
@@ -133,7 +133,7 @@ public sealed class ApiController : ControllerBase
         if (avatar is not null)
         {
             var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
-            await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
+            await using var filestream = System.IO.File.Create($"wwwroot/images/{filename}");
             await using var input = avatar.OpenReadStream();
             await input.CopyToAsync(filestream);
             filestream.Flush();
@@ -180,7 +180,7 @@ public sealed class ApiController : ControllerBase
         System.IO.File.Delete($"wwwroot/{user.Avatar}");
 
         var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
-        await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
+        await using var filestream = System.IO.File.Create($"wwwroot/images/{filename}");
         await using var input = avatar.OpenReadStream();
         await input.CopyToAsync(filestream);
         filestream.Flush();
