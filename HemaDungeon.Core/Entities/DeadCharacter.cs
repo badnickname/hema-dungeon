@@ -2,6 +2,10 @@
 
 public sealed class DeadCharacter
 {
+    public string Id { get; set; }
+
+    public string ParentId { get; set; }
+
     public string Name { get; set; }
 
     public string Avatar { get; set; }
@@ -31,5 +35,7 @@ public sealed class DeadCharacter
 
     public int Rope { get; set; }
 
-    public bool? IsDead { get; set; }
+    public IList<DeadTournament> DeadTournaments { get; set; }
+
+    public IList<DeadVisit> DeadVisits { get; set; }
 }

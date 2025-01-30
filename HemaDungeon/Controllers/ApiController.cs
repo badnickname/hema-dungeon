@@ -1,12 +1,14 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using HemaDungeon.Core.Entities;
+using HemaDungeon.Core.Reborn;
 using HemaDungeon.Models;
 using HemaDungeon.Options;
 using HemaDungeon.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace HemaDungeon.Controllers;
@@ -117,9 +119,21 @@ public sealed class ApiController : ControllerBase
         return new JsonResult(characters);
     }
 
-    public async Task<IActionResult> Reborn([FromBody] SignUpModel model)
+    [HttpPost("reborn")]
+    public async Task<IActionResult> Reborn([FromBody] RebornModel model, [FromServices] RebornService service, [FromServices] SignInManager<Character> signInManager, [FromServices] Context context, CancellationToken token)
     {
-        
+        var user = await signInManager.UserManager.GetUserAsync(HttpContext.User);
+        if (user is null) return Unauthorized();
+
+        var character = await context.Users.Include(x => x.Tournaments).Include(x => x.Visits).FirstAsync(x => x.Id == user.Id, token);
+        character.IsDead = false;
+        var dead = service.Reborn(character, model);
+        context.DeadCharacters.Add(dead);
+        await context.SaveChangesAsync(token);
+        context.Visits.RemoveRange(character.Visits ?? []);
+        context.RemoveRange(character.Tournaments ?? []);
+        await context.SaveChangesAsync(token);
+        return Ok();
     }
 
     [HttpPost("user")]
