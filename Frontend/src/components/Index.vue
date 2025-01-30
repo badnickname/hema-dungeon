@@ -9,7 +9,7 @@ const loading = ref(true);
 
 const isLoggedIn = computed(() => store.character.id !== '0');
 
-const isAdmin = computed(() => store.isAdmin);
+const isDead = computed(() => Boolean(store.character.isDead));
 
 const isFightStarted = ref(false);
 
@@ -52,15 +52,18 @@ onMounted(async () => {
       </RouterLink>
     </div>
   </div>
-  <div v-else class="body">
-    <div v-if="isAdmin">
-      <RouterLink to="/training">
-        <button>Начать тренировку!</button>
+  <div v-else-if="isDead">
+    <div>
+      <p style="color: #f9f9f9;">Вы мертвы <3</p>
+      <RouterLink to="/reborn">
+        <button>Переродиться!</button>
       </RouterLink>
     </div>
+  </div>
+  <div v-else class="body">
     <div class="icons">
-      <RouterLink v-if="isFightStarted" to="/fight" class="fight-ico" />
       <RouterLink to="/dashboard" class="character-ico" />
+      <a href="https://calc.hema-dungeon.ru/" class="fight-ico" />
       <RouterLink to="/visit" class="schedule-ico" />
     </div>
   </div>

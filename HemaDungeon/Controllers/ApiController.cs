@@ -120,7 +120,7 @@ public sealed class ApiController : ControllerBase
     }
 
     [HttpPost("reborn")]
-    public async Task<IActionResult> Reborn([FromBody] RebornModel model, [FromServices] RebornService service, [FromServices] SignInManager<Character> signInManager, [FromServices] Context context, CancellationToken token)
+    public async Task<IActionResult> Reborn([FromForm] RebornModel model, [FromServices] RebornService service, [FromServices] SignInManager<Character> signInManager, [FromServices] Context context, CancellationToken token)
     {
         var user = await signInManager.UserManager.GetUserAsync(HttpContext.User);
         if (user is null) return Unauthorized();
@@ -128,12 +128,25 @@ public sealed class ApiController : ControllerBase
         var character = await context.Users.Include(x => x.Tournaments).Include(x => x.Visits).FirstAsync(x => x.Id == user.Id, token);
         character.IsDead = false;
         var dead = service.Reborn(character, model);
+
+        var avatar = HttpContext.Request.Form.Files.GetFile("avatar");
+        if (avatar is not null)
+        {
+            var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
+            await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
+            await using var input = avatar.OpenReadStream();
+            await input.CopyToAsync(filestream);
+            filestream.Flush();
+
+            character.Avatar = filename;
+        }
+
         context.DeadCharacters.Add(dead);
         await context.SaveChangesAsync(token);
         context.Visits.RemoveRange(character.Visits ?? []);
         context.RemoveRange(character.Tournaments ?? []);
         await context.SaveChangesAsync(token);
-        return Ok();
+        return Redirect("/?dashboard=true");
     }
 
     [HttpPost("user")]

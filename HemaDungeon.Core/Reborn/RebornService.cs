@@ -30,7 +30,6 @@ public sealed class RebornService
         };
 
         character.Age = model.Age;
-        character.Avatar = model.Avatar;
         character.Name = model.Name;
         character.Gender = model.Gender;
         character.Story = model.Story;

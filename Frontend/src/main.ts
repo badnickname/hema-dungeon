@@ -14,6 +14,7 @@ import Password from './components/Password.vue';
 import Visit from './components/Visit.vue';
 import Page from './components/Page.vue';
 import Training from './components/Training.vue';
+import Reborn from './components/Reborn.vue';
 
 const router = createRouter({
 	history: createMemoryHistory(), routes: [{
@@ -38,6 +39,8 @@ const router = createRouter({
 		path: '/page', component: Page
 	}, {
 		path: '/training', component: Training
+	}, {
+		path: '/reborn', component: Reborn
 	}]
 });
 
