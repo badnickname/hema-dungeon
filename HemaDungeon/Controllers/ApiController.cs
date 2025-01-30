@@ -116,7 +116,7 @@ public sealed class ApiController : ControllerBase
     public async Task<IActionResult> GetUser([FromServices] CharacterRepository repository)
     {
         var characters = await repository.GetAllCharacters();
-        return new JsonResult(characters);
+        return new JsonResult(characters.Where(x => x.IsDead != true).ToList());
     }
 
     [HttpPost("reborn")]
