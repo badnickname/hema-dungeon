@@ -1,4 +1,4 @@
-﻿namespace HemaDungeon.Abilities;
+﻿namespace HemaDungeon.Core.Abilities;
 
 public enum AbilityType
 {
@@ -16,5 +16,6 @@ public enum AbilityType
     Wisdom = 11,
     Calm = 12,
     Gnome = 13,
-    DungeonMaster = 14
+    DungeonMaster = 14,
+    None = 99
 }

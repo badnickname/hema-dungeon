@@ -22,4 +22,5 @@ export type Character = {
 	rope?: number;
 	author?: string;
 	pages?: Page[];
+	isDead?: boolean;
 }

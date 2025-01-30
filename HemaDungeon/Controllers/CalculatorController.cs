@@ -1,11 +1,9 @@
-﻿using HemaDungeon.Abilities;
-using HemaDungeon.Adapters;
-using HemaDungeon.Entities;
+﻿using HemaDungeon.Adapters;
+using HemaDungeon.Core.Entities;
 using HemaDungeon.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using Character = HemaDungeon.Calculator.Character;
 
 namespace HemaDungeon.Controllers;
 

@@ -1,6 +1,6 @@
-﻿using HemaDungeon.Entities;
+﻿using HemaDungeon.Core.Entities;
 
-namespace HemaDungeon.Abilities;
+namespace HemaDungeon.Core.Abilities;
 
 public sealed class AbilityService
 {
@@ -112,6 +112,14 @@ public sealed class AbilityService
                 {
                     Name = "Мастер",
                     Description = "Снижает получаемый урон на 80% с участниками не достигшими 3 ранга. Увеличивает статы в 2 раза",
+                };
+            }
+            case AbilityType.None:
+            {
+                return new Buff
+                {
+                    Name = "Крестьянин",
+                    Description = "Не обладает никакими особыми качествами"
                 };
             }
         }

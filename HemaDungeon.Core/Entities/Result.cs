@@ -1,4 +1,4 @@
-﻿namespace HemaDungeon.Entities;
+﻿namespace HemaDungeon.Core.Entities;
 
 public sealed class Result
 {

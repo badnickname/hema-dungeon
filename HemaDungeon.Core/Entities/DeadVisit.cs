@@ -1,12 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace HemaDungeon.Core.Entities;
 
-namespace HemaDungeon.Entities;
-
-public sealed class Visit
+public sealed class DeadVisit
 {
     public string Id { get; set; }
 
-    public Character Character { get; set; }
+    public DeadCharacter DeadCharacter { get; set; }
 
     public DateTime? Date { get; set; }
 

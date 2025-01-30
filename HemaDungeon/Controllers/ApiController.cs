@@ -1,12 +1,14 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using HemaDungeon.Entities;
+using HemaDungeon.Core.Entities;
+using HemaDungeon.Core.Reborn;
 using HemaDungeon.Models;
 using HemaDungeon.Options;
 using HemaDungeon.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace HemaDungeon.Controllers;
@@ -115,6 +117,36 @@ public sealed class ApiController : ControllerBase
     {
         var characters = await repository.GetAllCharacters();
         return new JsonResult(characters);
+    }
+
+    [HttpPost("reborn")]
+    public async Task<IActionResult> Reborn([FromForm] RebornModel model, [FromServices] RebornService service, [FromServices] SignInManager<Character> signInManager, [FromServices] Context context, CancellationToken token)
+    {
+        var user = await signInManager.UserManager.GetUserAsync(HttpContext.User);
+        if (user is null) return Unauthorized();
+
+        var character = await context.Users.Include(x => x.Tournaments).Include(x => x.Visits).FirstAsync(x => x.Id == user.Id, token);
+        character.IsDead = false;
+        var dead = service.Reborn(character, model);
+
+        var avatar = HttpContext.Request.Form.Files.GetFile("avatar");
+        if (avatar is not null)
+        {
+            var filename = $"{Guid.NewGuid().ToString()}{avatar.FileName}";
+            await using var filestream = System.IO.File.Create($"wwwroot/{filename}");
+            await using var input = avatar.OpenReadStream();
+            await input.CopyToAsync(filestream);
+            filestream.Flush();
+
+            character.Avatar = filename;
+        }
+
+        context.DeadCharacters.Add(dead);
+        await context.SaveChangesAsync(token);
+        context.Visits.RemoveRange(character.Visits ?? []);
+        context.RemoveRange(character.Tournaments ?? []);
+        await context.SaveChangesAsync(token);
+        return Redirect("/?dashboard=true");
     }
 
     [HttpPost("user")]

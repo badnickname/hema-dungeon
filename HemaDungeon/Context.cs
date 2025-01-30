@@ -1,4 +1,4 @@
-﻿using HemaDungeon.Entities;
+﻿using HemaDungeon.Core.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +13,8 @@ public sealed class Context : IdentityDbContext<Character>
     public DbSet<Visit> Visits { get; set; }
 
     public DbSet<Result> Results { get; set; }
+
+    public DbSet<DeadCharacter> DeadCharacters { get; set; }
 
     public Context(DbContextOptions options) : base(options)
     {

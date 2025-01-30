@@ -1,4 +1,4 @@
-﻿using HemaDungeon.Entities;
+﻿using HemaDungeon.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HemaDungeon.Repositories;

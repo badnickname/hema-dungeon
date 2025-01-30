@@ -1,13 +1,14 @@
 using HemaDungeon;
-using HemaDungeon.Abilities;
 using HemaDungeon.Adapters;
 using HemaDungeon.Calculator;
+using HemaDungeon.Core.Abilities;
+using HemaDungeon.Core.Reborn;
 using HemaDungeon.Options;
 using HemaDungeon.Repositories;
 using HemaDungeon.Workers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Character = HemaDungeon.Entities.Character;
+using Character = HemaDungeon.Core.Entities.Character;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<Context>(options => options.UseNpgsql(builder.Conf
 builder.Services.AddTransient<AbilityService>();
 builder.Services.AddTransient<Calculator>();
 builder.Services.AddTransient<FightStateAdapter>();
+builder.Services.AddTransient<RebornService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddTransient<CharacterRepository>();
 builder.Services.AddIdentity<Character, IdentityRole>(options =>

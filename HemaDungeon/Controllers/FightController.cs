@@ -1,6 +1,5 @@
-﻿using HemaDungeon.Abilities;
-using HemaDungeon.Adapters;
-using HemaDungeon.Entities;
+﻿using HemaDungeon.Adapters;
+using HemaDungeon.Core.Entities;
 using HemaDungeon.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
