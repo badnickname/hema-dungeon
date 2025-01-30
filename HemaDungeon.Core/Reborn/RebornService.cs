@@ -1,4 +1,5 @@
-﻿using HemaDungeon.Core.Entities;
+﻿using HemaDungeon.Core.Abilities;
+using HemaDungeon.Core.Entities;
 
 namespace HemaDungeon.Core.Reborn;
 
@@ -33,6 +34,7 @@ public sealed class RebornService
         character.Name = model.Name;
         character.Gender = model.Gender;
         character.Story = model.Story;
+        character.Ability = AbilityType.None;
         return dead;
     }
 }
