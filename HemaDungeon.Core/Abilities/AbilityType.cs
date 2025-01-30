@@ -1,4 +1,4 @@
-﻿namespace HemaDungeon.Abilities;
+﻿namespace HemaDungeon.Core.Abilities;
 
 public enum AbilityType
 {

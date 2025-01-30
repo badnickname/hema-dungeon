@@ -1,5 +1,5 @@
-﻿using HemaDungeon.Abilities;
-using HemaDungeon.Entities;
+﻿using HemaDungeon.Core.Abilities;
+using HemaDungeon.Core.Entities;
 using Character = HemaDungeon.Calculator.Character;
 using AbilityType = HemaDungeon.Calculator.AbilityType;
 

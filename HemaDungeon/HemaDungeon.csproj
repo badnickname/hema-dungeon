@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\HemaDungeon.Calculator\HemaDungeon.Calculator.csproj" />
+      <ProjectReference Include="..\HemaDungeon.Core\HemaDungeon.Core.csproj" />
     </ItemGroup>
 
 </Project>

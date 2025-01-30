@@ -1,4 +1,4 @@
-﻿using HemaDungeon.Entities;
+﻿using HemaDungeon.Core.Entities;
 using HemaDungeon.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace HemaDungeon.Entities;
+﻿namespace HemaDungeon.Core.Entities;
 
 public sealed class Visit
 {

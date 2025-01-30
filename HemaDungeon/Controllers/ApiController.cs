@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using HemaDungeon.Entities;
+using HemaDungeon.Core.Entities;
 using HemaDungeon.Models;
 using HemaDungeon.Options;
 using HemaDungeon.Repositories;
@@ -115,6 +115,11 @@ public sealed class ApiController : ControllerBase
     {
         var characters = await repository.GetAllCharacters();
         return new JsonResult(characters);
+    }
+
+    public async Task<IActionResult> Reborn([FromBody] SignUpModel model)
+    {
+        
     }
 
     [HttpPost("user")]

@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using HemaDungeon.Entities;
+using HemaDungeon.Core.Entities;
 using HemaDungeon.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using HemaDungeon.Abilities;
+using HemaDungeon.Core.Abilities;
 using Microsoft.AspNetCore.Identity;
 
-namespace HemaDungeon.Entities;
+namespace HemaDungeon.Core.Entities;
 
 public sealed class Character : IdentityUser
 {
@@ -35,6 +35,8 @@ public sealed class Character : IdentityUser
     public int Score { get; set; }
 
     public int Rope { get; set; }
+
+    public bool? IsDead { get; set; }
 
     public AbilityType? Ability { get; set; }
 

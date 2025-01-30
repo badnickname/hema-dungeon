@@ -1,6 +1,6 @@
-﻿using HemaDungeon.Entities;
+﻿using HemaDungeon.Core.Entities;
 
-namespace HemaDungeon.Abilities;
+namespace HemaDungeon.Core.Abilities;
 
 public sealed class AbilityService
 {
