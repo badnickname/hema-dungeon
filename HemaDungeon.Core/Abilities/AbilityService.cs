@@ -114,6 +114,14 @@ public sealed class AbilityService
                     Description = "Снижает получаемый урон на 80% с участниками не достигшими 3 ранга. Увеличивает статы в 2 раза",
                 };
             }
+            case AbilityType.Bubble:
+            {
+                return new Buff
+                {
+                    Name = "Бабл",
+                    Description = "Каждый 3 удар противника не наносит урон",
+                };
+            }
             case AbilityType.None:
             {
                 return new Buff

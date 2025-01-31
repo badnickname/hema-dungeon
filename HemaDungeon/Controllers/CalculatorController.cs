@@ -64,17 +64,30 @@ public sealed class CalculatorController : ControllerBase
     [HttpPost("users/calculate")]
     public async Task<CalculateResult> Calculate(CalculatorCompareModel model, [FromServices] Context context, [FromServices] FightStateAdapter adapter, [FromServices] Calculator.Calculator service)
     {
-        var compare = await Compare(model, service, adapter, context);
+        var firstState = await GetState(model.FirstUser.Id, context);
+        var secondState = await GetState(model.SecondUser.Id, context);
+        
+        var first = adapter.ToCharacter(firstState, model.FirstUser.DisableAbility, model.FirstUser.Health);
+        first.Hits = model.FirstUser.Score ?? 0;
+        var second = adapter.ToCharacter(secondState, model.SecondUser.DisableAbility, model.SecondUser.Health);
+        second.Hits = model.SecondUser.Score ?? 0;
+
+        service.Accept(first, second);
+
+        adapter.EnrichFromCharacter(firstState, first);
+        adapter.EnrichFromCharacter(secondState, second);
+
+        var compare = new CompareResult(firstState, secondState);
 
         return new CalculateResult(
             new CalculateResult.CalculatedUser(
                 compare.FirstUser.Character.Character.Id,
-                (float) Math.Floor(Math.Max(0, compare.FirstUser.Character.Health - compare.SecondUser.Damage * (model.SecondUser.Score ?? 0))),
+                (float) first.HealthAfter,
                 compare.FirstUser.ScoreHealth
             ),
             new CalculateResult.CalculatedUser(
                 compare.SecondUser.Character.Character.Id,
-                (float) Math.Floor(Math.Max(0, compare.SecondUser.Character.Health - compare.FirstUser.Damage * (model.FirstUser.Score ?? 0))),
+                (float) second.HealthAfter,
                 compare.SecondUser.ScoreHealth
             )
         );

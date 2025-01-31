@@ -40,6 +40,10 @@ public sealed class Character
     
     public int TournamentsCount { get; set; }
 
+    public int Hits { get; set; }
+    
+    public double HealthAfter { get; set; }
+
     public AbilityType Ability { get; set; }
 
     internal IList<IModificator> List { get; set; } = new List<IModificator>();

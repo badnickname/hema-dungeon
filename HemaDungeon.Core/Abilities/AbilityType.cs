@@ -17,5 +17,6 @@ public enum AbilityType
     Calm = 12,
     Gnome = 13,
     DungeonMaster = 14,
+    Bubble = 15,
     None = 99
 }

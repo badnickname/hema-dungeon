@@ -25,6 +25,7 @@ public sealed class Calculator
         character.List.Add(new DamageModificator());
         character.List.Add(new ScoreHealthModificator());
         character.List.Add(new TournamentModificator());
+        character.List.Add(new HealthAfterModificator());
         if (character.Ability != AbilityType.Armor) character.List.Add(new Poisonable());
     }
 
@@ -43,6 +44,7 @@ public sealed class Calculator
                 break;
             case AbilityType.Roar:
                 character.List.Add(new Roar());
+                character.List.Add(new GiantModificator());
                 break;
             case AbilityType.Food:
                 character.List.Add(new Food());
@@ -74,9 +76,13 @@ public sealed class Calculator
             case AbilityType.Gnome:
                 character.List.Add(new Gnome());
                 break;
+            case AbilityType.Bubble:
+                character.List.Add(new BubbleModificator());
+                break;
             case AbilityType.DungeonMaster:
                 character.List.Add(new MasterBefore());
                 character.List.Add(new GodDefence());
+                character.List.Add(new GiantModificator());
                 break;
         }
     }
