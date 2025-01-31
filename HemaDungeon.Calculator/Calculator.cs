@@ -50,6 +50,7 @@ public sealed class Calculator
                 character.List.Add(new Food());
                 break;
             case AbilityType.Air:
+                character.List.Add(new AirShield());
                 character.List.Add(new AirBender());
                 break;
             case AbilityType.Armor:
@@ -77,7 +78,7 @@ public sealed class Calculator
                 character.List.Add(new Gnome());
                 break;
             case AbilityType.Bubble:
-                character.List.Add(new BubbleModificator());
+                character.List.Add(new Bubble());
                 break;
             case AbilityType.DungeonMaster:
                 character.List.Add(new MasterBefore());

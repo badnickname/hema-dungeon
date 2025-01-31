@@ -29,8 +29,8 @@ public sealed class AbilityService
             {
                 return new Buff
                 {
-                    Name = "Маг воздуха",
-                    Description = "Ловкость увеличена на 10",
+                    Name = "Щит ветра",
+                    Description = "Жертвует 20% имеющихся хп, и на 1 бой уменьшаяет получаемый по себе урон на 50%. Вслучае победы в бою пожертвованные хп возвращаются",
                 };
             }
             case AbilityType.Armor:
