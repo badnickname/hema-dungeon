@@ -35,6 +35,7 @@ public sealed class Calculator
         {
             case AbilityType.GodDefence:
                 character.List.Add(new GodDefence());
+                character.List.Add(new GiantSlayer());
                 break;
             case AbilityType.Joke:
                 character.List.Add(new Joke());
@@ -70,12 +71,18 @@ public sealed class Calculator
                 break;
             case AbilityType.Wisdom:
                 character.List.Add(new Wisdom());
+                character.List.Add(new Imba());
                 break;
             case AbilityType.Calm:
-                character.List.Add(new EmptyAbility());
+                character.List.Add(new Workaholic());
+                character.List.Add(new Calm());
                 break;
             case AbilityType.Gnome:
                 character.List.Add(new Gnome());
+                character.List.Add(new Trader());
+                break;
+            case AbilityType.None:
+                character.List.Add(new EmptyAbility());
                 break;
             case AbilityType.Bubble:
                 character.List.Add(new Bubble());

@@ -2,9 +2,10 @@
 
 public sealed class Character
 {
-    public Character(double health, double damage, double wisdom, double stamina, double agility, double power, AbilityType ability, int rang, int tournamentsCount, int league)
+    public Character(double health, double maxHealth, double damage, double wisdom, double stamina, double agility, double power, AbilityType ability, int rang, int tournamentsCount, int league, IDictionary<string, Spell> spells)
     {
         Health = health;
+        MaxHealth = maxHealth;
         Damage = damage;
         Wisdom = wisdom;
         Stamina = stamina;
@@ -14,6 +15,7 @@ public sealed class Character
         Rang = rang;
         League = league;
         TournamentsCount = tournamentsCount;
+        Spells = spells;
     }
 
     public int Rang { get; set; }
@@ -21,6 +23,8 @@ public sealed class Character
     public int League { get; set; }
 
     public double Health { get; set; }
+
+    public double MaxHealth { get; set; }
 
     public double Damage { get; set; }
 
@@ -34,10 +38,6 @@ public sealed class Character
 
     public int ScoreHealth { get; set; }
 
-    public bool? Force { get; set; }
-
-    public bool IsPassive { get; set; }
-    
     public int TournamentsCount { get; set; }
 
     public int Hits { get; set; }
@@ -47,4 +47,8 @@ public sealed class Character
     public AbilityType Ability { get; set; }
 
     internal IList<IModificator> List { get; set; } = new List<IModificator>();
+
+    public IDictionary<string, Spell> Spells { get; set; }
+
+    public sealed record Spell(string Description, int Value, string Type);
 }

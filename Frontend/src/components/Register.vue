@@ -58,11 +58,11 @@
     <input type="number" name="abdominal" autocomplete="off" />
   </label>
   <label>
-    <span>Челнок 4х14</span>
+    <span>Челнок 4х10</span>
     <input type="number" step=".01" name="runTwenty" autocomplete="off" />
   </label>
   <label>
-    <span>Челнок 15 м</span>
+    <span>Челнок 10 м</span>
     <input type="number" name="runFifteen" autocomplete="off" />
   </label>
   <label>

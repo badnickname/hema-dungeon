@@ -1,3 +1,5 @@
+import type { Spell } from './Spell';
+
 export type State = {
 	firstUser: User;
 	secondUser: User;
@@ -8,5 +10,5 @@ type User = {
 	health?: number;
 	score?: number;
 	damage?: number;
-	disableAbility?: boolean;
+	spells: Spell[];
 }

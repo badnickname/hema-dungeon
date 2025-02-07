@@ -2,17 +2,17 @@
 import { onMounted, onUnmounted, PropType, ref } from 'vue';
 import Character from './Character.vue';
 import type { Character as CharacterType } from '../types/Character';
-import type { State } from '../types/State';
-import type { FightState } from '../types/FightState';
-import type { Result } from '../types/Result';
+import { State, User } from '../types/State';
 import { debounce } from 'lodash';
 import Timer from './Timer.vue';
+import { CalculateResult } from '../types/CalculateResult';
+import { Spell } from '../types/Spell';
 
 const props = defineProps({ characters: { type: Array as PropType<CharacterType[]>, required: true } });
 const emit = defineEmits(['back']);
 
 const state = ref<State>();
-const fightState = ref<{ firstUser: FightState, secondUser: FightState }>();
+const fightState = ref<CalculateResult>();
 
 const sentiel = ref<WakeLockSentinel>();
 
@@ -37,14 +37,14 @@ onMounted(async function () {
       damage: 0,
       health: Math.round(props.characters[0].vitality),
       score: 0,
-      disableAbility: !fightState.value!.firstUser.calculated,
+      spells: fightState.value!.firstUser.spells,
     },
     secondUser: {
       id: props.characters[1].id,
       damage: 0,
       health: Math.round(props.characters[1].vitality),
       score: 0,
-      disableAbility: !fightState.value!.secondUser.calculated,
+      spells: fightState.value!.secondUser.spells,
     },
   }
   await calculate();
@@ -55,11 +55,18 @@ async function rawCalculate() {
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
   const payload = state.value;
-  const result: Result = await fetch('/api/users/calculate', { method: 'POST', headers, body: JSON.stringify(payload)}).then(x => x.json());
-  fightState.value.firstUser.scoreHealth = result.firstUser.hits || 1;
-  fightState.value.secondUser.scoreHealth = result.secondUser.hits || 1;
+  const result: CalculateResult = await fetch('/api/users/calculate', { method: 'POST', headers, body: JSON.stringify(payload)}).then(x => x.json());
+  fightState.value.firstUser.scoreHealth = result.firstUser.scoreHealth || 1;
+  fightState.value.secondUser.scoreHealth = result.secondUser.scoreHealth || 1;
   fightState.value.firstUser.health = result.firstUser.health;
   fightState.value.secondUser.health = result.secondUser.health;
+  fightState.value.firstUser.spells = result.firstUser.spells;
+  fightState.value.secondUser.spells = result.secondUser.spells;
+}
+
+function updateSpell(user: User, spells: Spell[]) {
+  user.spells = spells;
+  return calculate()
 }
 
 const calculate = debounce(rawCalculate, 800);
@@ -80,16 +87,15 @@ onUnmounted(function () {
         :entity="props.characters[0]"
         v-model:health="state!.firstUser.health"
         v-model:hits="state!.firstUser.score"
-        v-model:disableAbility="state!.firstUser.disableAbility"
         :max-hits="fightState?.secondUser.scoreHealth"
-        :abilityName="fightState?.firstUser.name"
+        :spells="fightState?.firstUser.spells"
         @update:health="calculate"
         @update:hits="calculate"
-        @update:disableAbility="calculate"
+        @update:spells="updateSpell(state!.firstUser, $event)"
     />
     <div>
       <h3>ХП после боя:</h3>
-      <span>{{ fightState.firstUser.health ?? '--' }}</span>
+      <span class="size">{{ fightState.firstUser.health ?? '--' }}</span>
     </div>
   </div>
   <h1 style="margin: 0; padding: 0; font-size: 12px">VS</h1>
@@ -98,16 +104,15 @@ onUnmounted(function () {
         :entity="props.characters[1]"
         v-model:health="state!.secondUser.health"
         v-model:hits="state!.secondUser.score"
-        v-model:disableAbility="state!.secondUser.disableAbility"
         :max-hits="fightState?.firstUser.scoreHealth"
-        :abilityName="fightState?.secondUser.name"
+        :spells="fightState?.secondUser.spells"
         @update:health="calculate"
         @update:hits="calculate"
-        @update:disableAbility="calculate"
+        @update:spells="updateSpell(state!.secondUser, $event)"
     />
     <div>
       <h3>ХП после боя:</h3>
-      <span>{{ fightState.secondUser.health ?? '--' }}</span>
+      <span class="size">{{ fightState.secondUser.health ?? '--' }}</span>
     </div>
   </div>
 </div>
@@ -128,5 +133,8 @@ onUnmounted(function () {
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
+}
+.size {
+  font-size: 22px;
 }
 </style>

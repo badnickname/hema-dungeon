@@ -23,11 +23,11 @@ const entity = computed(() => store.character);
         <input v-model="entity.abdominal" type="number" name="abdominal" autocomplete="off" />
       </label>
       <label>
-        <span>Челнок 4х14</span>
+        <span>Челнок 4х10</span>
         <input v-model="entity.runTwenty" type="number" step=".01" name="runTwenty" autocomplete="off" />
       </label>
       <label>
-        <span>Челнок 15 м</span>
+        <span>Челнок 10 м</span>
         <input v-model="entity.runFifteen" type="number" name="runFifteen" autocomplete="off" />
       </label>
       <label>

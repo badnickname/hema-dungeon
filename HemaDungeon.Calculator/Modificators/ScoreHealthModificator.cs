@@ -6,6 +6,6 @@ internal sealed class ScoreHealthModificator : IModificator
 
     public void Accept(Character character, Character enemy)
     {
-        character.ScoreHealth = (int) Math.Ceiling(character.Health / enemy.Damage);
+        character.ScoreHealth += (int) Math.Ceiling(character.Health / enemy.Damage);
     }
 }

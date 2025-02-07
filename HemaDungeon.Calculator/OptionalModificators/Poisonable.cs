@@ -6,6 +6,6 @@ internal sealed class Poisonable : IModificator
 
     public void Accept(Character character, Character enemy)
     {
-        if (enemy.Ability == AbilityType.Poison && enemy.Force != false && character.ScoreHealth > 3) character.ScoreHealth = 3;
+        if (enemy.Ability == AbilityType.Poison && character.ScoreHealth > 3) character.ScoreHealth = 3;
     }
 }

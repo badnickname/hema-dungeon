@@ -34,15 +34,12 @@ public sealed class CalculatorController : ControllerBase
         var firstState = await GetState(model.FirstUser.Id, context);
         var secondState = await GetState(model.SecondUser.Id, context);
         
-        var first = adapter.ToCharacter(firstState, model.FirstUser.DisableAbility, model.FirstUser.Health);
-        var second = adapter.ToCharacter(secondState, model.SecondUser.DisableAbility, model.SecondUser.Health);
+        var first = adapter.ToCharacter(firstState, model.FirstUser.Health, model.FirstUser.Spells ?? []);
+        var second = adapter.ToCharacter(secondState, model.SecondUser.Health, model.SecondUser.Spells ?? []);
 
         service.Accept(first, second);
 
-        adapter.EnrichFromCharacter(firstState, first);
-        adapter.EnrichFromCharacter(secondState, second);
-
-        var result = new CompareResult(firstState, secondState);
+        var result = new CompareResult(adapter.EnrichFromCharacter(firstState, first), adapter.EnrichFromCharacter(secondState, second));
         return result;
     }
 
@@ -67,36 +64,29 @@ public sealed class CalculatorController : ControllerBase
         var firstState = await GetState(model.FirstUser.Id, context);
         var secondState = await GetState(model.SecondUser.Id, context);
         
-        var first = adapter.ToCharacter(firstState, model.FirstUser.DisableAbility, model.FirstUser.Health);
+        var first = adapter.ToCharacter(firstState, model.FirstUser.Health, model.FirstUser.Spells ?? []);
         first.Hits = model.FirstUser.Score ?? 0;
-        var second = adapter.ToCharacter(secondState, model.SecondUser.DisableAbility, model.SecondUser.Health);
+        var second = adapter.ToCharacter(secondState, model.SecondUser.Health, model.SecondUser.Spells ?? []);
         second.Hits = model.SecondUser.Score ?? 0;
 
         service.Accept(first, second);
 
-        adapter.EnrichFromCharacter(firstState, first);
-        adapter.EnrichFromCharacter(secondState, second);
+        var compare = new CompareResult(adapter.EnrichFromCharacter(firstState, first), adapter.EnrichFromCharacter(secondState, second))
+        {
+            FirstUser =
+            {
+                Health = first.HealthAfter,
+            },
+            SecondUser =
+            {
+                Health = second.HealthAfter
+            }
+        };
 
-        var compare = new CompareResult(firstState, secondState);
-
-        return new CalculateResult(
-            new CalculateResult.CalculatedUser(
-                compare.FirstUser.Character.Character.Id,
-                (float) first.HealthAfter,
-                compare.FirstUser.ScoreHealth
-            ),
-            new CalculateResult.CalculatedUser(
-                compare.SecondUser.Character.Character.Id,
-                (float) second.HealthAfter,
-                compare.SecondUser.ScoreHealth
-            )
-        );
+        return new CalculateResult(compare.FirstUser, compare.SecondUser);
     }
 
-    public sealed record CompareResult(FightState FirstUser, FightState SecondUser);
+    public sealed record CompareResult(CalculatorCompareResult FirstUser, CalculatorCompareResult SecondUser);
 
-    public sealed record CalculateResult(CalculateResult.CalculatedUser FirstUser, CalculateResult.CalculatedUser SecondUser)
-    {
-        public sealed record CalculatedUser(string Id, float Health, float Hits);
-    };
+    public sealed record CalculateResult(CalculatorCompareResult FirstUser, CalculatorCompareResult SecondUser);
 }

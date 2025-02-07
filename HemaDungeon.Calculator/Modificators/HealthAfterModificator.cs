@@ -2,7 +2,7 @@
 
 public sealed class HealthAfterModificator : IModificator
 {
-    public int Priority => int.MaxValue - 12;
+    public int Priority => int.MaxValue - 9;
 
     public void Accept(Character character, Character enemy)
     {

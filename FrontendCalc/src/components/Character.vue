@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, PropType } from 'vue';
+import { computed, nextTick, onMounted, PropType } from 'vue';
 import type { Character } from '../types/Character';
+import type { Spell } from '../types/Spell';
 
 const props = defineProps({
   health: { type: Number },
-  disableAbility: {type: Boolean },
-  abilityName: { type: String },
+  spells: { type: Array as PropType<Spell[]>, required: true },
   maxHits: { type: Number },
   hits: { type: Number },
   entity: { type: Object as PropType<Character>, required: true }
 });
-const emit = defineEmits(['update:health', 'update:hits', 'update:disableAbility']);
+const emit = defineEmits(['update:health', 'update:hits', 'update:spells']);
 
 onMounted(() => {
   if (!props.health) emit('update:health', props.entity?.vitality ?? 0);
@@ -27,10 +27,9 @@ const hits = computed({
   set: (value: number) => emit('update:hits', value),
 })
 
-const ability = computed({
-  get: () => !props.disableAbility,
-  set: (value: boolean) => emit('update:disableAbility', !value),
-})
+function updateSpells() {
+  nextTick(() => emit('update:spells', props.spells))
+}
 
 function isMinimum() {
   return hits.value < 1;
@@ -41,10 +40,16 @@ function isMinimum() {
 <div class="character">
   <h1>{{ entity.name }}</h1>
   <img :src="`/api/image/${entity.avatar}`" :alt="entity.name" />
-  <label style="display: flex">
-    <span>{{ abilityName }}</span>
-    <input v-model="ability" type="checkbox" />
-  </label>
+  <div>
+    <div v-for="spell in spells" :key="spell.key" class="ability">
+      <label>
+        <span>{{ spell.key }}</span>
+        <input v-if="spell.type === 'P'" v-model="spell.value" class="checkbox" type="checkbox" :true-value="1" :false-value="0" @click="updateSpells" />
+        <input v-else v-model="spell.value" type="number" @input="updateSpells" />
+      </label>
+      <span class="description">{{ spell.description }}</span>
+    </div>
+  </div>
   <label>
     <span>Жизни</span>
     <div class="health">
@@ -72,7 +77,7 @@ function isMinimum() {
 .character {
   display: flex;
   flex-direction: column;
-  width: 140px;
+  width: 200px;
   gap: 4px;
   padding: 10px;
   border: #f9f9f9 1px solid;
@@ -100,9 +105,36 @@ function isMinimum() {
       flex: 1;
     }
   }
+  .ability {
+    display: flex;
+    flex-direction: column;
+    > label {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      > input {
+        max-width: 40px;
+      }
+    }
+    > span {
+      max-height: 50px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  .checkbox {
+    width: 25px;
+    height: 25px;
+  }
+  .description {
+    font-size: 9px;
+    color: white;
+  }
   .control {
     display: flex;
-    margin-top: 8px;
+    margin-top: 4px;
     flex-direction: row;
     justify-content: space-between;
   }
