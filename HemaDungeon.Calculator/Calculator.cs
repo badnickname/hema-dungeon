@@ -36,6 +36,7 @@ public sealed class Calculator
             case AbilityType.GodDefence:
                 character.List.Add(new GodDefence());
                 character.List.Add(new GiantSlayer());
+                character.List.Add(new SmallModificator());
                 break;
             case AbilityType.Joke:
                 character.List.Add(new Joke());
@@ -64,7 +65,7 @@ public sealed class Calculator
                 character.List.Add(new EmptyAbility());
                 break;
             case AbilityType.Worm:
-                character.List.Add(new EmptyAbility());
+                character.List.Add(new SmallModificator());
                 break;
             case AbilityType.Poison:
                 character.List.Add(new EmptyAbility());
@@ -80,6 +81,7 @@ public sealed class Calculator
             case AbilityType.Gnome:
                 character.List.Add(new Gnome());
                 character.List.Add(new Trader());
+                character.List.Add(new SmallModificator());
                 break;
             case AbilityType.None:
                 character.List.Add(new EmptyAbility());
