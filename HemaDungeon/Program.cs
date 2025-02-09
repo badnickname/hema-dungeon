@@ -6,6 +6,7 @@ using HemaDungeon.Core.Reborn;
 using HemaDungeon.Options;
 using HemaDungeon.Repositories;
 using HemaDungeon.Workers;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Character = HemaDungeon.Core.Entities.Character;
@@ -41,6 +42,7 @@ builder.Services.AddIdentity<Character, IdentityRole>(options =>
     options.SignIn.RequireConfirmedPhoneNumber = false;
 }).AddEntityFrameworkStores<Context>().AddTokenProvider<DataProtectorTokenProvider<Character>>(TokenOptions.DefaultProvider);
 builder.Services.AddHostedService<AdminWorker>();
+builder.Services.AddDataProtection().PersistKeysToDbContext<Context>();
 
 var app = builder.Build();
 
