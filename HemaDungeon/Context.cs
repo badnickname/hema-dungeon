@@ -17,7 +17,7 @@ public sealed class Context : IdentityDbContext<Character>, IDataProtectionKeyCo
 
     public DbSet<DeadCharacter> DeadCharacters { get; set; }
 
-    public DbSet<DataProtectionKey> DataProtectionKeys { get; }
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
     public Context(DbContextOptions options) : base(options)
     {
