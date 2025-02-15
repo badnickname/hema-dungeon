@@ -42,7 +42,7 @@ builder.Services.AddIdentity<Character, IdentityRole>(options =>
     options.SignIn.RequireConfirmedPhoneNumber = false;
 }).AddEntityFrameworkStores<Context>().AddTokenProvider<DataProtectorTokenProvider<Character>>(TokenOptions.DefaultProvider);
 builder.Services.AddHostedService<AdminWorker>();
-builder.Services.AddDataProtection().PersistKeysToDbContext<Context>();
+builder.Services.AddDataProtection().PersistKeysToDbContext<Context>().SetApplicationName("HemaDungeon");
 
 var app = builder.Build();
 
