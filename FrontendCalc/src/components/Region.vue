@@ -47,6 +47,9 @@ onMounted(async function () {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    > li {
+      margin-bottom: 4px;
+    }
   }
 
   label {
