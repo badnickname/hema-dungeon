@@ -87,6 +87,9 @@ public sealed class CalculatorController : ControllerBase
         return new CalculateResult(compare.FirstUser, compare.SecondUser);
     }
 
+    [HttpGet("regions")]
+    public async Task<Region[]> GetRegions([FromServices] Context context, CancellationToken token) => await context.Regions.ToArrayAsync(token);
+
     public sealed record CompareResult(CalculatorCompareResult FirstUser, CalculatorCompareResult SecondUser);
 
     public sealed record CalculateResult(CalculatorCompareResult FirstUser, CalculatorCompareResult SecondUser);

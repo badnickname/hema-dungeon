@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import type { Character } from '../types/Character';
+import type { Region } from '../types/Region';
 
 const emit = defineEmits(['calculate'])
 
 const characters = ref<Character[]>([]);
 
+const region = computed(() => {
+  const item = localStorage.getItem('region');
+  if (!item) return null;
+  return JSON.parse(item) as Region;
+});
+
 onMounted(async () => {
-  characters.value = await fetch('/api/users').then(x => x.json());
+  characters.value = await fetch(`/api/users?region=${region.value?.id ?? 'NOVOSIBIRSK'}`).then(x => x.json());
   characters.value = characters.value.filter(x => !x.name.startsWith('Плотников'))
 })
 
