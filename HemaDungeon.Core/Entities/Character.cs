@@ -40,6 +40,8 @@ public sealed class Character : IdentityUser
 
     public bool? IsDead { get; set; }
 
+    public bool? VisitToday { get; set; }
+
     public AbilityType? Ability { get; set; }
 
     public ICollection<Page> Pages { get; set; }

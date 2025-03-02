@@ -25,7 +25,7 @@ public sealed class CalculatorController : ControllerBase
     public async Task<IActionResult> GetCharacters([FromServices] Context context, string? region)
     {
         if (string.IsNullOrEmpty(region)) region = "NOVOSIBIRSK";
-        var result = await context.Users.Include(x => x.Region).Include(x => x.Visits).Include(x => x.Cataclysms).Where(x => x.Region.Id == region).ToListAsync();
+        var result = await context.Users.Include(x => x.Region).Include(x => x.Visits).Include(x => x.Cataclysms).Where(x => x.Region.Id == region && x.VisitToday == true).ToListAsync();
         return new JsonResult(result.Where(x => x.IsDead != true).ToList());
     }
  

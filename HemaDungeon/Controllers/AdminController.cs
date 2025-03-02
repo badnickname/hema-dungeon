@@ -45,6 +45,7 @@ public sealed class AdminController : ControllerBase
                 WasHere = model.Ids.Contains(user.Id),
                 CanSkip = model.SkipIds.Contains(user.Id)
             });
+            user.VisitToday = model.Ids.Contains(user.Id);
         }
         await context.SaveChangesAsync();
         
