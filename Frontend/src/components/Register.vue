@@ -38,8 +38,8 @@ const regions = computed(() => store.regions);
   <label>
     <span>Регион</span>
     <select name="region">
-      <option v-for="region in regions">
-        <option :value="region.id">{{ region.name }}</option>
+      <option v-for="region in regions" :value="region.id">
+        {{ region.name }}
       </option>
     </select>
   </label>
