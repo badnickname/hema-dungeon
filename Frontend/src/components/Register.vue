@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { useStore } from '../store';
+import { computed } from 'vue';
+const store = useStore();
 
+const regions = computed(() => store.regions);
 </script>
 
 <template>
@@ -30,6 +34,14 @@
   <label>
     <span>Возраст</span>
     <input type="number" name="age" autocomplete="off" />
+  </label>
+  <label>
+    <span>Регион</span>
+    <select name="region">
+      <option v-for="region in regions">
+        <option :value="region.id">{{ region.name }}</option>
+      </option>
+    </select>
   </label>
   <label>
     <span>Гендер</span>

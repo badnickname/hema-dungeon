@@ -33,4 +33,6 @@ public sealed class SignUpModel
     public int? Score { get; set; }
 
     public int? Rope { get; set; }
+
+    public string Region { get; set; }
 }

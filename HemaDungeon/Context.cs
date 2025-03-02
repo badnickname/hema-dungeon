@@ -7,6 +7,8 @@ namespace HemaDungeon;
 
 public sealed class Context : IdentityDbContext<Character>, IDataProtectionKeyContext
 {
+    private static bool _initialized;
+
     public DbSet<FightCharacter> FightCharacters { get; set; }
 
     public DbSet<FightState> FightStates { get; set; }
@@ -19,10 +21,12 @@ public sealed class Context : IdentityDbContext<Character>, IDataProtectionKeyCo
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
+    public DbSet<Region> Regions { get; set; }
+
     public Context(DbContextOptions options) : base(options)
     {
-#if RELEASE
+        if (_initialized) return;
+        _initialized = true;
         Database.Migrate();
-#endif
     }
 }

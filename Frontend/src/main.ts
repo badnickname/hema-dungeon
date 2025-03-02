@@ -15,10 +15,11 @@ import Visit from './components/Visit.vue';
 import Page from './components/Page.vue';
 import Training from './components/Training.vue';
 import Reborn from './components/Reborn.vue';
+import Region from './components/Region.vue';
 
 const router = createRouter({
 	history: createMemoryHistory(), routes: [{
-		path: '/', component: Index,
+		path: '/', component: Index, name: 'index'
 	}, {
 		path: '/register', component: Register
 	}, {
@@ -41,6 +42,8 @@ const router = createRouter({
 		path: '/training', component: Training
 	}, {
 		path: '/reborn', component: Reborn
+	}, {
+		path: '/region', component: Region
 	}]
 });
 

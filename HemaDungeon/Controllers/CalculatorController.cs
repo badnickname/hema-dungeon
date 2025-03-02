@@ -22,9 +22,10 @@ public sealed class CalculatorController : ControllerBase
     }
 
     [HttpGet("users")]
-    public async Task<IActionResult> GetCharacters([FromServices] Context context)
+    public async Task<IActionResult> GetCharacters([FromServices] Context context, string? region)
     {
-        var result = await context.Users.Include(x => x.Visits).Include(x => x.Cataclysms).ToListAsync();
+        if (string.IsNullOrEmpty(region)) region = "NOVOSIBIRSK";
+        var result = await context.Users.Include(x => x.Region).Include(x => x.Visits).Include(x => x.Cataclysms).Where(x => x.Region.Id == region).ToListAsync();
         return new JsonResult(result.Where(x => x.IsDead != true).ToList());
     }
  

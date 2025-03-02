@@ -22,6 +22,8 @@ public sealed class ApiController : ControllerBase
     {
         if (context.Users.Any(x => x.Name == model.Name || x.Email == model.Email)) return Redirect("/");
 
+        var region = await context.Regions.FirstOrDefaultAsync(x => x.Id == model.Region);
+
         var user = new Character
         {
             Email = model.Email,
@@ -40,6 +42,7 @@ public sealed class ApiController : ControllerBase
             Score = model.Score ?? 0,
             Avatar = "default.png",
             Author = model.Author ?? string.Empty,
+            Region = region,
         };
 
         var avatar = HttpContext.Request.Form.Files.GetFile("avatar");
@@ -113,9 +116,10 @@ public sealed class ApiController : ControllerBase
     }
 
     [HttpGet("users")]
-    public async Task<IActionResult> GetUser([FromServices] CharacterRepository repository)
+    public async Task<IActionResult> GetUser([FromServices] CharacterRepository repository, string? region)
     {
-        var characters = await repository.GetAllCharacters();
+        if (string.IsNullOrEmpty(region)) region = "NOVOSIBIRSK";
+        var characters = await repository.GetAllCharacters(region);
         return new JsonResult(characters.Where(x => x.IsDead != true).ToList());
     }
 
@@ -213,4 +217,7 @@ public sealed class ApiController : ControllerBase
 
         return Redirect("/?dashboard=true");
     }
+
+    [HttpGet("regions")]
+    public async Task<Region[]> GetRegions([FromServices] Context context, CancellationToken token) => await context.Regions.ToArrayAsync(token);
 }
