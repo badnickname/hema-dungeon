@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useStore } from '../store';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 const store = useStore();
+
+onMounted(() => store.getRegions());
 
 const regions = computed(() => store.regions);
 </script>
