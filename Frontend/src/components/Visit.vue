@@ -27,6 +27,8 @@ const visits = ref<Visit[]>();
 
 const visitsDate = ref<string>();
 
+const region = computed(() => store.region?.id);
+
 const createDate = ref(`${moment().year().toString().padStart(2, '0')}-${(moment().month() + 1).toString().padStart(2, '0')}-${moment().date().toString().padStart(2, '0')}`);
 
 function openDate(date: string) {
@@ -73,6 +75,7 @@ function back() {
   <form v-else class="body" action="/api/admin/visits" method="POST">
     <h2>{{ visitsDate }}</h2>
     <input type="hidden" name="dateTime" :value="dateTime" />
+    <input type="hidden" name="region" :value="region" />
     <ul>
       <li v-for="visit in visits">
         <img :src="visit.character.avatar" :alt="visit.character.name"/>

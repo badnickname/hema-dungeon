@@ -36,7 +36,11 @@ public sealed class Character : IdentityUser
 
     public int Rope { get; set; }
 
+    public Region? Region { get; set; }
+
     public bool? IsDead { get; set; }
+
+    public bool? VisitToday { get; set; }
 
     public AbilityType? Ability { get; set; }
 

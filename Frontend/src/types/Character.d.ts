@@ -23,4 +23,5 @@ export type Character = {
 	author?: string;
 	pages?: Page[];
 	isDead?: boolean;
+	region?: Region;
 }

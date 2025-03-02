@@ -22,9 +22,10 @@ public sealed class CalculatorController : ControllerBase
     }
 
     [HttpGet("users")]
-    public async Task<IActionResult> GetCharacters([FromServices] Context context)
+    public async Task<IActionResult> GetCharacters([FromServices] Context context, string? region)
     {
-        var result = await context.Users.Include(x => x.Visits).Include(x => x.Cataclysms).ToListAsync();
+        if (string.IsNullOrEmpty(region)) region = "NOVOSIBIRSK";
+        var result = await context.Users.Include(x => x.Region).Include(x => x.Visits).Include(x => x.Cataclysms).Where(x => x.Region.Id == region && x.VisitToday == true).ToListAsync();
         return new JsonResult(result.Where(x => x.IsDead != true).ToList());
     }
  
@@ -85,6 +86,9 @@ public sealed class CalculatorController : ControllerBase
 
         return new CalculateResult(compare.FirstUser, compare.SecondUser);
     }
+
+    [HttpGet("regions")]
+    public async Task<Region[]> GetRegions([FromServices] Context context, CancellationToken token) => await context.Regions.ToArrayAsync(token);
 
     public sealed record CompareResult(CalculatorCompareResult FirstUser, CalculatorCompareResult SecondUser);
 

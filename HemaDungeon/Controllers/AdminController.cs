@@ -12,9 +12,10 @@ namespace HemaDungeon.Controllers;
 public sealed class AdminController : ControllerBase
 {
     [HttpGet("visits")]
-    public async Task<IActionResult> GetVisits([FromServices] Context context)
+    public async Task<IActionResult> GetVisits([FromServices] Context context, string? region)
     {
-        var visits = await context.Visits.OrderBy(x =>x.Date).Include(x => x.Character).ToListAsync();
+        if (string.IsNullOrEmpty(region)) region = "NOVOSIBIRSK";
+        var visits = await context.Visits.OrderBy(x =>x.Date).Include(x => x.Character).ThenInclude(x => x.Region).Where(x => x.Character.Region.Id == region && (x.Character.IsDead == null || x.Character.IsDead == false)).ToListAsync();
         var result = visits
             .GroupBy(x => x.Date)
             .ToDictionary(x => $"{x.Key!.Value.Year}-{x.Key!.Value.Month}-{x.Key!.Value.Day}", x => x.ToList());
@@ -29,7 +30,7 @@ public sealed class AdminController : ControllerBase
         model.SkipIds ??= [];
         model.Ids ??= [];
 
-        var visits = await context.Visits.Where(x => x.Date == date).ToListAsync();
+        var visits = await context.Visits.Include(x => x.Character).ThenInclude(x => x.Region).Where(x => x.Date == date && x.Character.Region.Id == model.Region).ToListAsync();
         context.Visits.RemoveRange(visits);
         await context.SaveChangesAsync();
 
@@ -44,6 +45,7 @@ public sealed class AdminController : ControllerBase
                 WasHere = model.Ids.Contains(user.Id),
                 CanSkip = model.SkipIds.Contains(user.Id)
             });
+            user.VisitToday = model.Ids.Contains(user.Id);
         }
         await context.SaveChangesAsync();
         

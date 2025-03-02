@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import type { Character } from '../types/Character';
 import type { FightCharacter } from '../types/FightCharacter';
 import type { FightState } from '../types/FightState';
@@ -8,6 +8,7 @@ import moment from 'moment';
 import type { Page } from '../types/Page';
 import type { Result } from '../types/Result';
 import { mapAvatar } from './map-avatar.ts';
+import type { Region } from '../types/Region';
 
 export const useStore = defineStore('app', {
 	state: () => {
@@ -27,8 +28,26 @@ export const useStore = defineStore('app', {
 		const page = ref<Page>();
 		const isRefreshed = ref<boolean>();
 		const results = ref<Result[]>([]);
-		return { character, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits, page, isRefreshed, results };
+		const regions = ref<Region[]>([]);
+		const region = computed({
+			get: () => {
+				const value = localStorage.getItem('region');
+				if (value) return JSON.parse(value) as Region;
+				return null;
+			},
+			set: (value) => {
+				if (!value) localStorage.removeItem('region');
+				else localStorage.setItem('region', JSON.stringify(value));
+			}
+		})
+		return { character, regions, characters, visibleCharacter, fightCharacters, fightStates, isAdmin, visits, page, isRefreshed, results, region };
 	}, actions: {
+		async getRegions() {
+			const result = await fetch('/api/regions');
+			if (result.status === 401) return false;
+			this.regions = await result.json() as Region[];
+			return true;
+		},
 		async getCharacter() {
 			// return true;
 			const result = await fetch('/api/user');
@@ -46,7 +65,7 @@ export const useStore = defineStore('app', {
 			return true;
 		},
 		async getCharacters() {
-			const result = await fetch('/api/users');
+			const result = await fetch(`/api/users?region=${this.region?.id ?? 'NOVOSIBIRSK'}`);
 			this.characters = await result.json() as Character[];
 			this.characters.forEach(mapAvatar);
 		},
@@ -68,7 +87,7 @@ export const useStore = defineStore('app', {
 			return true;
 		},
 		async getVisits() {
-			const result = await fetch('/api/admin/visits');
+			const result = await fetch(`/api/admin/visits?region=${this.region?.id ?? 'NOVOSIBIRSK'}`);
 			if (result.status === 401) return false;
 			const visits = await result.json() as Record<string, (Omit<Visit, 'date'> & { date: string }) []>;
 			this.visits = Object.keys(visits).reduce((list, y) =>

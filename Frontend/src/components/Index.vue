@@ -13,7 +13,14 @@ const isDead = computed(() => Boolean(store.character.isDead));
 
 const isFightStarted = ref(false);
 
+const isRegionSelected = computed(() => Boolean(store.region));
+
 onMounted(async () => {
+  if (!isRegionSelected.value) {
+    await router.replace('/region');
+    return;
+  }
+
   const uri = window.location.search.substring(1);
   const params = new URLSearchParams(uri);
 
