@@ -63,7 +63,7 @@ public sealed class Character : IdentityUser
     [NotMapped]
     public double Vitality => new HealthService().Enrich(this);
 
-    [NotMapped] public int League => Name.ToLower() == "кокос" || Name.ToLower() == "брен тебрил" ? 6 : 7;
+    [NotMapped] public int League => Name.ToLower() == "кокос" || Name.ToLower() == "брен тебрил" || Name.ToLower() == "витгард солморн" ? 6 : 7;
     // Stats
 
     [NotMapped]
