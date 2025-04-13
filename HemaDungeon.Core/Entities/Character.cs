@@ -52,7 +52,7 @@ public sealed class Character : IdentityUser
     public float Power => Math.Min(60, PushUp) + PullUp * 3;
 
     [NotMapped]
-    public double Agility => Math.Min(50.0, Abdominal) + (RunTwenty > 0 ? Math.Max(0, 50 - (12.5f - RunTwenty) * 20) : 0);
+    public double Agility => Math.Min(50.0, Abdominal) + Math.Max(0,  (12.5f - RunTwenty) * 5);
 
     [NotMapped]
     public float Wisdom => Rang > 0 ? (11 - Rang) * 10 : 0;
