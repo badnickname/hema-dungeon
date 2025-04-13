@@ -92,4 +92,3 @@ public sealed class AdminController : ControllerBase
         return new JsonResult(await manager.IsInRoleAsync(user!, "Admin"));
     }
 }
- 
