@@ -21,6 +21,11 @@ const region = computed(() => {
   if (!item) return null;
   return JSON.parse(item) as Region;
 });
+
+function resetRegion() {
+  localStorage.removeItem('region');
+  window.location.reload();
+}
 </script>
 
 <template>
@@ -31,6 +36,7 @@ const region = computed(() => {
     <CharacterList @calculate="calculate" />
   </div>
   <Calculator v-else :characters="characters" @back="characters=[]" />
+  <div v-if="region && needToSelect()" class="link-1" @click="resetRegion">Сменить регион</div>
 </template>
 
 <style scoped>
@@ -41,5 +47,13 @@ const region = computed(() => {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+.link-1 {
+  margin-top: 30px;
+  color: #ff6800;
+  cursor: pointer;
+}
+.link-1:hover {
+  text-decoration: underline;
 }
 </style>
